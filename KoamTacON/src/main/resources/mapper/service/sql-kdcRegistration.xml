@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aisolution.koamtacon.mapper.service.KDCMapper">
+    <select id="getKDCRegistrationListCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_kdc_registration kdc
+               left outer join tb_code cod on cod.master_code = 'kdc_model'
+                                          and cod.use_yn = 'Y'
+                                          and cod.code = kdc.product_name
+         where 1=1
+           and kdc.user_id = #{userId}
+    ]]>
+    <if test="cbSearchField != null and cbSearchField == 'kdc.product_name' and sKeyword != null and sKeyword != ''">
+    <![CDATA[
+           and ${cbSearchField} = #{sKeyword}
+    ]]>
+    </if>
+    <if test="cbSearchField != null and cbSearchField != '' and cbSearchField != 'kdc.product_name' and sKeyword != null and sKeyword != ''">
+    <![CDATA[
+           and ${cbSearchField} like concat('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <if test="cbSearchApproval != null and cbSearchApproval != ''">
+    <![CDATA[
+           and kdc.approval = #{cbSearchApproval}
+    ]]>
+    </if>
+    </select>
+    
+    <select id="getKDCRegistrationList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select kdc.kdc_seq as kdcSeq
+             , kdc.serial_no as serialNo
+             , cod.code as productCode
+             , IFNULL(cod.code_name, kdc.product_name) as productName
+             , kdc.product_photo as productPhoto
+             , DATE_FORMAT(kdc.created_date, '%Y-%m-%d %H:%i:%s') as registrationDate
+             , kdc.approval as approval
+             , case kdc.approval when '0' then 'Not approved'
+                             when '1' then 'Approved'
+                             when '2' then 'Refused'
+                             else ''
+               end as approvalText
+             , kdc.comment
+          from tb_kdc_registration kdc
+               left outer join tb_code cod on cod.master_code = 'kdc_model'
+                                          and cod.use_yn = 'Y'
+                                          and cod.code = kdc.product_name
+         where 1=1
+           and kdc.user_id = #{userId}
+    ]]>
+    <if test="cbSearchField != null and cbSearchField == 'kdc.product_name' and sKeyword != null and sKeyword != ''">
+    <![CDATA[
+           and ${cbSearchField} = #{sKeyword}
+    ]]>
+    </if>
+    <if test="cbSearchField != null and cbSearchField != '' and cbSearchField != 'kdc.product_name' and sKeyword != null and sKeyword != ''">
+    <![CDATA[
+           and ${cbSearchField} like concat('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <if test="cbSearchApproval != null and cbSearchApproval != ''">
+    <![CDATA[
+           and kdc.approval = #{cbSearchApproval}
+    ]]>
+    </if>
+    <![CDATA[
+         order by kdc.created_date asc
+         limit #{itemNoPerPage} offset #{offset}
+    ]]>    
+    </select>
+    
+    <insert id="insertKDCRegistration" parameterType="HashMap">
+    <![CDATA[
+        insert into tb_kdc_registration (
+               user_id        , serial_no , product_name
+             , product_photo  , filename  , filesize
+             , created_date, updated_date
+        ) values (
+               #{userId}      , #{serialNo}, #{cbProductName}
+             , #{productPhoto}, #{filename}, #{filesize}
+             , CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()
+        )
+    ]]>
+    </insert>
+    
+    <select id="getKDCPhoto" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select product_photo as productPhoto
+             , filename
+          from tb_kdc_registration
+         where 1=1
+           and user_id = #{userId}
+           and kdc_seq = #{kdcSeq}
+    ]]>    
+    </select>
+    
+    <select id="checkSerialNoDuplcation" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_kdc_registration
+         where 1=1
+           and serial_no = #{serialNo}
+           and product_name = #{cbProductName}
+    ]]>
+    </select>
+    
+    <select id="getApprovalCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as approvalCnt
+          from tb_kdc_registration
+         where 1=1
+           and user_id = #{userId}
+           and approval = '1'
+    ]]>
+    </select>
+</mapper>

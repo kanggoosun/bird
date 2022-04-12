@@ -1,0 +1,660 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aisolution.koamtacon.mapper.service.SystemManagementMapper">
+    <select id="getMenuListByDivision" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select menu_seq as menuSeq
+             , menu_division as menuDivision
+             , menu_level as menuLevel
+             , parent_menu_seq as parentMenuSeq
+             , menu_order as menuOrder
+             , menu_type as menuType
+             , uri
+             , menu_name as menuName
+             , opener_class as openerClass
+             , description
+             , use_yn as useYn
+          from tb_menu
+         where 1=1
+           and menu_division = #{division}
+         order by menu_level, parent_menu_seq desc, menu_order
+    ]]>
+    </select>
+    
+    <select id="getMenuList1" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select lv0menu, lv0seq, lv0division, lv0divisionName
+             , lv1menu, lv1seq, lv1opener, lv1uri
+             , lv2menu, lv2seq, lv2opener, lv2uri
+          from vw_menu
+         where 1=1
+         order by lv0order, lv1order, lv2order
+    ]]>
+    </select>
+    
+    <select id="getMenuListInUse2" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select lv0menu, lv0seq, lv0division, lv0divisionName
+             , lv1menu, lv1seq, lv1opener, lv1uri
+             , lv2menu, lv2seq, lv2opener, lv2uri
+          from vw_menu_in_use
+         where 1=1
+         order by lv0order, lv1order, lv2order
+    ]]>
+    </select>
+    
+    <select id="getDivisionList" resultType="HashMap">
+    <![CDATA[
+        select menu_division as menuDivision
+             , IFNULL(MAX(menu_level),0) as maxMenuLevel
+             , COUNT(0) as menuCnt
+          from tb_menu
+         group by menu_division
+    ]]>
+    </select>
+    
+    <select id="getMaxLevel" resultType="int">
+    <![CDATA[
+        select IFNULL(MAX(menu_level),0) as maxMenuLevel
+          from tb_menu
+    ]]>
+    </select>
+    
+    <select id="getMaxMenuSeq" resultType="int">
+    <![CDATA[
+        select IFNULL(MAX(menu_seq), -1)+1 as maxMenuSeq
+          from tb_menu
+    ]]>
+    </select>
+    
+    <insert id="insertMenu" parameterType="HashMap">
+    <![CDATA[
+        insert into tb_menu (
+               menu_seq      , menu_division  , menu_level  , parent_menu_seq
+             , menu_order    , menu_type      , uri         , menu_name
+             , opener_class  , description    , use_yn
+             , created_date, updated_date
+        ) values  (
+               #{menuSeq}    , #{menuDivision}, #{menuLevel}, #{parentMenuSeq}
+             , #{menuOrder}  , #{menuType}    , #{uri}      , #{menuName}
+             , #{openerClass}, #{description} , #{cbUseYn}
+             , CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()
+        )
+    ]]>
+    </insert>
+    
+    <update id="updateMenu" parameterType="HashMap">
+    <![CDATA[
+        update tb_menu
+           set menu_division = #{menuDivision}
+             , menu_level = #{menuLevel}
+             , parent_menu_seq = #{parentMenuSeq}
+             , menu_order = #{menuOrder}
+             , menu_Type = #{menuType}
+             , uri = #{uri}
+             , menu_name = #{menuName}
+             , opener_class = #{openerClass}
+             , description = #{description}
+             , use_yn = #{cbUseYn}
+             , updated_date = CURRENT_TIMESTAMP()
+         where 1=1
+           and menu_seq = #{menuSeq}
+    ]]>
+    </update>
+    
+    <select id="getMenuInfo" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select mn.menu_seq as menuSeq
+             , mn.menu_division as menuDivision
+             , cod.code_name as menuDivisionName
+             , mn.menu_level as menuLevel
+             , mn.parent_menu_seq as parentMenuSeq
+             , mn.menu_order as menuOrder
+             , mn.menu_type as menuType
+             , mn.uri
+             , mn.menu_name as menuName
+             , mn.opener_class as openerClass
+             , mn.description
+             , mn.use_yn as useYn
+          from tb_menu mn
+               left join tb_code cod on cod.master_code = 'menu_division' and mn.menu_division = cod.code
+         where 1=1
+           and mn.menu_seq = #{menuSeq}
+    ]]>
+    </select>
+    
+    <select id="getMaxRoleSeq" resultType="int">
+    <![CDATA[
+        select IFNULL(MAX(role_seq), -1)+1 as maxRoleSeq
+          from tb_role
+    ]]>
+    </select>
+    
+    <insert id="insertRole" parameterType="HashMap">
+    <![CDATA[
+        insert into tb_role (
+               role_seq  , role_name  , role_description
+             , created_date, updated_date
+        ) values (
+               #{roleSeq}, #{roleName}, #{roleDescription}
+             , CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()
+        )
+    ]]>
+    </insert>
+    
+    <update id="updateRole" parameterType="HashMap">
+    <![CDATA[
+        update tb_role
+           set role_name = #{roleName}
+             , role_description = #{roleDescription}
+             , updated_date = CURRENT_TIMESTAMP()
+         where 1=1
+           and role_seq = #{roleSeq}
+    ]]>
+    </update>
+    
+    <select id="getRoleListCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_role
+         where 1=1
+    ]]>
+    </select>
+    
+    <select id="getRoleList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select role_seq as roleSeq
+             , role_name as roleName
+             , role_description as roleDescription
+          from tb_role
+         where 1=1
+         order by created_date desc
+         limit #{itemNoPerPage} offset #{offset}
+    ]]>
+    </select>
+    
+    <select id="getRoleUserListCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_role_user base
+               left join tb_user usr on base.user_id = usr.user_id
+         where 1=1
+           and base.role_seq = #{roleSeq}
+    ]]>
+    </select>
+    
+    <select id="getRoleUserList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select base.role_seq as roleSeq
+             , base.user_id as userId
+             , usr.name as userName
+             , usr.email as userEmail
+          from tb_role_user base
+               left join tb_user usr on base.user_id = usr.user_id
+         where 1=1
+           and base.role_seq = #{roleSeq}
+         order by usr.name asc, base.user_id asc
+         limit #{itemNoPerPage} offset #{offset}
+    ]]>
+    </select>
+    
+    <select id="getUserList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select usr.user_id as userId
+             , usr.name
+             , usr.email
+             , usr.country
+             , cc.name_en as countryName
+          from tb_user usr
+               left join tb_country_code cc on cc.code = usr.country
+         where 1=1
+           and user_type = '9'
+           and user_id not in (select user_id from tb_role_user)
+    ]]>
+    </select>
+    
+    <insert id="insertRoleUser" parameterType="HashMap">
+    <![CDATA[
+        insert into tb_role_user (
+               role_seq  , user_id
+             , created_date, updated_date
+        ) values (
+               #{roleSeq}, #{userId}
+             , CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteRoleUser" parameterType="HashMap">
+    <![CDATA[
+        delete from tb_role_user
+         where 1=1
+           and role_seq = #{roleSeq}
+           and user_id = #{userId}
+    ]]>
+    </delete>
+    
+    <select id="getRoleMenuList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select rm.role_seq as roleSeq
+             , mn.menu_division as menuDivision
+             , cod.code_name as menuDivisionName
+             , rm.menu_seq as menuSeq
+             , mn.menu_name as menuName
+             , mn.menu_level as menuLevel
+             , mn.menu_division as menuDivision
+             , mn.parent_menu_seq as parentMenuSeq
+             , mn.menu_order as menuOrder
+             , mn.menu_type as menuType
+             , mn.uri
+             , mn.opener_class as openerClass
+             , mn.description
+             , mn.use_yn as useYn
+             , rm.role_read as roleRead
+             , rm.role_write as roleWrite
+             , rm.role_delete as roleDelete
+             , rm.role_upload as roleUpload
+             , rm.role_download as roledownload
+          from tb_role_menu rm
+               left join tb_menu mn on rm.menu_seq = mn.menu_seq
+               left join tb_code cod on cod.master_code = 'menu_division' and cod.code = mn.menu_division
+         where 1=1
+           and rm.role_seq = #{roleSeq}
+           and mn.menu_division = #{division}
+         order by mn.menu_level, mn.parent_menu_seq, mn.menu_order
+    ]]>
+    </select>
+    
+    <select id="getMenuListNotInRole" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+	    select mn.menu_seq as menuSeq
+             , mn.menu_division as menuDivision
+             , cod.code_name as menuDivisionName
+             , mn.menu_level as menuLevel
+             , mn.parent_menu_seq as parentMenuSeq
+             , mn.menu_order as menuOrder
+             , mn.menu_type as menuType
+             , mn.uri
+             , mn.menu_name as menuName
+             , mn.opener_class as openerClass
+             , mn.description
+             , mn.use_yn as useYn
+          from tb_menu mn
+               left join tb_code cod on cod.master_code = 'menu_division' and cod.code = mn.menu_division
+         where 1=1
+           and mn.menu_division = #{division}
+           and mn.menu_seq not in (select menu_seq from tb_role_menu where role_seq = #{roleSeq} )
+         order by mn.menu_level, mn.parent_menu_seq, mn.menu_order
+    ]]>
+    </select>
+    
+    <insert id="insertRoleMenu" parameterType="HashMap">
+    <![CDATA[
+        insert into tb_role_menu (
+               role_seq  , menu_seq
+             , created_date, updated_date
+        ) values (
+               #{roleSeq}, #{menuSeq}
+             , CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteRoleMenu" parameterType="HashMap">
+    <![CDATA[
+        delete from tb_role_menu
+         where 1=1
+           and role_seq = #{roleSeq}
+           and menu_seq = #{menuSeq}
+    ]]>
+    </delete>
+    
+    <select id="getCodeMasterListCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_code_master
+         where 1=1
+    ]]>
+    <if test="sCodeName != null and sCodeName != ''">
+    <![CDATA[
+           and master_code_name like CONCAT('%', #{sCodeName}, '%')
+    ]]>
+    </if>
+    <if test="sTableName != null and sTableName != ''">
+    <![CDATA[
+           and table_name like CONCAT('%', #{sTableName}, '%')
+    ]]>
+    </if>
+    <if test="sColumnName != null and sColumnName != ''">
+    <![CDATA[
+           and column_name like CONCAT('%', #{sColumnName}, '%')
+    ]]>
+    </if>
+    </select>
+    
+    <select id="getCodeMasterList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select master_code as masterCode
+             , master_code_name as masterCodeName
+             , table_name as tableName
+             , column_name as columnName
+             , description
+             , use_yn as useYn
+          from tb_code_master
+         where 1=1
+    ]]>
+    <if test="sCodeName != null and sCodeName != ''">
+    <![CDATA[
+           and master_code_name like CONCAT('%', #{sCodeName}, '%')
+    ]]>
+    </if>
+    <if test="sTableName != null and sTableName != ''">
+    <![CDATA[
+           and table_name like CONCAT('%', #{sTableName}, '%')
+    ]]>
+    </if>
+    <if test="sColumnName != null and sColumnName != ''">
+    <![CDATA[
+           and column_name like CONCAT('%', #{sColumnName}, '%')
+    ]]>
+    </if>
+    <![CDATA[
+         order by master_code_name asc
+         limit #{itemNoPerPage} offset #{offset}
+    ]]>     
+    </select>
+    
+    <select id="getCodeDetailListCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_code
+         where 1=1
+           and master_code = #{masterCode}
+    ]]>
+    </select>
+    
+    <select id="getCodeDetailList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select master_code as masterCode
+             , code
+             , code_name as codeName
+             , description
+             , code_order as codeOrder
+             , use_yn as useYn
+          from tb_code
+         where 1=1
+           and master_code = #{masterCode}
+         order by code_order asc
+         limit #{itemNoPerPage} offset #{offset}
+    ]]>
+    </select>
+    
+    <select id="checkCodeMasterDuplication" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_code_master
+         where 1=1
+           and master_code = #{masterCode}
+    ]]>
+    </select>
+    
+    <insert id="insertCodeMaster" parameterType="HashMap">
+    <![CDATA[
+        insert into tb_code_master (
+               master_code   , master_code_name , table_name  , column_name
+             , description   , use_yn
+             , created_date, updated_date
+        ) values (
+               #{masterCode} , #{masterCodeName}, #{tableName}, #{columnName}
+             , #{description}, #{cbUseYn}
+             , CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()
+        )
+    ]]>
+    </insert>
+    
+    <update id="updateCodeMaster" parameterType="HashMap">
+    <![CDATA[
+        update tb_code_master
+           set master_code_name = #{masterCodeName}
+             , table_name = #{tableName}
+             , column_name = #{columnName}
+             , description = #{description}
+             , use_yn = #{cbUseYn}
+             , updated_date = CURRENT_TIMESTAMP()
+         where 1=1
+           and master_code = #{masterCode}
+    ]]>
+    </update>
+    
+    <insert id="insertCodeDetail" parameterType="HashMap">
+    <![CDATA[
+        insert into tb_code (
+               master_code  , code       , code_name  , description
+             , code_order   , use_yn
+             , created_date, updated_date
+        ) values (
+               #{dMasterCode}, #{code}    , #{codeName}, #{dDescription}
+             , #{codeOrder} , #{cbDUseYn}
+             , CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()
+        )
+    ]]>
+    </insert>
+    
+    <update id="updateCodeDetail" parameterType="HashMap">
+    <![CDATA[
+        update tb_code
+           set code_name = #{codeName}
+             , description = #{dDescription}
+             , code_order = #{codeOrder}
+             , use_yn = #{cbDUseYn}
+             , updated_date = CURRENT_TIMESTAMP()
+         where 1=1
+           and master_code = #{dMasterCode}
+           and code = #{code}
+    ]]>
+    </update>
+    
+    <select id="getApplicationListCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_applications
+         where 1=1
+    ]]>
+    </select>
+    
+    <select id="getApplicationList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select application_seq as applicationSeq
+             , application_name as applicationName
+             , application_description as applicationDescription
+             , application_introduction as applicationIntroduction
+             , application_url as applicationUrl
+             , tutorial_url as tutorialUrl
+             , idq as idq
+             , codiceq as codiceq
+             , tabgen_name as tabgenName
+             , use_yn as useYn
+             , CASE use_yn WHEN 'Y' THEN 'used'
+                           ELSE 'not used'
+               END as useYnNm
+             , display_order as displayOrder
+          from tb_applications
+         where 1=1
+         order by display_order asc, application_name asc
+         limit #{itemNoPerPage} offset #{offset}
+    ]]>
+    </select>
+    
+    <select id="getApplicationInfo" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select application_seq as applicationSeq
+             , application_name as applicationName
+             , application_description as applicationDescription
+             , application_introduction as applicationIntroduction
+             , application_url as applicationUrl
+             , tutorial_url as tutorialUrl
+             , idq as idq
+             , codiceq as codiceq
+             , tabgen_name as tabgenName
+             , use_yn as useYn
+             , CASE use_yn WHEN 'Y' THEN 'used'
+                           ELSE 'not used'
+               END as useYnNm
+             , display_order as displayOrder
+          from tb_applications
+         where 1=1
+           and application_seq = #{applicationSeq}
+    ]]>
+    </select>
+    
+    <select id="getMaxApplicationSeq" resultType="int">
+    <![CDATA[
+        select IFNULL(MAX(application_seq), -1) + 1 as maxApplicationSeq
+          from tb_applications
+    ]]>
+    </select>
+    
+    <insert id="insertApplication" parameterType="HashMap">
+    <![CDATA[
+        insert into tb_applications (
+               application_seq  , application_name  , application_description  , application_introduction
+             , application_url  , tutorial_url      , idq                      , codiceq
+             , tabgen_name      , use_yn            , display_order
+             , created_date, updated_date
+        ) values (
+               #{applicationSeq}, #{applicationName}, #{applicationDescription}, #{applicationIntroduction}
+             , #{applicationUrl}, #{tutorialUrl}    , #{idq}                   , #{codiceq}
+             , #{tabgenName}    , #{cbUseYn}        , #{displayOrder}
+             , CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()
+        )
+    ]]>
+    </insert>
+    
+    <update id="updateApplication" parameterType="HashMap">
+    <![CDATA[
+        update tb_applications
+           set application_name = #{applicationName}
+             , application_description = #{applicationDescription}
+             , application_introduction = #{applicationIntroduction}
+             , application_url = #{applicationUrl}
+             , tutorial_url = #{tutorialUrl}
+             , idq = #{idq}
+             , codiceq = #{codiceq}
+             , tabgen_name = #{tabgenName}
+             , use_yn = #{cbUseYn}
+             , display_order = #{displayOrder}
+             , updated_date = CURRENT_TIMESTAMP()
+         where 1=1
+           and application_seq = #{applicationSeq}
+    ]]>
+    </update>
+    
+    <select id="getFileListCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_files f
+               left join tb_code tcd on tcd.master_code = 'file_type' and tcd.code = f.file_type
+               left join tb_code ucd on ucd.master_code = 'file_usage' and ucd.code = f.file_usage
+         where 1=1
+           and f.linked_seq = #{linkedSeq}
+           and f.linked_table = #{linkedTable}
+    ]]>
+    </select>
+    
+    <select id="getFileList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select f.files_seq as filesSeq
+             , f.linked_seq as linkedSeq
+             , f.linked_table as linkedTable
+             , f.file_type as fileType
+             , tcd.code_name as fileTypeNm
+             , f.file_usage as fileUsage
+             , ucd.code_name as fileUsageNm
+             , f.original_name as originalName
+             , f.filename as filename
+             , f.filesize as filesize
+          from tb_files f
+               left join tb_code tcd on tcd.master_code = 'file_type' and tcd.code = f.file_type
+               left join tb_code ucd on ucd.master_code = 'file_usage' and ucd.code = f.file_usage
+         where 1=1
+           and f.linked_seq = #{linkedSeq}
+           and f.linked_table = #{linkedTable}
+         order by f.original_name asc, f.updated_date desc
+         limit #{itemNoPerPage} offset #{offset}
+    ]]>
+    </select>
+    
+    <select id="getFileInfo" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select f.files_seq as filesSeq
+             , f.linked_seq as linkedSeq
+             , f.linked_table as linkedTable
+             , f.file_type as fileType
+             , tcd.code_name as fileTypeNm
+             , f.file_usage as fileUsage
+             , ucd.code_name as fileUsageNm
+             , f.original_name as originalName
+             , f.filename as filename
+             , f.filesize as filesize
+          from tb_files f
+               left join tb_code tcd on tcd.master_code = 'file_type' and tcd.code = f.file_type
+               left join tb_code ucd on ucd.master_code = 'file_usage' and ucd.code = f.file_usage
+         where 1=1
+           and f.files_seq = #{filesSeq}
+    ]]>
+    </select>
+    
+    <select id="getMaxFilesSeq" resultType="int">
+    <![CDATA[
+        select IFNULL(MAX(files_seq), -1) + 1 as maxFilesSeq
+          from tb_files
+    ]]>
+    </select>
+    
+    <insert id="insertFiles" parameterType="HashMap">
+    <![CDATA[
+        insert into tb_files (
+               files_seq      , linked_seq , linked_table  , file_type  , file_usage
+             , original_name  , filename   , filesize
+             , created_date, updated_date
+        ) values (
+               #{filesSeq}    , #{linkedSeq}, #{linkedTable}, #{cbFileType}, #{cbFileUsage}
+             , #{originalName}, #{filename} , #{filesize}
+             , CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()
+        )
+    ]]>
+    </insert>
+    
+    <update id="updateFiles" parameterType="HashMap">
+    <![CDATA[
+        update tb_files
+           set original_name = #{originalName}
+             , filename = #{filename}
+             , filesize = #{filesize}
+             , updated_date = CURRENT_TIMESTAMP()
+         where 1=1
+           and files_seq = #{filesSeq}
+    ]]>
+    </update>
+    
+    <update id="updateFilesWithNoFile" parameterType="HashMap">
+    <![CDATA[
+        update tb_files
+           set file_type = #{cbFileType}
+             , file_usage = #{cbFileUsage}
+             , updated_date = CURRENT_TIMESTAMP()
+         where 1=1
+           and files_seq = #{filesSeq}
+    ]]>
+    </update>
+    
+    <delete id="deleteFiles" parameterType="HashMap">
+    <![CDATA[
+        delete
+          from tb_files
+         where 1=1
+           and files_seq = #{filesSeq}
+    ]]>
+    </delete>
+</mapper>

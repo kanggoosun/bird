@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aisolution.koamtacon.mapper.service.ApprovalManagementMapper">
+    <select id="getKDCRegistrationApprovalListCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_kdc_registration kdc
+               left join tb_group grp on grp.owner_id = kdc.user_id
+               left outer join tb_code cod on cod.master_code = 'kdc_model'
+                                          and cod.use_yn = 'Y'
+                                          and cod.code = kdc.product_name
+         where 1=1
+    ]]>
+    <if test="cbSearchField != null and cbSearchField == 'kdc.product_name' and sKeyword != null and sKeyword != ''">
+    <![CDATA[
+           and ${cbSearchField} = #{sKeyword}
+    ]]>
+    </if>
+    <if test="cbSearchField != null and cbSearchField != '' and cbSearchField != 'kdc.product_name' and sKeyword != null and sKeyword != ''">
+    <![CDATA[
+           and ${cbSearchField} like concat('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <if test="cbSearchApproval != null and cbSearchApproval != ''">
+    <![CDATA[
+           and kdc.approval = #{cbSearchApproval}
+    ]]>
+    </if>
+    </select>
+    
+    <select id="getKDCRegistrationApprovalList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select kdc.kdc_seq as kdcSeq
+             , kdc.user_id as userId
+             , grp.group_code as groupCode
+             , kdc.serial_no as serialNo
+             , cod.code as productCode
+             , cod.code_name as productName
+             , kdc.product_photo as productPhoto
+             , DATE_FORMAT(kdc.created_date, '%Y-%m-%d %H:%i:%s') as registrationDate
+             , kdc.approval as approval
+             , case kdc.approval when '0' then 'Not approved'
+                                 when '1' then 'Approved'
+                                 when '2' then 'Refused'
+                                 else ''
+               end as approvalText
+             , kdc.comment
+          from tb_kdc_registration kdc
+               left join tb_group grp on grp.owner_id = kdc.user_id
+               left outer join tb_code cod on cod.master_code = 'kdc_model'
+                                          and cod.use_yn = 'Y'
+                                          and cod.code = kdc.product_name
+         where 1=1
+    ]]>
+    <if test="cbSearchField != null and cbSearchField == 'kdc.product_name' and sKeyword != null and sKeyword != ''">
+    <![CDATA[
+           and ${cbSearchField} = #{sKeyword}
+    ]]>
+    </if>
+    <if test="cbSearchField != null and cbSearchField != '' and cbSearchField != 'kdc.product_name' and sKeyword != null and sKeyword != ''">
+    <![CDATA[
+           and ${cbSearchField} like concat('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <if test="cbSearchApproval != null and cbSearchApproval != ''">
+    <![CDATA[
+           and kdc.approval = #{cbSearchApproval}
+    ]]>
+    </if>
+    <![CDATA[
+         order by kdc.created_date desc, kdc.updated_date desc
+         limit #{itemNoPerPage} offset #{offset}
+    ]]>    
+    </select>
+    
+    <update id="kdcApproval" parameterType="HashMap">
+    <![CDATA[
+        update tb_kdc_registration
+           set serial_no = #{serialNo}
+             , product_name = #{cbProductName}
+             , approval = #{cbApproval}
+             , comment = #{comment}
+         where 1=1
+           and user_id = #{userId}
+           and kdc_seq = #{kdcSeq}
+    ]]>
+    </update>
+    
+    <select id="getApplicationApprovalListCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_user_requests rq
+               left join tb_user usr on usr.user_id = rq.user_id
+               left join tb_applications ap on ap.application_seq = rq.request_target
+               left join tb_code cd on cd.master_code = 'approval_flag'
+                                   and cd.code = rq.approval_flag
+               left join tb_group gr on gr.area = #{area}
+                                    and gr.owner_id = rq.user_id
+                                    and gr.use_yn = 'Y'
+         where 1=1
+           and request_type = '0'
+           and request_kind = '0'
+    ]]>
+    </select>
+    
+    <select id="getApplicationApprovalList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select rq.user_id as userId
+             , usr.name as userName
+             , rq.request_type as requestType
+             , rq.request_kind as requestKind
+             , rq.request_target as requestTarget
+             , ap.application_name as applicationName
+             , DATE_FORMAT(rq.request_date, '%Y-%m-%d %H:%i:%s') as requestDate
+             , rq.approval_flag as approvalFlag
+             , cd.code_name as approvalFlagNm
+             , DATE_FORMAT(rq.approval_date, '%Y-%m-%d %H:%i:%s') as approvalDate
+             , rq.comment
+             , gr.group_code as groupCode
+          from tb_user_requests rq
+               left join tb_user usr on usr.user_id = rq.user_id
+               left join tb_applications ap on ap.application_seq = rq.request_target
+               left join tb_code cd on cd.master_code = 'approval_flag'
+                                   and cd.code = rq.approval_flag
+               left join tb_group gr on gr.area = #{area}
+                                    and gr.owner_id = rq.user_id
+                                    and gr.use_yn = 'Y'
+         where 1=1
+           and request_type = '0'
+           and request_kind = '0'
+         order by rq.request_date desc
+         limit #{itemNoPerPage} offset #{offset}
+    ]]>
+    </select>
+    
+    <update id="saveApplicationApproval" parameterType="HashMap">
+    <![CDATA[
+        update tb_user_requests
+           set approval_flag = #{cbApprovalFlag}
+             , approval_date = CURRENT_TIMESTAMP()
+             , comment = #{comment}
+             , updated_date = CURRENT_TIMESTAMP()
+         where 1=1
+           and user_id = #{userId}
+           and request_Type = #{requestType}
+           and request_kind = #{requestKind}
+           and request_target = #{requestTarget}
+    ]]>
+    </update>
+    
+    <select id="getApplicationGroupCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_application_group
+         where 1=1
+           and application_seq = #{applicationSeq}
+           and area = #{area}
+           and group_code = #{groupCode}
+    ]]>
+    </select>
+    
+    <insert id="insertApplicationGroup" parameterType="HashMap">
+    <![CDATA[
+        insert into tb_application_group (
+               application_seq  , area   , group_code  , use_yn
+             , created_date, updated_date
+        ) values (
+               #{applicationSeq}, #{area}, #{groupCode}, 'Y'
+             , CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()
+        )
+    ]]>
+    </insert>
+    
+    <update id="updateApplicationGroup" parameterType="HashMap">
+    <![CDATA[
+        update tb_application_group
+           set use_yn = #{useYn}
+             , updated_date = CURRENT_TIMESTAMP()
+         where 1=1
+           and application_seq = #{applicationSeq}
+           and area = #{area}
+           and group_code = #{groupCode}
+    ]]>
+    </update>
+</mapper>

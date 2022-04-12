@@ -1,0 +1,36 @@
+[2017-08-10 17:13:33:482][main] DEBUG c.aisolution.common.util.ExcelUtils - path:C:\Temp, filename:TemplateForGroupMemberRegistration.xlsx
+[2017-08-10 17:14:16:283][main] DEBUG c.aisolution.common.util.ExcelUtils - path:C:\Temp, filename:TemplateForGroupMemberRegistration.xlsx
+[2017-08-10 17:15:47:254][main] DEBUG c.aisolution.common.util.ExcelUtils - path:C:\Temp, filename:TemplateForGroupMemberRegistration.xlsx
+[2017-08-10 17:15:47:908][main] INFO  c.aisolution.common.util.ExcelUtils - A=ender,B=ender, kang,C=endernick@gmail.com
+[2017-08-10 17:15:47:909][main] INFO  c.aisolution.common.util.ExcelUtils - A=ender.kang,B=ender, kang,C=null
+[2017-08-10 17:15:47:909][main] INFO  c.aisolution.common.util.ExcelUtils - A=endernick,B=,C=endernick@gmail.com
+[2017-08-10 17:15:47:910][main] INFO  c.aisolution.common.util.ExcelUtils - A=,B=ender, kang,C=endernick@gmail.com
+[2017-08-10 17:15:47:910][main] INFO  c.aisolution.common.util.ExcelUtils - A=ender1,B=null,C=null
+[2017-08-10 17:15:47:910][main] INFO  c.aisolution.common.util.ExcelUtils - A=,B=ender, kang,C=null
+[2017-08-10 17:15:47:910][main] INFO  c.aisolution.common.util.ExcelUtils - A=,B=,C=endernick@gmail.com
+[2017-08-10 17:15:47:910][main] INFO  c.aisolution.common.util.ExcelUtils - A=tester,B=tester,C=endernick@gmail.com
+[2017-08-10 17:21:14:273][main] DEBUG c.aisolution.common.util.ExcelUtils - path:C:\Temp, filename:TemplateForGroupMemberRegistration.xlsx
+[2017-08-10 17:21:15:1025][main] INFO  c.aisolution.common.util.ExcelUtils - A=ender,B=ender, kang,C=endernick@gmail.com
+[2017-08-10 17:21:15:1026][main] INFO  c.aisolution.common.util.ExcelUtils - A=,B=,C=
+[2017-08-10 17:21:15:1026][main] INFO  c.aisolution.common.util.ExcelUtils - A=ender.kang,B=ender, kang,C=null
+[2017-08-10 17:21:15:1026][main] INFO  c.aisolution.common.util.ExcelUtils - A=endernick,B=,C=endernick@gmail.com
+[2017-08-10 17:21:15:1026][main] INFO  c.aisolution.common.util.ExcelUtils - A=,B=,C=
+[2017-08-10 17:21:15:1026][main] INFO  c.aisolution.common.util.ExcelUtils - A=,B=ender, kang,C=endernick@gmail.com
+[2017-08-10 17:21:15:1026][main] INFO  c.aisolution.common.util.ExcelUtils - A=,B=,C=
+[2017-08-10 17:21:15:1026][main] INFO  c.aisolution.common.util.ExcelUtils - A=ender1,B=null,C=null
+[2017-08-10 17:21:15:1026][main] INFO  c.aisolution.common.util.ExcelUtils - A=,B=ender, kang,C=null
+[2017-08-10 17:23:43:328][main] DEBUG c.aisolution.common.util.ExcelUtils - path:C:\Temp, filename:TemplateForGroupMemberRegistration.xlsx
+[2017-08-10 17:32:17:350][main] DEBUG c.aisolution.common.util.ExcelUtils - path:C:\Temp, filename:TemplateForGroupMemberRegistration.xlsx
+[2017-08-10 17:34:19:449][main] DEBUG c.aisolution.common.util.ExcelUtils - path:C:\Temp, filename:TemplateForGroupMemberRegistration.xlsx
+[2017-08-10 17:35:53:284][main] DEBUG c.aisolution.common.util.ExcelUtils - path:C:\Temp, filename:TemplateForGroupMemberRegistration.xlsx
+[2017-08-10 17:36:01:859][main] DEBUG c.aisolution.common.util.ExcelUtils - path:C:\Temp, filename:TemplateForGroupMemberRegistration.xlsx
+[2017-08-10 17:46:39:322][main] DEBUG c.aisolution.common.util.ExcelUtils - path:C:\Temp, filename:TemplateForGroupMemberRegistration.xlsx
+[2017-08-10 17:46:40:1181][main] INFO  c.aisolution.common.util.ExcelUtils - A=ender,B=ender, kang,C=endernick@gmail.com
+[2017-08-10 17:47:16:294][main] DEBUG c.aisolution.common.util.ExcelUtils - path:C:\Temp, filename:TemplateForGroupMemberRegistration.xlsx
+[2017-08-10 17:47:16:1089][main] INFO  c.aisolution.common.util.ExcelUtils - A=ender,B=ender, kang,C=endernick@gmail.com
+[2017-08-10 17:47:16:1090][main] INFO  c.aisolution.common.util.ExcelUtils - A=ender.kang,B=ender, kang,C=
+[2017-08-10 17:47:16:1090][main] INFO  c.aisolution.common.util.ExcelUtils - A=endernick,B=,C=endernick@gmail.com
+[2017-08-10 17:50:25:329][main] DEBUG c.aisolution.common.util.ExcelUtils - path:C:\Temp, filename:TemplateForGroupMemberRegistration.xlsx
+[2017-08-10 17:50:26:1125][main] INFO  c.aisolution.common.util.ExcelUtils - A=ender,B=null,C=endernick@gmail.com
+[2017-08-10 17:50:26:1126][main] INFO  c.aisolution.common.util.ExcelUtils - A=ender.kang,B=null,C=
+[2017-08-10 17:50:26:1126][main] INFO  c.aisolution.common.util.ExcelUtils - A=endernick,B=null,C=endernick@gmail.com

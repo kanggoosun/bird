@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aisolution.koamtacon.mapper.mdc.TabgenMapper">
+
+    <select id="getTabgenRecordsByReckey" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select tabname
+             , reckey
+             , val01, val02, val03, val04, val05
+             , val06, val07, val08, val09, val10
+             , val11, val12, val13, val14, val15
+             , val16, val17, val18, val19, val20
+             , sortorder
+             , sync_idagente
+             , sync_op
+          from tabgen
+         where 1=1
+           and sync_op != 3
+           and tabname = #{tabname}
+           and reckey = #{reckey}
+           and sync_idagente = concat('|',#{groupCode},'|')
+    ]]>
+    </select>
+    
+    <select id="getTabgenRecordsWithHeaderByReckey" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select tg.tabname
+             , tg.reckey
+             , tg.val01, tg.val02, tg.val03, tg.val04, tg.val05
+             , tg.val06, tg.val07, tg.val08, tg.val09, tg.val10
+             , tg.val11, tg.val12, tg.val13, tg.val14, tg.val15
+             , tg.val16, tg.val17, tg.val18, tg.val19, tg.val20
+             , tg.sortorder
+             , tg.sync_idagente
+             , tg.sync_op
+             , tgs.val01 as hval01, tgs.val02 as hval02
+             , tgs.val03 as hval03, tgs.val04 as hval04
+             , tgs.val05 as hval05, tgs.val06 as hval06
+             , tgs.val07 as hval07, tgs.val08 as hval08
+             , tgs.val09 as hval09, tgs.val10 as hval10
+             , tgs.isupdated
+          from tabgen tg
+               left outer join tabgens1 tgs on tgs.tabname = tg.tabname
+                                           and tgs.reckey = tg.reckey
+                                           and tgs.rectype = 'DETAIL'
+                                           and tgs.sync_op != 3
+         where 1=1
+           and tg.sync_op != 3
+           and tg.tabname = #{tabname}
+           and tg.reckey = #{reckey}
+           and tg.sync_idagente = concat('|',#{groupCode},'|')
+    ]]>
+    </select>
+</mapper>

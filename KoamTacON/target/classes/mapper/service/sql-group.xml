@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aisolution.koamtacon.mapper.service.GroupMapper">
+    <select id="getGroupInfo" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select grp.area as area
+             , grp.group_code as groupCode
+             , grp.group_name as groupName
+             , grp.owner_id as ownerId
+             , usr.name as ownerName
+             , usr.company as ownerCompany
+             , grp.use_yn as useYn
+             , DATE_FORMAT(grp.created_date, '%Y-%m-%d %H:%i:%s') as creationDate
+          from tb_group grp
+             , tb_group_member membr
+             , tb_user usr
+         where 1=1
+           and membr.user_id = #{userId}
+           and grp.area = membr.area
+           and grp.group_code = membr.group_code
+           and usr.user_id = grp.owner_id
+    ]]>
+    </select>
+    
+    <select id="getGroupMemberCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_group_member members
+               left join tb_user usr on usr.user_id = members.user_id
+             , tb_group grp
+         where 1=1
+           and grp.owner_id = #{ownerId}
+           and grp.use_yn = 'Y'
+           and members.group_code = grp.group_code
+    ]]>
+    </select>
+    
+    <select id="getGroupMember" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select usr.user_id as memberId
+             , usr.name as memberName
+             , usr.email as memberEmail
+             , DATE_FORMAT(usr.created_date, '%Y-%m-%d %H:%i:%s') as memberCreationDate
+          from tb_group_member members
+               left join tb_user usr on usr.user_id = members.user_id
+             , tb_group grp
+         where 1=1
+           and grp.owner_id = #{ownerId}
+           and grp.use_yn = 'Y'
+           and members.group_code = grp.group_code
+         order by usr.name asc, usr.created_date asc
+         limit #{itemNoPerPage} offset #{offset}
+    ]]>
+    </select>
+    
+    <insert id="createGroup" parameterType="HashMap">
+    <![CDATA[
+        insert into tb_group (
+               area   , group_code   , group_name   , owner_id   , use_yn
+             , created_date, updated_date
+        ) values (
+               #{area}, #{groupCode}, #{groupName}, #{userId}, 'Y'
+             , CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()
+        )
+    ]]>
+    </insert>
+    
+    <select id="getMaxGroupCode" parameterType="HashMap" resultType="String">
+    <![CDATA[
+        select MAX(group_code) as groupCode
+          from tb_group
+         where 1=1
+    ]]>
+    </select>
+    
+    <select id="getGroupCode" parameterType="HashMap" resultType="String">
+    <![CDATA[
+        select group_code as groupCode
+          from tb_group
+         where 1=1
+           and owner_id = #{ownerId}
+    ]]>
+    </select>
+    
+    <select id="getGroupCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_group
+         where 1=1
+           and owner_id = #{userId}
+    ]]>
+    </select>
+    
+    <select id="getDuplicatedGroupCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_group
+         where 1=1
+           and area = #{area}
+           and group_code = #{groupCode}
+    ]]>
+    </select>
+    
+    <insert id="insertMember" parameterType="HashMap">
+    <![CDATA[
+        insert into tb_group_member (
+               user_id  , area   , group_code
+             , created_date, updated_date
+        ) values (
+               #{userId}, #{area}, #{groupCode}
+             , CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()
+        )
+    ]]>
+    </insert>
+    
+    <update id="updateGroupUsable" parameterType="HashMap">
+    <![CDATA[
+        update tb_group
+           set use_yn = #{usable}
+         where 1=1
+           and group_code = #{groupCode}
+           and owner_id = #{ownerId}
+    ]]>
+    </update>
+    
+    <select id="getNextMemberSeq" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as memberCnt
+          from tb_group_member
+         where 1=1
+           and area = #{area}
+           and group_code = #{groupCode}
+    ]]>
+    </select>
+    
+    <update id="updateGroupArea" parameterType="HashMap">
+    <![CDATA[
+        update tb_group
+           set area = #{area}
+         where 1=1
+           and group_code = #{groupCode}
+           and owner_id = #{ownerId}
+    ]]>
+    </update>
+    
+    <update id="updateGroupMemberArea" parameterType="HashMap">
+    <![CDATA[
+        update tb_group_member
+           set area = #{area}
+         where 1=1
+           and group_code = #{groupCode}
+    ]]>
+    </update>
+    
+    <update id="updateUserArea" parameterType="HashMap">
+    <![CDATA[
+        update tb_user
+           set area = #{area}
+         where 1=1
+           and user_id in (select user_id from tb_group_member where group_code = #{groupCode})
+    ]]>
+    </update>
+</mapper>

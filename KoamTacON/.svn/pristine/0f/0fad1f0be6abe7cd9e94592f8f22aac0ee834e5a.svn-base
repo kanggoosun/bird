@@ -1,0 +1,239 @@
+CommonController.java (20 matches)	
+	214: model.addAttribute("msg", "Failed");  
+	219: model.addAttribute("msg", "System error. Please retry!");  
+	470: model.addAttribute("msg", "Your country is serviced by Gulliver.<br><a href='http://www.gullivernet.com/en'>Click this link. http://www.gullivernet.com/en</a>");  
+	
+ErrorController.java (12 matches)	
+	24: model.addAttribute("msg", "Your request could not be processed.");  
+	32: model.addAttribute("msg", "Your request could not be processed.");  
+	40: model.addAttribute("msg", "Your request could not be processed.");  
+	48: model.addAttribute("msg", "Your request could not be processed.");  
+	57: model.addAttribute("msg", "Your request could not be processed.");  
+	66: model.addAttribute("msg", "The network or server seems to have failed. Please try again in a few minutes.");  
+	74: model.addAttribute("msg", "The network or server seems to have failed. Please try again in a few minutes.");  
+	82: model.addAttribute("msg", "The network or server seems to have failed. Please try again in a few minutes.");  
+	90: model.addAttribute("msg", "An exception occurred.");  
+	98: model.addAttribute("msg", "An exception occurred.");  
+	  
+	
+WSApiController.java (48 matches)	
+	45: model.addAttribute("msg", "Authentication failed.");  
+	67: model.addAttribute("msg", "Authentication failed.");  
+	88: model.addAttribute("msg", "Authentication failed.");  
+	109: model.addAttribute("msg", "Authentication failed.");  
+	130: model.addAttribute("msg", "Authentication failed.");  
+	151: model.addAttribute("msg", "Authentication failed.");  
+	172: model.addAttribute("msg", "Authentication failed.");  
+	193: model.addAttribute("msg", "Authentication failed.");  
+	207: model.addAttribute("msg", "File upload successful");  
+	210: model.addAttribute("msg", "File upload failed");  
+	231: model.addAttribute("msg", "Authentication failed.");  
+	252: model.addAttribute("msg", "Authentication failed.");  
+	273: model.addAttribute("msg", "Authentication failed."); 
+	
+	
+ApplicationController.java (23 matches)	
+	111: model.addAttribute("msg", "Request success");  
+	115: model.addAttribute("msg", "Failed to request");  
+	
+ApprovalManagementController.java (22 matches)	
+	99: model.addAttribute("msg", "Approval succeeded.");  
+	148: model.addAttribute("msg", "Approval failed.");  
+	211: model.addAttribute("msg", "Approval succeeded. ");  
+	215: model.addAttribute("msg", "Approval failed.");  
+	231: model.addAttribute("msg", "System error occured.");  
+	
+BoardController.java (9 matches)	
+	65: model.addAttribute("msg", "Mail sent successfully.");  
+	68: model.addAttribute("msg", "Failed to send mail.");  
+	
+BoardManagementController.java (23 matches)	
+	67: model.addAttribute("msg", "Saved succesfully!");  
+	71: model.addAttribute("msg", "Failed to save.");  
+	85: model.addAttribute("msg", "Saved succesfully!");  
+	89: model.addAttribute("msg", "Failed to save.");  
+	108: model.addAttribute("msg", "Succesfully deleted.");  
+	112: model.addAttribute("msg", "Failed to delete.");  
+	187: model.addAttribute("msg", "Mail sent successfully.");  
+	190: model.addAttribute("msg", "Failed to send mail.");  
+	
+GroupController.java (51 matches)	
+	208: model.addAttribute("msg", "Owner's country info is required.");  
+	212: model.addAttribute("msg", "Authentication failed.");  
+	359: model.addAttribute("msg", sbMsg.toString());  
+	366: model.addAttribute("msg", sbMsg.toString());  
+	370: model.addAttribute("msg", "There is no data to add.");  
+	375: model.addAttribute("msg", "System error.");  
+	379: model.addAttribute("msg", "Owner's country info is required.");  
+	383: model.addAttribute("msg", "Authentication failed.");  
+	404: model.addAttribute("msg", "Group creation successful");  
+	409: model.addAttribute("msg", "Group creation failed");  
+	413: model.addAttribute("msg", "Group Duplicate Error");  
+	417: model.addAttribute("msg", "Permission error");  
+	432: model.addAttribute("msg", "Group update successful");  
+	436: model.addAttribute("msg", "Group update failed");  
+	440: model.addAttribute("msg", "Permission error");  
+	457: model.addAttribute("msg", "Group update successful");  
+	461: model.addAttribute("msg", "Group update failed");  
+	465: model.addAttribute("msg", "Permission error");  
+	
+KDCController.java (44 matches)	
+	57: model.addAttribute("redirectMsg", "Abnormal access.");  
+	64: model.addAttribute("redirectMsg", "Abnormal access.");  
+	97: model.addAttribute("redirectMsg", "Authentication failed. You don't have permission for KDC Registration.");  
+	112: model.addAttribute("msg", "Abnormal access.");  
+	118: model.addAttribute("msg", "Abnormal access.");  
+	138: model.addAttribute("msg", "Abnormal access.");  
+	144: model.addAttribute("msg", "Abnormal access.");  
+	156: model.addAttribute("msg", "Successfully registered.");  
+	170: model.addAttribute("msg", "Failed to upload file.");  
+	174: model.addAttribute("msg", "This serial number is already registered.");  
+	178: model.addAttribute("msg", "There is no serial number.");  
+	192: model.addAttribute("msg", "Abnormal access.");  
+	197: model.addAttribute("msg", "Abnormal access.");  
+	219: model.addAttribute("msg", "Abnormal access.");  
+	225: model.addAttribute("msg", "Abnormal access.");  
+	 
+MainController.java	
+	
+SignController.java (41 matches)	
+	122: model.addAttribute("Msg", strMsg);  
+	267: model.addAttribute("msg", "We sent the changed password to your email.");  
+	271: model.addAttribute("msg", "We changed your password but failed to send an email.");  
+	276: model.addAttribute("msg", "Reset password failed.");  
+	280: model.addAttribute("msg", "Reset password failed.");  
+	307: model.addAttribute("msg", "Password successfully changed.");  
+	311: model.addAttribute("msg", "Failed to change password.");  
+	315: model.addAttribute("msg", "Invalid access.");  
+	319: model.addAttribute("msg", "Invalid access.");  
+	324: model.addAttribute("msg", "Failed to change password.");  
+	393: model.addAttribute("msg", "Your account will be delivered by email in 2~3 business days.");  
+	396: model.addAttribute("msg", "Fail");  
+	
+SystemManagementController.java (97 matches)	
+	86: model.addAttribute("msg", "Save succesful!");  
+	90: model.addAttribute("msg", "Failed to save");  
+	103: model.addAttribute("msg", "Save succesful!");  
+	107: model.addAttribute("msg", "Failed to save");  
+	135: model.addAttribute("msg", "Save succesful!");  
+	139: model.addAttribute("msg", "Failed to save");  
+	150: model.addAttribute("msg", "Save succesful!");  
+	154: model.addAttribute("msg", "Failed to save");  
+	198: model.addAttribute("msg", "Save succesful!");  
+	202: model.addAttribute("msg", "Failed to save");  
+	213: model.addAttribute("msg", "Removal succeded.");  
+	217: model.addAttribute("msg", "Failed to remove");  
+	253: model.addAttribute("msg", "Save succesful!");  
+	257: model.addAttribute("msg", "Failed to save");  
+	268: model.addAttribute("msg", "Removal succeded.");  
+	272: model.addAttribute("msg", "Failed to remove.");  
+	321: model.addAttribute("msg", "Save succesful!");  
+	325: model.addAttribute("msg", "Failed to save");  
+	336: model.addAttribute("msg", "Save succesful!");  
+	340: model.addAttribute("msg", "Failed to save");  
+	351: model.addAttribute("msg", "Save succesful!");  
+	355: model.addAttribute("msg", "Failed to save");  
+	366: model.addAttribute("msg", "Save succesful!");  
+	370: model.addAttribute("msg", "Failed to save");  
+	417: model.addAttribute("msg", "Save succesful!");  
+	421: model.addAttribute("msg", "Failed to save");  
+	432: model.addAttribute("msg", "Save succesful!");  
+	436: model.addAttribute("msg", "Failed to save");  
+	451: model.addAttribute("msg", "Save succesful!");  
+	454: model.addAttribute("msg", "Failed to save");  
+	469: model.addAttribute("msg", "Save succesful!");  
+	472: model.addAttribute("msg", "Failed to save");  
+	483: model.addAttribute("msg", "Save succesful!");  
+	487: model.addAttribute("msg", "Failed to save");  
+	520: model.addAttribute("msg", "Delete succeded.");  
+	523: model.addAttribute("msg", "Failed to delete.");  
+	528: model.addAttribute("msg", "Failed to delete.");  
+	
+TestController.java	
+	48: model.addAttribute("msg", "End of time test.");  
+	
+UserManagementController.java (68 matches)	
+	112: model.addAttribute("msg", "User information succesfully updated!");  
+	116: model.addAttribute("msg", "Failed to update user information.");  
+	152: model.addAttribute("msg", "User information succesfully saved!");  
+	156: model.addAttribute("msg", "Failed to save user information.");  
+	167: model.addAttribute("msg", "User information succesfully updated!");  
+	171: model.addAttribute("msg", "Failed to update user information.");  
+	208: model.addAttribute("msg", "User information succesfully updated!");  
+	212: model.addAttribute("msg", "Failed to update user information.");  
+	301: model.addAttribute("msg", "Sending mail successfully.");  
+	305: model.addAttribute("msg", "Failed to send mail.");  
+	369: model.addAttribute("msg", "Sending mail successfully.");  
+	372: model.addAttribute("msg", "Failed to send mail.");  
+	454: model.addAttribute("msg", "Success");  
+	457: model.addAttribute("msg", "Fail");  
+	505: model.addAttribute("msg", "Sending mail successfully.");  
+	509: model.addAttribute("msg", "Failed to send mail.");  
+	549: model.addAttribute("msg", "Mobile user creation is complete.");  
+	552: model.addAttribute("msg", "Mobile user creation is complete but failed to send mail.");  
+	556: model.addAttribute("msg", "Failed to create mobile user. There is an error to create mobile user.");  
+	560: model.addAttribute("msg", "Failed to create mobile user. There is a difference between Services DB and MDC DB.");  
+	565: model.addAttribute("msg", "Failed to create mobile user.");  
+	622: model.addAttribute("msg", "Mobile user creation is complete.");  
+	625: model.addAttribute("msg", "Mobile user creation is complete but failed to send mail.");  
+	629: model.addAttribute("msg", "Failed to create mobile user. There is an error to create mobile user.");  
+	634: model.addAttribute("msg", "Failed to create mobile user.");  
+	
+=================================
+MSG-SV001=Abnormal access.
+MSG-SV002=An exception occurred.
+MSG-SV003=Approval failed.
+MSG-SV004=Approval succeeded.
+MSG-SV005=Authentication failed.
+MSG-SV006=Click this link.
+MSG-SV007=Delete succeded.
+MSG-SV008=Failed.
+MSG-SV009=Failed to change password.
+MSG-SV010=Failed to create mobile user.
+MSG-SV011=Failed to delete.
+MSG-SV012=Failed to remove.
+MSG-SV013=Failed to request.
+MSG-SV014=Failed to save user information.
+MSG-SV015=Failed to save.
+MSG-SV016=Failed to send mail.
+MSG-SV017=Failed to update user information.
+MSG-SV018=Failed to upload file.
+MSG-SV019=File upload failed.
+MSG-SV020=File upload successful.
+MSG-SV021=Group creation failed.
+MSG-SV022=Group creation successful.
+MSG-SV023=Group Duplicate Error.
+MSG-SV024=Group update failed.
+MSG-SV025=Group update successful.
+MSG-SV026=Invalid access.
+MSG-SV027=Mail sent successfully.
+MSG-SV028=Mobile user creation is complete but failed to send mail.
+MSG-SV029=Mobile user creation is complete.
+MSG-SV030=Owner's country info is required.
+MSG-SV031=Password successfully changed.
+MSG-SV032=Permission error.
+MSG-SV033=Please try again in a few minutes.
+MSG-SV034=Removal succeded.
+MSG-SV035=Request success.
+MSG-SV036=Reset password failed.
+MSG-SV037=Saved succesfully!
+MSG-SV038=Sending mail successfully.
+MSG-SV039=Succesfully deleted.
+MSG-SV040=Success.
+MSG-SV041=Successfully registered.
+MSG-SV042=System error occured.
+MSG-SV044=System error. Please retry!
+MSG-SV045=The network or server seems to have failed.
+MSG-SV046=There is a difference between Services DB and MDC DB.
+MSG-SV047=There is an error to create mobile user.
+MSG-SV048=There is no data to add.
+MSG-SV049=There is no serial number.
+MSG-SV050=This serial number is already registered.
+MSG-SV051=User information succesfully saved!
+MSG-SV052=User information succesfully updated!
+MSG-SV053=We changed your password but failed to send an email.
+MSG-SV054=We sent the changed password to your email.
+MSG-SV055=You don't have permission for KDC Registration.
+MSG-SV056=Your account will be delivered by email in 2~3 business days.
+MSG-SV057=Your country is serviced by Gulliver.
+MSG-SV058=Your request could not be processed.

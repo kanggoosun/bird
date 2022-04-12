@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aisolution.koamtacon.mapper.service.SignMapper">
+	<resultMap type="com.aisolution.common.model.SessionInfo" id="sessionInfo">
+		<result property="loginDate" column="loginDate" />
+		<result property="userId" column="userId" />
+		<result property="email" column="email" />
+		<result property="name" column="name" />
+		<result property="phone" column="phone" />
+		<result property="site" column="site" />
+		<result property="country" column="country" />
+		<result property="company" column="company" />
+		<result property="userType" column="userType" />
+		<result property="userActivationYn" column="userActivationYn" />
+		<result property="initialPwdYn" column="initialPwdYn" />
+		<result property="roleSeq" column="roleSeq" />
+		<result property="groupCode" column="groupCode" />
+		<result property="area" column="area" />
+	</resultMap>
+	
+	<select id="CanLogin" parameterType="HashMap" resultType="int">
+	<![CDATA[
+		select count(0) as cnt
+		  from tb_user
+		 where 1=1
+		   and BINARY user_id = #{userId}
+		   and password = #{decPassword}
+		   and activation_yn = 'Y'
+	]]>
+	</select>
+	
+	<select id="SelectSessionInfo" parameterType="HashMap" resultMap="sessionInfo">
+	<![CDATA[
+		select now() as loginDate
+		     , usr.user_id as userId
+		     , usr.email
+		     , usr.name
+		     , usr.phone
+		     , usr.site
+		     , usr.country
+		     , usr.company
+		     , usr.user_type as userType
+		     , usr.activation_yn as userActivationYn
+		     , usr.initial_pwd_yn as initialPwdYn
+		     , rol.role_seq as roleSeq
+		     , grp.group_code as groupCode
+		     , usr.area as area
+		  from tb_user usr
+		       left outer join tb_role_user rol on rol.user_id = usr.user_id
+		       left outer join tb_group_member grp on grp.user_id = usr.user_id
+		 where 1=1
+		   and BINARY usr.user_id = #{userId}
+		   and usr.activation_yn = 'Y'
+	]]>
+	</select>
+	
+	<insert id="insertUser" parameterType="HashMap">
+    <![CDATA[
+        insert into tb_user (
+               user_id   , email   , name        , phone
+             , company   , site    , country     , user_type
+             , created_date, updated_date
+        ) values (
+               #{userId} , #{email}, #{name}     , #{phone}
+             , #{company}, #{site} , #{cbCountry}, #{userType}
+             , CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()
+        )
+    ]]>
+    </insert>
+    
+	<insert id="insertSign" parameterType="HashMap">
+    <![CDATA[
+        insert into tb_user (
+               user_id     , password      , email   , name
+             , phone       , company       , site    , country
+             , user_type
+             , created_date, updated_date
+        ) values (
+               #{userId}   , #{decPassword}, #{email}, #{name}
+             , #{phone}    , #{company}    , #{site} , #{cbCountry}
+             , #{userType}
+             , CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()
+        )
+    ]]>
+    </insert>
+    
+    <update id="updateSign" parameterType="HashMap">
+    <![CDATA[
+        update tb_user
+           set email = #{email}
+             , name = #{name}
+             , phone = #{phone}
+             , company = #{company}
+             , site = #{site}
+             , country = #{cbCountry}
+             , updated_date = CURRENT_TIMESTAMP()
+         where 1=1
+           and BINARY user_id = #{userId}
+    ]]>
+    </update>
+    
+    <select id="isExist" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as isExist
+          from tb_user
+         where 1=1
+           and BINARY user_id = #{userId}
+    ]]>
+    </select>
+    
+    <select id="getUserProfile" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select usr.user_id as userId
+             , usr.email as email
+             , usr.name as name
+             , usr.phone as phone
+             , usr.company as company
+             , usr.site as site
+             , usr.country as country
+             , usr.user_type as userType
+             , usr.area as area
+             , mem.group_code as groupCode
+             , mem.mdc_id as syncUser
+             , mem.device_code as deviceCode
+             , mem.activation_code as activationCode
+          from tb_user usr
+               left outer join (select m.user_id as user_id
+                                     , m.group_code as group_code
+                                     , m.mdc_id as mdc_id
+                                     , m.device_code as device_code
+                                     , m.payment_plan as payment_plan
+                                     , m.payment_key as payment_key
+                                     , m.activation_yn as activation_yn
+                                     , m.activation_code as activation_code
+                                  from tb_group_member m
+                                       left join tb_group g on g.group_code = m.group_code
+                                                           and g.area = m.area
+                                                           and g.use_yn = 'Y'
+                               ) mem on mem.user_id = usr.user_id
+               
+         where 1=1
+           and BINARY usr.user_id = #{userId}
+    ]]>
+    </select>
+    
+    <select id="verifyOwner" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_user
+         where 1=1
+           and BINARY user_id = #{userId}
+           and BINARY email = #{email}
+           and user_type = '0'
+    ]]>
+    </select>
+    
+    <select id="verifyUser" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_user
+         where 1=1
+           and BINARY user_id = #{userId}
+           and BINARY email = #{email}
+    ]]>
+    </select>
+    
+    <update id="resetPassword" parameterType="HashMap">
+    <![CDATA[
+        update tb_user
+           set password = #{newPassword}
+             , initial_pwd_yn = 'Y'
+             , updated_date = CURRENT_TIMESTAMP()
+             , temp_pwd = #{tmpPassword}
+         where 1=1
+           and BINARY user_id = #{userId}
+           and BINARY email = #{email}
+    ]]>
+    </update>
+    
+    <update id="changePassword" parameterType="HashMap">
+    <![CDATA[
+        update tb_user
+           set password = #{decNewPassword}
+             , initial_pwd_yn = 'N'
+             , updated_date = CURRENT_TIMESTAMP()
+         where 1=1
+           and BINARY user_id = #{userId}
+           and password = #{decPassword}
+    ]]>
+    </update>
+    
+    <select id="getCountry" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select code
+             , t_code
+             , name_en
+             , name_ko
+             , continent
+          from tb_country_code
+         where 1=1
+           and code = #{cbCountry}
+    ]]>
+    </select>
+    
+    <insert id="insertDemoAccount" parameterType="HashMap">
+    <![CDATA[
+        insert into tb_demo_accounts (
+               email   , name      , phone    , company
+             , site    , country   , user_type
+             , created_date, updated_date
+        ) values (
+               #{rEmail}, #{rName}   , #{rPhone} , #{rCompany}
+             , #{rSite} , #{cbCountry}, '3'
+             , CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()
+        )
+    ]]>
+    </insert>
+</mapper>

@@ -1,0 +1,394 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<!-- global header -->
+<%@ include file="../include/gheader.jsp" %>
+
+<!DOCTYPE HTML>
+<!--
+    Editorial by HTML5 UP
+    html5up.net | @ajlkn
+    Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+<head>
+    <title>User Management</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <!--[if lte IE 8]><script src="<c:url value='/resources/assets/js/ie/html5shiv.js' />"></script><![endif]-->
+    <link rel="stylesheet" href="<c:url value='/resources/assets/css/main.css' />" />
+    <!--[if lte IE 9]><link rel="stylesheet" href="<c:url value='/resources/assets/css/ie9.css' />" /><![endif]-->
+    <!--[if lte IE 8]><link rel="stylesheet" href="<c:url value='/resources/assets/css/ie8.css' />" /><![endif]-->
+
+    <!-- Scripts -->
+    <%@ include file="../include/incScripts.jsp" %>
+    
+</head>
+
+<body>
+<!-- Wrapper -->
+<div id="wrapper">
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
+            <!-- Header -->
+            <%@ include file="../include/header.jsp" %>
+            
+            <section>
+                <header class="main">
+                    <h2>Customer Management</h2>
+                </header>
+                
+                <section>
+                    <h4>Filters</h4>
+                    
+                    <form id="frmMainFilter" name="frmMainFilter">
+	                    <div class="row">
+		                    <div class="2u 12u$(medium) select-wrapper">
+		                        <select id="cbActivationYn" name="cbActivationYn" class="filter">
+		                            <option value=""> -- Activation YN -- </option>
+		                            <option value="Y">Yes</option>
+		                            <option value="N">No</option>
+		                        </select>
+		                    </div>
+		                    <div class="2u 12u$(medium) select-wrapper">
+		                        <select id="cbJoinDate" name="cbJoinDate" class="filter">
+		                            <option value=""> -- Join Date -- </option>
+		                            <option value="1">In 1 Day</option>
+		                            <option value="2">In 2 Day</option>
+		                            <option value="3">In 3 Day</option>
+		                        </select>
+		                    </div>
+		                    <div class="1u 12u$(medium) select-wrapper">
+                                <select id="cbSearchField" name="cbSearchField">
+                                    <option value="0">User id</option>
+                                    <option value="1">Name</option>
+                                    <option value="2">E-mail</option>
+                                    <option value="3">Group code</option>
+                                </select>
+                            </div>
+		                    <div class="3u 12u$(medium)">
+                                <input type="text" name="sKeyword" id="sKeyword" value="" placeholder="keyword"/> 
+                            </div>
+	                    </div>
+                    </form>
+                </section>
+                
+                <section>
+                    <h4>User List</h4>
+                    <div id="tblUserList" class="table-wrapper">
+	                    <table class="alt">
+	                        <thead>
+	                            <tr>
+	                                <th style="text-align:center;">ID</th>
+	                                <th style="text-align:center;">Name</th>
+	                                <th style="text-align:center;">E-mail</th>
+	                                <th style="text-align:center;">Country</th>
+	                                <th style="text-align:center;">Type</th>
+	                                <th style="text-align:center;">Creation<br>date</th>
+	                                <th style="text-align:center;">Activation<br>Code</th>
+	                                <th style="text-align:center;">Activated<br>date</th>
+	                                <th style="text-align:center;">Group Code</th>
+	                                <th style="text-align:center;">SyncUser<br>(Mobile User name)</th>
+	                                <th style="text-align:center;">Device<br>Code</th>
+	                            </tr>
+	                        </thead>
+	                        <tbody style="text-align:center;font-size:0.8em;">
+	                        </tbody>
+	                        <tfoot style="font-size:0.8em;">
+		                        <tr><td colspan="11" style="text-align:center;" id="tdPagination"></td></tr>
+		                        <tr><td colspan="11" style="text-align:right;" id="tdButton"></td></tr>
+	                        </tfoot>
+	                    </table>
+                    </div>
+                </section>
+            </section>
+            <!-- Footer -->
+            <%@ include file="../include/footer.jsp" %>
+        </div>
+    </div>
+</div>
+
+<!-- User Information popup layer -->
+<div id="dim-layer-user-info" class="dim-layer">
+    <div id="dimBgUserInfo" class="dimBg"></div>
+    <div id="user_info_layer" class="popcont-layer 12u$" style="width:600px;">
+        <div class="pop-container">
+            <div class="pop-conts">
+                <!--content //-->
+                <div id="userInfoDiv">
+                    <form id="frmUserInfoPop" method="post">
+                        <div class="row uniform">
+                            <div class="12u 12u$(small)">
+                                <input type="hidden" name="userId" id="userId" value="" />
+                            </div>
+                            <div class="6u 12u$(small)">
+                                <input type="text" name="groupCode" id="groupCode" value="" placeholder="Group code" readonly="readonly"/>
+                            </div>
+                            <div class="6u 12u$(small)">
+                                <input type="text" name="groupName" id="groupName" value="" placeholder="Group name" readonly="readonly"/>
+                            </div>
+                            <div class="6u 12u$(small)">
+                                <input type="text" name="mdcId" id="mdcId" value="" placeholder="SyncUser" maxlength="1000" />
+                            </div>
+                            <div class="6u$ 12u$(small)">
+                                <input type="text" name="deviceCode" id="deviceCode" value="" placeholder="Device Code" readonly="readonly" maxlength="30" />
+                            </div>
+                            <div class="12u$ 12u$(small)">
+                                <input type="button" name="btnCheckMdcId" id="btnCheckMdcId" value="Check ID" class="button small fit" />
+                            </div>
+                            <div class="6u 12u$(small)">
+                                <input type="hidden" name="activationYn" id="activationYn" value="" />
+                                <input type="text" name="activationCode" id="activationCode" value="" placeholder="Activation Code" maxlength="50" />
+                            </div>
+                            <div class="6u 12u$(small)">
+                                <input type="text" name="activatedDate" id="activatedDate" value="" placeholder="Activated Date" readonly="readonly" maxlength="30" />
+                            </div>
+                            <div class="12u 12u$">
+                                <ul class="actions vertical">
+                                    <li><input type="button" name="btnSaveUserInfo" id="btnSaveUserInfo" value="Save" class="button special fit" /></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <!--// content-->
+                <div class="btn-r">
+                    <a href="#" id="closeUserInfoPopup" class="btn-layerClose">Close</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- popup layer -->
+<%@ include file="../include/popupLayer.jsp" %>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	var msg = "<c:out value='${msg}' />";
+    if (msg != null && msg != "") { gfn_layerPopup(msg); }
+    
+    gfn_toggleMenu('.userMgmt');
+    
+    fn_getUserInfoList(1);
+});
+
+var strClickEventNm  = "";
+strClickEventNm += "#btnSaveUserInfo, #btnCheckMdcId, #btnExcelExport";
+// mouse click event
+$(document).on("click", strClickEventNm, function(e){
+    e.preventDefault();
+
+    var id = $(this).attr("id");
+    fn_eventCallFunction(id);
+});
+
+//key press event
+var strKeypressEventNm  = "";
+strKeypressEventNm += "#groupName, #mdcId, #deviceCode, #activationCode";
+$(document).on("keypress", strKeypressEventNm, function(e){
+    var id = $(this).attr("id");
+    
+    if(e.keyCode == 13){
+        if (id === "groupName"){
+            return false;
+        } else {
+            fn_eventCallFunction(id);
+        }
+    }
+});
+
+function fn_eventCallFunction() {
+    var args = fn_eventCallFunction.arguments;
+    
+    if (args[0] === "btnSaveUserInfo") {
+        fn_submitUserInfo();
+    } else if (args[0] === "btnCheckMdcId") {
+        fn_checkMdcId();
+    } else if (args[0] === "btnExcelExport") {
+    	fn_excelExport();
+    }
+    
+    else if (args[0] === "groupName") {
+        $("#mdcId").focus();
+    } else if (args[0] === "mdcId") {
+        $("#deviceCode").focus();
+    } else if (args[0] === "deviceCode") {
+    	$("#activationCode").focus();
+    } else if (args[0] === "activationCode") {
+        return false;
+    }
+}
+
+$(document).on("click", "#tblUserList tbody td", function(e){
+    e.preventDefault();
+
+    var id = $(this).attr("id");
+    var no = id.split("-")[1];
+
+    fn_userInfoPop(no);
+});
+
+$('.filter').change( function() {
+	fn_getUserInfoList(1);
+});
+
+$("#cbSearchField").change( function() {
+	if ($("#sKeyword").val() != "") {
+		fn_getUserInfoList(1);
+	}
+});
+
+$("#sKeyword").on("input", function() {
+	fn_getUserInfoList(1);
+});
+
+function fn_getUserInfoList(pageNo) {
+	var param = "";
+	param += "cbActivationYn="+$("#cbActivationYn").val();
+    param += "&";
+    param += "cbJoinDate="+$("#cbJoinDate").val();
+    param += "&";
+    param += "cbSearchField="+$("#cbSearchField").val();
+    param += "&";
+    param += "sKeyword="+$("#sKeyword").val();
+    param += "&";
+    param += "curPage="+pageNo;
+    param += "&";
+    param += "callFunction=fn_getUserInfoList";
+	
+	gf_send("<c:url value='/admin/userManagement/getUserInfoList' />", param, "fn_getUserInfoListCallback");
+}
+
+function fn_getUserInfoListCallback(data) {
+	var userInfoList = data.userInfoList;
+	var paginationHtml = data.pageInfo.paginationHtml;
+
+	fn_makeTblUserInfoList(userInfoList, paginationHtml);
+}
+
+function fn_makeTblUserInfoList(userInfoList, paginationHtml) {
+	var bodyHtml = "";
+	var pageHtml = "";
+	var buttonHtml = "";
+	
+	if (userInfoList != null && userInfoList.length > 0) {
+		for(var i=0; i<userInfoList.length; i++) {
+			bodyHtml += "<tr>";
+	        bodyHtml += "    <td id=\"tdUserId-"+i+"\">"+gfn_nullValue(userInfoList[i].userId);
+	        bodyHtml += "        <input type=\"hidden\" name=\"userId-"+i+"\" id=\"userId-"+i+"\" value=\""+gfn_nullValue(userInfoList[i].userId)+"\" />";
+	        bodyHtml += "        <input type=\"hidden\" name=\"countryCode-"+i+"\" id=\"countryCode-"+i+"\" value=\""+gfn_nullValue(userInfoList[i].countryCode)+"\" />";
+	        bodyHtml += "        <input type=\"hidden\" name=\"userType-"+i+"\" id=\"userType-"+i+"\" value=\""+gfn_nullValue(userInfoList[i].userType)+"\" />";
+	        bodyHtml += "        <input type=\"hidden\" name=\"groupCode-"+i+"\" id=\"groupCode-"+i+"\" value=\""+gfn_nullValue(userInfoList[i].groupCode)+"\" />";
+	        bodyHtml += "        <input type=\"hidden\" name=\"groupName-"+i+"\" id=\"groupName-"+i+"\" value=\""+gfn_nullValue(userInfoList[i].groupName)+"\" />";
+	        bodyHtml += "        <input type=\"hidden\" name=\"mdcId-"+i+"\" id=\"mdcId-"+i+"\" value=\""+gfn_nullValue(userInfoList[i].mdcId)+"\" />";
+	        bodyHtml += "        <input type=\"hidden\" name=\"deviceCode-"+i+"\" id=\"deviceCode-"+i+"\" value=\""+gfn_nullValue(userInfoList[i].deviceCode)+"\" />";
+	        bodyHtml += "        <input type=\"hidden\" name=\"paymentPlan-"+i+"\" id=\"paymentPlan-"+i+"\" value=\""+gfn_nullValue(userInfoList[i].paymentPlan)+"\" />";
+	        bodyHtml += "        <input type=\"hidden\" name=\"paymentKey-"+i+"\" id=\"paymentKey-"+i+"\" value=\""+gfn_nullValue(userInfoList[i].paymentKey)+"\" />";
+	        bodyHtml += "        <input type=\"hidden\" name=\"activationYn-"+i+"\" id=\"activationYn-"+i+"\" value=\""+gfn_nullValue(userInfoList[i].activationYn)+"\" />";
+	        bodyHtml += "        <input type=\"hidden\" name=\"activationCode-"+i+"\" id=\"activationCode-"+i+"\" value=\""+gfn_nullValue(userInfoList[i].activationCode)+"\" />";
+	        bodyHtml += "        <input type=\"hidden\" name=\"activatedDate-"+i+"\" id=\"activatedDate-"+i+"\" value=\""+gfn_nullValue(userInfoList[i].activatedDate)+"\" />";
+	        bodyHtml += "    </td>";
+	        bodyHtml += "    <td id=\"tdUserName-"+i+"\">"+gfn_nullValue(userInfoList[i].userName)+"</td>";
+	        bodyHtml += "    <td id=\"tdUseEmail-"+i+"\">"+gfn_nullValue(userInfoList[i].userEmail)+"</td>";
+	        bodyHtml += "    <td id=\"tdCountryName-"+i+"\">"+gfn_nullValue(userInfoList[i].countryName)+"</td>";
+	        bodyHtml += "    <td id=\"tdUserTypeName-"+i+"\">"+gfn_nullValue(userInfoList[i].userTypeName)+"</td>";
+	        bodyHtml += "    <td id=\"tdCreatioinDate-"+i+"\">"+gfn_nullValue(userInfoList[i].creationDate)+"</td>";
+	        bodyHtml += "    <td id=\"tdActivationCode-"+i+"\">"+gfn_nullValue(userInfoList[i].activationCode)+"</td>";
+	        bodyHtml += "    <td id=\"activatedDate-"+i+"\">"+gfn_nullValue(userInfoList[i].activatedDate)+"</td>";
+	        bodyHtml += "    <td id=\"groupCode-"+i+"\">"+gfn_nullValue(userInfoList[i].groupCode)+"</td>";
+	        bodyHtml += "    <td id=\"mdcId-"+i+"\">"+gfn_nullValue(userInfoList[i].mdcId)+"</td>";
+	        bodyHtml += "    <td id=\"deviceCode-"+i+"\">"+gfn_nullValue(userInfoList[i].deviceCode)+"</td>";
+	        bodyHtml += "</tr>";
+		}
+		pageHtml = paginationHtml;
+		buttonHtml += "<ul class=\"actions\">";
+		buttonHtml += "    <li><input type=\"button\" name=\"btnExcelExport\" id=\"btnExcelExport\" value=\"Export\" class=\"button special fit\" /></li>";
+		buttonHtml += "</ul>";
+	} else {
+		bodyHtml += "<tr>";
+		bodyHtml += "    <td colspan=\"11\">There is no data.</td>";
+        bodyHtml += "</tr>";
+	}
+	
+	$("#tblUserList tbody").html(bodyHtml);
+	$("#tblUserList tfoot #tdPagination").html(pageHtml);
+	$("#tblUserList tfoot #tdButton").html(buttonHtml);
+}
+
+function fn_clearFrmUserInfoPop() {
+	$("#userId").val("");
+    $("#groupCode").val("");
+    $("#groupName").val("");
+    $("#mdcId").val("");
+    $("#deviceCode").val("");
+    $("#activationCode").val("");
+    $("#activatedDate").val("");
+    $("#activationYn").val("");
+}
+
+function fn_userInfoPop(no) {
+	fn_clearFrmUserInfoPop();
+	
+	$("#userId").val($("#userId-"+no).val());
+	$("#groupCode").val($("#groupCode-"+no).val());
+	$("#groupName").val($("#groupName-"+no).val());
+	$("#mdcId").val($("#mdcId-"+no).val());
+	$("#deviceCode").val($("#deviceCode-"+no).val());
+	$("#activationCode").val($("#activationCode-"+no).val());
+	$("#activatedDate").val($("#activatedDate-"+no).val());
+	
+	if ($("#groupName").val()) {
+        $("#groupName").attr("readonly", true);
+    } else {
+        $("#groupName").attr("readonly", false);
+    }
+	
+	if ($("#activationCode").val()) {
+		$("#activationYn").val("Y");
+	} else {
+		$("#activationYn").val("N");
+	}
+	
+	gfn_customLayerPopup('dim-layer-user-info', 'dimBgUserInfo', 'user_info_layer', 'closeUserInfoPopup');
+}
+
+function fn_checkMdcId() {
+	var param = "mdcId="+$("#mdcId").val();
+	gf_send("<c:url value='/mdc/mdcKoamtac/getSyncUser' />", param, "fn_checkMdcIdCallback");
+}
+
+function fn_checkMdcIdCallback(data) {
+	if (data != null && data.syncUserMap != null && data.syncUserMap.mdcId != null) {
+		gfn_layerPopup("The id "+data.syncUserMap.mdcId+" exists.");
+		$("#deviceCode").val(data.syncUserMap.deviceCode);
+	} else {
+		gfn_layerPopup("The id "+$("#mdcId").val()+" doess not exist.");
+	}
+}
+
+function fn_submitUserInfo() {
+	gf_sendForm("frmUserInfoPop", "<c:url value='/admin/userManagement/updateUserInfo' />", "fn_submitUserInfoCallback");
+}
+
+function fn_submitUserInfoCallback(data) {
+	gfn_layerPopup(data.msg);
+	
+	fn_getUserInfoList(1);
+}
+
+function fn_excelExport() {
+	var param = "";
+	param += "filename=customer-list";
+	param += "&";
+	param += "cbActivationYn="+$("#cbActivationYn").val();
+    param += "&";
+    param += "cbJoinDate="+$("#cbJoinDate").val();
+    param += "&";
+    param += "sUserId="+$("#sUserId").val();
+	
+	document.location.href = "/common/excelExport?"+param;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aisolution.common.mapper.CommonMapper">
+
+    <select id="getListCountryCode" resultType="HashMap">
+    <![CDATA[
+        select code as code
+             , t_code
+             , name_en as value
+             , name_ko
+          from tb_country_code
+         where 1=1
+         order by name_en asc
+    ]]>
+    </select>
+    
+    <select id="getComboCode" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select code as code
+             , code_name as value
+          from tb_code
+         where 1=1
+           and master_code = #{masterCode}
+           and use_yn = 'Y'
+         order by code_order asc
+    ]]>
+    </select>
+    
+    <select id="checkIp" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select ip.country_code as countryCode
+             , cn.continent as continent
+             , ip.start_ip as startIp
+             , ip.end_ip as endIp
+          from tb_ip_v4 ip
+               left outer join tb_country_code cn on cn.code = ip.country_code
+         where 1=1
+           and cast(#{ipA} as unsigned) between cast(start_ip_a as unsigned) and cast(end_ip_a as unsigned)
+           and cast(#{ipB} as unsigned) between cast(start_ip_b as unsigned) and cast(end_ip_b as unsigned)
+           and cast(#{ipC} as unsigned) between cast(start_ip_c as unsigned) and cast(end_ip_c as unsigned)
+           and cast(#{ipD} as unsigned) between cast(start_ip_d as unsigned) and cast(end_ip_d as unsigned)
+    ]]>
+    </select>
+</mapper>

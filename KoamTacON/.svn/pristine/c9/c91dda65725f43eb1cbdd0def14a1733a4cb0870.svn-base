@@ -1,0 +1,551 @@
+package com.aisolution.koamtacon.controller.service;
+
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.aisolution.common.config.ConfigConstants;
+import com.aisolution.common.service.CommonService;
+import com.aisolution.common.service.MailService;
+import com.aisolution.common.util.CommonUtils;
+import com.aisolution.common.util.InitUtil;
+import com.aisolution.koamtacon.service.mdc.WSApiService;
+import com.aisolution.koamtacon.service.service.GroupService;
+import com.aisolution.koamtacon.service.service.SignService;
+import com.aisolution.koamtacon.service.service.UserManagementService;
+
+@Controller
+@RequestMapping("/admin/userManagement")
+public class UserManagementController {
+	private static final Logger log = LoggerFactory.getLogger(UserManagementController.class);
+	
+	@Autowired
+	private CommonService commonService;
+	@Autowired
+	private GroupService groupService;
+	@Autowired
+	private SignService signService;
+	@Autowired
+	private UserManagementService userManagementService;
+	@Autowired
+	private InitUtil initUtil;
+	@Autowired
+	private MailService mailService;
+	
+	@Autowired
+	private WSApiService wsApiService;
+	
+	@RequestMapping(value="/group", method={RequestMethod.GET, RequestMethod.POST})
+	public String group(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("group paramMap={}",paramMap);
+		
+		model = initUtil.initMenu(paramMap, model);
+		
+		return "/admin/groupManagement";
+	}
+	
+	@RequestMapping(value="/getOwnerList", method={RequestMethod.GET, RequestMethod.POST})
+	public String getOwnerList(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("getOwnerList paramMap={}",paramMap);
+		
+		Map<String, Object> map = userManagementService.getOwnerList(paramMap);
+		model.addAttribute("ownerList", map.get("list"));
+		model.addAttribute("pageInfo", map.get("pageInfo"));
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/customer", method={RequestMethod.GET, RequestMethod.POST})
+	public String customer(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("customer paramMap={}",paramMap);
+		
+		model = initUtil.initMenu(paramMap, model);
+		
+		return "/admin/customerManagement";
+	}
+	
+	@RequestMapping(value="/getUserInfoList", method={RequestMethod.GET, RequestMethod.POST})
+	public String getUserInfoList(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("getUserInfoList paramMap={}",paramMap);
+		
+		int itemNoPerPage = paramMap.get("itemNoPerPage") == null ? ConfigConstants.TEN_ITEMS_NO_PER_PAGE : Integer.parseInt(paramMap.get("itemNoPerPage"));
+		paramMap.put("itemNoPerPage", String.valueOf(itemNoPerPage));
+		Map<String, Object> map = userManagementService.getUserInfoList(paramMap);
+		model.addAttribute("userInfoList", map.get("userInfoList"));
+		model.addAttribute("pageInfo", map.get("pageInfo"));
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/updateUserInfo", method={RequestMethod.GET, RequestMethod.POST})
+	public String updateUserInfo(@RequestParam Map<String, String> paramMap, Model model) throws Exception {
+		log.debug("updateUserInfo paramMap={}",paramMap);
+		try {
+			userManagementService.updateUserInfo(paramMap);
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", "User information succesfully updated!");
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", "Failed to update user information.");
+		}
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/admin", method={RequestMethod.GET, RequestMethod.POST})
+	public String admin(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("admin paramMap={}",paramMap);
+		
+		model = initUtil.initMenu(paramMap, model);
+		
+		model.addAttribute("listCountryCode", commonService.getComboCountry(""));
+		return "/admin/adminManagement";
+	}
+	
+	@RequestMapping(value="/getAdminInfoList", method={RequestMethod.GET, RequestMethod.POST})
+	public String getAdminInfoList(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("getAdminInfoList paramMap={}",paramMap);
+		
+		int itemNoPerPage = paramMap.get("itemNoPerPage") == null ? ConfigConstants.TEN_ITEMS_NO_PER_PAGE : Integer.parseInt(paramMap.get("itemNoPerPage"));
+		paramMap.put("itemNoPerPage", String.valueOf(itemNoPerPage));
+		Map<String, Object> map = userManagementService.getAdminInfoList(paramMap);
+		model.addAttribute("adminInfoList", map.get("adminInfoList"));
+		model.addAttribute("pageInfo", map.get("pageInfo"));
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/insertAdminInfo", method={RequestMethod.GET, RequestMethod.POST})
+	public String insertAdminInfo(@RequestParam Map<String, String> paramMap, Model model) throws Exception {
+		log.debug("insertAdminInfo paramMap={}",paramMap);
+		try {
+			paramMap.put("decPassword", CommonUtils.encryptSha512("aisolution"));
+			paramMap.put("userType", "9");
+			signService.insertSign(paramMap);
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", "User information succesfully saved!");
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", "Failed to save user information.");
+		}
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/updateAdminInfo", method={RequestMethod.GET, RequestMethod.POST})
+	public String updateAdminInfo(@RequestParam Map<String, String> paramMap, Model model) throws Exception {
+		log.debug("updateAdminInfo paramMap={}",paramMap);
+		try {
+			userManagementService.updateAdminInfo(paramMap);
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", "User information succesfully updated!");
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", "Failed to update user information.");
+		}
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/getGroupList", method={RequestMethod.GET, RequestMethod.POST})
+	public String getGroupList(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("getGroupList paramMap={}",paramMap);
+		
+		int itemNoPerPage = paramMap.get("itemNoPerPage") == null ? ConfigConstants.TEN_ITEMS_NO_PER_PAGE : Integer.parseInt(paramMap.get("itemNoPerPage"));
+		paramMap.put("itemNoPerPage", String.valueOf(itemNoPerPage));
+		Map<String, Object> map = userManagementService.getGroupList(paramMap);
+		model.addAttribute("groupList", map.get("groupList"));
+		model.addAttribute("pageInfo", map.get("pageInfo"));
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/getMemberList", method={RequestMethod.GET, RequestMethod.POST})
+	public String getMemberList(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("getMemberList paramMap={}",paramMap);
+		
+		int itemNoPerPage = paramMap.get("itemNoPerPage") == null ? ConfigConstants.TEN_ITEMS_NO_PER_PAGE : Integer.parseInt(paramMap.get("itemNoPerPage"));
+		paramMap.put("itemNoPerPage", String.valueOf(itemNoPerPage));
+		Map<String, Object> map = userManagementService.getMemberList(paramMap);
+		model.addAttribute("memberList", map.get("memberList"));
+		model.addAttribute("pageInfo", map.get("pageInfo"));
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/updateMemberInfo", method={RequestMethod.GET, RequestMethod.POST})
+	public String updateMemberInfo(@RequestParam Map<String, String> paramMap, Model model) throws Exception {
+		log.debug("updateMemberInfo paramMap={}",paramMap);
+		try {
+			userManagementService.updateUserInfo(paramMap);			
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", "User information succesfully updated!");
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", "Failed to update user information.");
+		}
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/sendMail", method={RequestMethod.GET, RequestMethod.POST})
+	public String sendMail(@RequestParam Map<String, String> paramMap, Model model) throws Exception {
+		log.debug("sendMail paramMap={}",paramMap);
+		
+		Map<String, Object> userInfo = userManagementService.getUserInfo(paramMap);
+		
+		//String accountActivationYn = CommonUtils.getValue(userInfo.get("accountActivationYn"), "");
+		//String initialPwdYn = CommonUtils.getValue(userInfo.get("initialPwdYn"), "");
+		
+		//String lineBreak = "\r\n";
+		String lineBreak = "<br>";
+		String sender = ConfigConstants.fromAddress;
+		String receiver = userInfo.get("userEmail").toString();
+		String userType = userInfo.get("userType").toString();
+		
+		String appleAppStore = "<a href='https://itunes.apple.com/us/app/koamtacon/id976617297?mt=8'>Apple App Store</a>";
+		String googlePlayStore = "<a href='https://play.google.com/store/apps/details?id=com.gullivernet.mdc.android.gui.k&amp;hl=en_US'>Google Play Store</a>";
+		String microsoftAppStore = "<a href='https://www.microsoft.com/en-us/p/koamtacon/9nblggh5265t'>Microsoft App Store</a>";
+		
+		String title = "Welcome to KOAMTACON!";
+		
+		StringBuffer sbContents = new StringBuffer();
+		sbContents.append("Dear ").append(userInfo.get("userName")).append(",").append(lineBreak).append(lineBreak);
+		sbContents.append(lineBreak);
+		sbContents.append("Congratulations! Your KOAMTACON registration for ").append(userInfo.get("company")).append(" is complete.").append(lineBreak);
+		sbContents.append(lineBreak);
+		sbContents.append("To log in to <a href='http://services.koamtacon.com/'>KOAMTACON’s web console</a> your credentials are: ").append(lineBreak);
+		sbContents.append("User ID: ").append(userInfo.get("userId")).append(lineBreak);
+		String newPassword = CommonUtils.makeRandomString(8);
+		sbContents.append("Password: ").append(newPassword).append(lineBreak);
+		sbContents.append(lineBreak);
+		sbContents.append("To begin using KOAMTACON with your KDC, please download the application from either the ").append(appleAppStore).append(", ").append(googlePlayStore).append(", or ").append(microsoftAppStore).append(".").append(lineBreak);
+		sbContents.append("Your activation code is <font face='consolas'>").append(userInfo.get("activationCode")).append("</font>.").append(lineBreak);
+		if (userType.equals("0")) {
+			sbContents.append(lineBreak);
+			sbContents.append("Now you can register more members to your organization using the web console. Your organization's allowed number of members directly correlates to the number of KDCs registered. Additionally, your User ID counts as one member for your organization.").append(lineBreak);
+		} else if (userType.equals("1")) {
+			
+		}
+		paramMap.put("newPassword", CommonUtils.encryptSha512(newPassword));
+		paramMap.put("email", receiver);
+		signService.resetPassword(paramMap);
+		userManagementService.activateUser(paramMap);
+		sbContents.append(lineBreak);
+		sbContents.append("Please refer to the <a href='http://koamtacon.com/product/documentation/'>KOAMTACON User Manual</a> for assistance or contact our support team at <a href='mailto:koamtacon@koamtac.com'>koamtacon@koamtac.com</a>.").append(lineBreak);
+		sbContents.append(lineBreak);
+		sbContents.append("Thank you and welcome!").append(lineBreak);
+		sbContents.append(lineBreak);
+		sbContents.append("The KOAMTACON Team").append(lineBreak);
+		
+		/*
+		if (accountActivationYn.equals("N") && initialPwdYn.equals("Y")) {
+			sbContents.append("Dear ").append(userInfo.get("userName")).append(lineBreak);
+			sbContents.append(lineBreak);
+			sbContents.append("Thank you for signing up to KoamtacON.").append(lineBreak);
+			sbContents.append(lineBreak);
+			sbContents.append("Here is your account information for services.koamtacon.com.").append(lineBreak);
+			sbContents.append("ID: ").append(userInfo.get("userId")).append(lineBreak);
+			String newPassword = CommonUtils.makeRandomString(8);
+			sbContents.append("Password: ").append(newPassword).append(lineBreak);
+			sbContents.append("** The above password is a temporary password.").append(lineBreak);
+			sbContents.append("   Please make sure to change to a new password after logging in.").append(lineBreak);
+			sbContents.append("E-mail: ").append(userInfo.get("userEmail")).append(lineBreak);
+			sbContents.append(lineBreak);
+			sbContents.append("Here is an activation code that allows mobile programs to be used.").append(lineBreak);
+			sbContents.append("Activation code: ").append(userInfo.get("activationCode")).append(lineBreak);
+			
+			paramMap.put("newPassword", CommonUtils.encryptSha512(newPassword));
+			paramMap.put("email", receiver);
+			signService.resetPassword(paramMap);
+			userManagementService.activateUser(paramMap);
+			sbContents.append("You can sign in with above information.").append(lineBreak);
+			sbContents.append("Please sign in to services.koamtacon.com and change you password.").append(lineBreak);
+			sbContents.append(lineBreak);
+			sbContents.append("Thank you.");
+		}
+		*/
+		
+		try {
+			//mailService.sendMail(sender, receiver, title, sbContents.toString());
+			mailService.sendHtmlMail(sender, receiver, title, sbContents.toString());
+			paramMap.put("sendYn", "Y");
+			userManagementService.updateSendYn(paramMap);
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", "Sending mail successfully.");
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", "Failed to send mail.");
+		}
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/sendMailAll", method={RequestMethod.GET, RequestMethod.POST})
+	public String sendMailAll(@RequestParam Map<String, String> paramMap, Model model) throws Exception {
+		log.debug("sendMailAll paramMap={}",paramMap);
+		int totalCnt = 0;
+		int successCnt = 0;
+		int failCnt = 0;
+		
+		String lineBreak = "\r\n";
+		
+		List<Map<String, Object>> memberList = userManagementService.getNotSendMemberList(paramMap);
+		
+		if (memberList != null && memberList.size() > 0) {
+			for(int i=0; i<memberList.size(); i++) {
+				totalCnt++;
+				Map<String, Object> memberMap = (Map<String, Object>)memberList.get(i);
+				
+				String sender = ConfigConstants.fromAddress;
+				String receiver = memberMap.get("userEmail").toString();
+				String title = "[KoamtacON] Mobile application information";
+				StringBuffer sbContents = new StringBuffer();
+				
+				sbContents.append("Dear ").append(memberMap.get("userName")).append(lineBreak);
+				sbContents.append(lineBreak);
+				sbContents.append("You can use the KoamtacON mobile application with the following information.").append(lineBreak);
+				sbContents.append(lineBreak);
+				sbContents.append("Your ID: ").append(memberMap.get("syncUser")).append(lineBreak);
+				sbContents.append("Activation code: ").append(memberMap.get("activationCode")).append(lineBreak);
+				sbContents.append(lineBreak);
+				sbContents.append("Thank you.");
+				
+				try {
+					mailService.sendMail(sender, receiver, title, sbContents.toString());
+					paramMap.put("userId", memberMap.get("userId").toString());
+					paramMap.put("sendYn", "Y");
+					userManagementService.updateSendYn(paramMap);
+					successCnt++;
+				} catch(Exception e) {
+					log.error(e.getMessage());
+					failCnt++;
+				}
+			}
+		}
+		StringBuffer sbResult = new StringBuffer();
+		sbResult.append("Total number of subjects: ").append(String.valueOf(totalCnt)).append(lineBreak);
+		sbResult.append("Total number of successes: ").append(String.valueOf(successCnt)).append(lineBreak);
+		sbResult.append("Total number of failed: ").append(String.valueOf(failCnt)).append(lineBreak);
+		
+		model.addAttribute("msg", sbResult.toString());
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/sendHtmlMail", method={RequestMethod.GET, RequestMethod.POST})
+	public String sendHtmlMail(@RequestParam Map<String, String> paramMap, Model model) throws Exception {
+		log.debug("sendHtmlMail paramMap={}",paramMap);
+		
+		Map<String, Object> userInfo = userManagementService.getUserInfo(paramMap);
+		
+		String lineBreak = "<br>";
+		String sender = ConfigConstants.fromAddress;
+		String receiver = userInfo.get("userEmail").toString();
+		String userType = userInfo.get("userType").toString();
+		
+		String appleAppStore = "<a href='https://itunes.apple.com/us/app/koamtacon/id976617297?mt=8'>Apple App Store</a>";
+		String googlePlayStore = "<a href='https://play.google.com/store/apps/details?id=com.gullivernet.mdc.android.gui.k&amp;hl=en_US'>Google Play Store</a>";
+		String microsoftAppStore = "<a href='https://www.microsoft.com/en-us/p/koamtacon/9nblggh5265t'>Microsoft App Store</a>";
+		
+		String title = "Welcome to KOAMTACON!";
+		
+		StringBuffer sbContents = new StringBuffer();
+		sbContents.append("Dear ").append(userInfo.get("userName")).append(",").append(lineBreak).append(lineBreak);
+		sbContents.append(lineBreak);
+		sbContents.append("Congratulations! Your KOAMTACON registration for ").append(userInfo.get("company")).append(" is complete.").append(lineBreak);
+		sbContents.append(lineBreak);
+		sbContents.append("To log in to <a href='http://services.koamtacon.com/'>KOAMTACON’s web console</a> your credentials are: ").append(lineBreak);
+		sbContents.append("User ID: ").append(userInfo.get("userId")).append(lineBreak);
+		String newPassword = CommonUtils.makeRandomString(8);
+		sbContents.append("Password: ").append(newPassword).append(lineBreak);
+		sbContents.append(lineBreak);
+		sbContents.append("To begin using KOAMTACON with your KDC, please download the application from either the ").append(appleAppStore).append(", ").append(googlePlayStore).append(", or ").append(microsoftAppStore).append(".").append(lineBreak);
+		sbContents.append("Your activation code is <font face='consolas'>").append(userInfo.get("activationCode")).append("</font>.").append(lineBreak);
+		if (userType.equals("0")) {
+			sbContents.append(lineBreak);
+			sbContents.append("Now you can register more members to your organization using the web console. Your organization's allowed number of members directly correlates to the number of KDCs registered. Additionally, your User ID counts as one member for your organization.").append(lineBreak);
+		} else if (userType.equals("1")) {
+			
+		}
+		paramMap.put("newPassword", CommonUtils.encryptSha512(newPassword));
+		paramMap.put("email", receiver);
+		signService.resetPassword(paramMap);
+		userManagementService.activateUser(paramMap);
+		sbContents.append(lineBreak);
+		sbContents.append("Please refer to the <a href='http://koamtacon.com/product/documentation/'>KOAMTACON User Manual</a> for assistance or contact our support team at <a href='mailto:koamtacon@koamtac.com'>koamtacon@koamtac.com</a>.").append(lineBreak);
+		sbContents.append(lineBreak);
+		sbContents.append("Thank you and welcome!").append(lineBreak);
+		sbContents.append(lineBreak);
+		sbContents.append("The KOAMTACON Team").append(lineBreak);
+		
+		try {
+			if (userType.equals("0")) {
+				String cc = ConfigConstants.fromAddress;
+				mailService.sendHtmlMail(sender, receiver, cc, title, sbContents.toString());
+			} else if (userType.equals("1")) {
+				String[] cc = {userInfo.get("ownerEmail").toString(), ConfigConstants.fromAddress};
+				mailService.sendHtmlMail(sender, receiver, cc, title, sbContents.toString());
+			}
+			paramMap.put("sendYn", "Y");
+			userManagementService.updateSendYn(paramMap);
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", "Sending mail successfully.");
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", "Failed to send mail.");
+		}
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/demoAccountsManagement", method={RequestMethod.GET, RequestMethod.POST})
+	public String demoAccountsManagement(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("demoAccountsManagement paramMap={}",paramMap);
+		
+		model = initUtil.initMenu(paramMap, model);
+		
+		return "/admin/demoAccountsManagement";
+	}
+	
+	@RequestMapping(value="/getDemoAccountsList", method={RequestMethod.GET, RequestMethod.POST})
+	public String getDemoAccountsList(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("getDemoAccountsList paramMap={}",paramMap);
+		
+		int itemNoPerPage = paramMap.get("itemNoPerPage") == null ? ConfigConstants.TEN_ITEMS_NO_PER_PAGE : Integer.parseInt(paramMap.get("itemNoPerPage"));
+		paramMap.put("itemNoPerPage", String.valueOf(itemNoPerPage));
+		Map<String, Object> map = userManagementService.getDemoAccountsList(paramMap);
+		model.addAttribute("demoAccountsList", map.get("demoAccountsList"));
+		model.addAttribute("pageInfo", map.get("pageInfo"));
+		model.addAttribute("demoAccount", userManagementService.getDemoAccount(paramMap));
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/updateDemoAccount", method={RequestMethod.GET, RequestMethod.POST})
+	public String updateDemoAccount(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("updateDemoAccount paramMap={}",paramMap);
+		
+		try {
+			userManagementService.updateDemoAccount(paramMap);
+			model.addAttribute("msg", "Success");
+		} catch(Exception ex) {
+			log.error("[ERROR] {}",ex.getMessage());
+			model.addAttribute("msg", "Fail");
+		}
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/sendDemoAccount", method={RequestMethod.GET, RequestMethod.POST})
+	public String sendDemoAccount(@RequestParam Map<String, String> paramMap, Model model) throws Exception {
+		log.debug("sendDemoAccount paramMap={}",paramMap);
+		
+		Map<String, Object> userInfo = userManagementService.getDemoAccountInfo(paramMap);
+		
+		String lineBreak = "<br>";
+		String sender = ConfigConstants.fromAddress;
+		String receiver = userInfo.get("email").toString();
+		String cc = ConfigConstants.fromAddress;
+		
+		String appleAppStore = "<a href='https://itunes.apple.com/us/app/koamtacon/id976617297?mt=8'>Apple App Store</a>";
+		String googlePlayStore = "<a href='https://play.google.com/store/apps/details?id=com.gullivernet.mdc.android.gui.k&amp;hl=en_US'>Google Play Store</a>";
+		String microsoftAppStore = "<a href='https://www.microsoft.com/en-us/p/koamtacon/9nblggh5265t'>Microsoft App Store</a>";
+		
+		String title = "Welcome to KOAMTACON Demo Trial!";
+		
+		StringBuffer sbContents = new StringBuffer();
+		sbContents.append("Dear ").append(userInfo.get("name")).append(",").append(lineBreak).append(lineBreak);
+		sbContents.append(lineBreak);
+		sbContents.append("Congratulations! Your KOAMTACON demo registration for ").append(userInfo.get("company")).append(" is complete.").append(lineBreak);
+		sbContents.append(lineBreak);
+		sbContents.append("To log in to <a href='http://services.koamtacon.com/'>KOAMTACON’s web console</a> your demo credentials are: ").append(lineBreak);
+		sbContents.append("User ID: ").append(userInfo.get("webId")).append(lineBreak);
+		sbContents.append("Password: ").append(userInfo.get("password")).append(lineBreak);
+		sbContents.append(lineBreak);
+		sbContents.append("Demo trial will be expired in one month.").append(lineBreak);
+		sbContents.append(lineBreak);
+		sbContents.append("To begin using KOAMTACON with your KDC, please download the application from either the ").append(appleAppStore).append(", ").append(googlePlayStore).append(", or ").append(microsoftAppStore).append(".").append(lineBreak);
+		sbContents.append("Your activation code is <font face='consolas'>").append(userInfo.get("activationCode")).append("</font>.").append(lineBreak);
+		sbContents.append(lineBreak);
+		sbContents.append("Please refer to the <a href='http://koamtacon.com/product/documentation/'>KOAMTACON User Manual</a> for assistance or contact our support team at <a href='mailto:koamtacon@koamtac.com'>koamtacon@koamtac.com</a>.").append(lineBreak);
+		sbContents.append(lineBreak);
+		sbContents.append("Thank you and welcome!").append(lineBreak);
+		sbContents.append(lineBreak);
+		sbContents.append("The KOAMTACON Team").append(lineBreak);
+		
+		try {
+			mailService.sendHtmlMail(sender, receiver, cc, title, sbContents.toString());
+			
+			userManagementService.updateDemoAccountStartDate(paramMap);
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", "Sending mail successfully.");
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", "Failed to send mail.");
+		}
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/userCreation", method={RequestMethod.GET, RequestMethod.POST})
+	public String userCreation(@RequestParam Map<String, String> paramMap, Model model) throws Exception {
+		log.debug("userCreation paramMap={}",paramMap);
+
+		model = initUtil.initMenu(paramMap, model);
+		
+		return "/admin/userCreation";
+	}
+	
+	@RequestMapping(value="/createMobileUser", method={RequestMethod.GET, RequestMethod.POST})
+	public String createMobileUser(@RequestParam Map<String, String> paramMap, Model model) throws Exception {
+		log.debug("createMobileUser paramMap={}",paramMap);
+		
+		try {
+			// 사용 가능한 그룹코드 중 가장 작은 값을 구한다.
+			String groupCode = groupService.getMinAvailableGroupCode();
+			log.debug("Min available group code: {}", groupCode);
+			paramMap.put("groupCode", groupCode);
+			
+			if (groupService.getGroupCount(paramMap) < 1) {
+				// services DB에 group 생성
+				groupService.createGroup(paramMap);
+				// services DB에 group member 추가
+				groupService.insertMember(paramMap);
+				// services DB에 user 정보 중 area 항목 업데이트
+				groupService.updateUserArea(paramMap);
+				
+				// MDC DB에 Mobile User 및 Activation Code 생성
+				Map <String, String> mdcMap = wsApiService.createMobileUserAndActivatioCode(paramMap);
+				if (mdcMap != null && mdcMap.size() > 0) {
+					userManagementService.updateUserInfo(mdcMap);
+					model.addAttribute("flag", "success");
+					model.addAttribute("msg", "Mobile user creation is complete.");
+				} else {
+					model.addAttribute("flag", "fail");
+					model.addAttribute("msg", "Failed to create mobile user. There is an error to create mobile user.");
+				}
+			} else {
+				model.addAttribute("flag", "fail");
+				model.addAttribute("msg", "Failed to create mobile user. There is a difference between Services DB and MDC DB.");
+			}
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", "Failed to create mobile user.");
+		}
+		
+		return "jsonView";
+	}
+}

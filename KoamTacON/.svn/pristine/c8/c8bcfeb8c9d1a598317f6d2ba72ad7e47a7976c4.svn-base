@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aisolution.koamtacon.mapper.mdc.MdcKoamtacMapper">
+
+    <select id="getSyncUser" resultType="HashMap">
+    <![CDATA[
+        select username as mdcId
+             , codagente as deviceCode
+             , codgruppo
+          from sync_user
+         where 1=1
+           and username = #{mdcId}
+    ]]>
+    </select>
+    
+    <select id="getUsedDeviceCodes" resultType="String">
+    <![CDATA[
+        select codagente
+          from sync_user
+         where 1=1
+           and CHAR_LENGTH(codagente) = 3
+         order by codagente asc
+    ]]>
+    </select>
+    
+    <select id="getUsedGroupCodes" resultType="String">
+    <![CDATA[
+        select distinct codgruppo
+          from sync_user
+         where 1=1
+           and CHAR_LENGTH(codgruppo) = 3
+         order by codgruppo asc
+    ]]>
+    </select>
+</mapper>

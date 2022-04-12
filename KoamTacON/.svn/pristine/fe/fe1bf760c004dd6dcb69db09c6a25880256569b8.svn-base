@@ -1,0 +1,3 @@
+[2017-08-23 17:02:21:278][main] DEBUG c.aisolution.common.util.FileUtils - arrTmp=2001:5:1
+[2017-08-23 17:03:19:222][main] DEBUG c.aisolution.common.util.FileUtils - length=1, arrTmp=[2001:5:1]
+[2017-08-23 20:46:14:246][main] DEBUG c.aisolution.common.util.FileUtils - length=1, arrTmp=[2001:5:1]

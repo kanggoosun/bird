@@ -1,0 +1,824 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aisolution.koamtacon.mapper.service.UserManagementMapper">
+    <select id="getOwnerListCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_user usr
+               left outer join tb_country_code ctr on ctr.code = usr.country
+               left outer join tb_group grp on grp.owner_id = usr.user_id
+               left outer join (select user_id, count(0) as cnt from tb_kdc_registration where 1=1 and approval = '1' group by user_id) kdc
+                                    on kdc.user_id = usr.user_id
+         where 1=1
+           and usr.user_type = '0'
+    ]]>
+    <if test="cbSearchField != null and cbSearchField != '' and sKeyword != null and sKeyword != '' ">
+    <![CDATA[
+           and ${cbSearchField} like concat('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    </select>
+    
+    <select id="getOwnerList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select usr.user_id as userId
+             , usr.name as userName
+             , usr.company as company
+             , usr.country as countryCode
+             , ctr.name_en as country
+             , IFNULL(kdc.cnt, 0) as kdcCnt
+             , grp.area as area
+             , grp.group_code as groupCode
+             , grp.use_yn as useYn
+          from tb_user usr
+               left outer join tb_country_code ctr on ctr.code = usr.country
+               left outer join tb_group grp on grp.owner_id = usr.user_id
+               left outer join (select user_id, count(0) as cnt from tb_kdc_registration where 1=1 and approval = '1' group by user_id) kdc
+                                    on kdc.user_id = usr.user_id
+         where 1=1
+           and usr.user_type = '0'
+    ]]>
+    <if test="cbSearchField != null and cbSearchField != '' and sKeyword != null and sKeyword != '' ">
+    <![CDATA[
+           and ${cbSearchField} like concat('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <![CDATA[
+         order by CASE WHEN grp.group_code is null THEN 0 ELSE 1 END asc, usr.name asc, usr.user_id asc
+         limit #{itemNoPerPage} offset #{offset}
+    ]]>
+    </select>
+
+    <select id="getUserInfoListCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+         from tb_user usr
+              left join tb_group grp on usr.user_id = grp.owner_id
+              left join tb_group_member mber on usr.user_id = mber.user_id
+              left join tb_country_code cntry on usr.country = cntry.code
+              left join tb_code cd on usr.user_type = cd.code and cd.master_code = 'user_type'
+        where 1=1
+          and usr.user_type != '9'
+    ]]>
+    <if test="cbActivationYn != null and cbActivationYn != '' ">
+    <![CDATA[
+          and mber.activation_yn = #{cbActivationYn}
+    ]]>
+    </if>
+    <if test="cbJoinDate != null and cbJoinDate != '' ">
+    <![CDATA[
+          and DATE_FORMAT(usr.created_date, '%Y%m%d') > DATE_FORMAT(DATE_ADD(NOW(), INTERVAL -#{cbJoinDate} DAY), '%Y%m%d')
+    ]]>
+    </if>
+    <if test="sKeyword != null and sKeyword != '' and cbSearchField != null and cbSearchField eq '0'.toString() ">
+    <![CDATA[
+          and #{cbSearchField} = '0'
+          and usr.user_id like CONCAT('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <if test="sKeyword != null and sKeyword != '' and cbSearchField != null and cbSearchField eq '1'.toString() ">
+    <![CDATA[
+          and #{cbSearchField} = '1'
+          and usr.name like CONCAT('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <if test="sKeyword != null and sKeyword != '' and cbSearchField != null and cbSearchField eq '2'.toString() ">
+    <![CDATA[
+          and #{cbSearchField} = '2'
+          and usr.email like CONCAT('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <if test="sKeyword != null and sKeyword != '' and cbSearchField != null and cbSearchField eq '3'.toString() ">
+    <![CDATA[
+          and #{cbSearchField} = '3'
+          and grp.group_code like CONCAT('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    </select>
+    
+    <select id="getUserInfoList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select usr.user_id as userId
+             , usr.name as userName
+             , usr.email as userEmail
+             , usr.phone as userPhone
+             , usr.company as userCompany
+             , usr.site as userSite
+             , usr.country as countryCode
+             , cntry.name_en as countryName
+             , usr.user_type as userType
+             , cd.code_name as userTypeName
+             , DATE_FORMAT(usr.created_date, '%Y-%m-%d') as creationDate
+             , grp.area as area
+             , grp.group_code as groupCode
+             , grp.group_name as groupName
+             , mber.mdc_id as mdcId
+             , mber.device_code as deviceCode
+             , mber.payment_plan as paymentPlan
+             , mber.payment_key as paymentKey
+             , mber.activation_yn as activationYn
+             , mber.activation_code as activationCode
+             , mber.send_yn as sendYn
+             , DATE_FORMAT(mber.activated_date, '%Y-%m-%d') as activatedDate
+         from tb_user usr
+              left join tb_group_member mber on usr.user_id = mber.user_id
+              left join tb_group grp on grp.group_code = mber.group_code
+              left join tb_country_code cntry on usr.country = cntry.code
+              left join tb_code cd on usr.user_type = cd.code and cd.master_code = 'user_type'
+        where 1=1
+          and usr.user_type != '9'
+    ]]>
+    <if test="cbActivationYn != null and cbActivationYn != ''">
+    <![CDATA[
+          and mber.activation_yn = #{cbActivationYn}
+    ]]>
+    </if>
+    <if test="cbJoinDate != null and cbJoinDate != '' ">
+    <![CDATA[
+          and DATE_FORMAT(usr.created_date, '%Y%m%d') > DATE_FORMAT(DATE_ADD(NOW(), INTERVAL -#{cbJoinDate} DAY), '%Y%m%d')
+    ]]>
+    </if>
+    <if test="sKeyword != null and sKeyword != '' and cbSearchField != null and cbSearchField eq '0'.toString() ">
+    <![CDATA[
+          and #{cbSearchField} = '0'
+          and usr.user_id like CONCAT('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <if test="sKeyword != null and sKeyword != '' and cbSearchField != null and cbSearchField eq '1'.toString() ">
+    <![CDATA[
+          and #{cbSearchField} = '1'
+          and usr.name like CONCAT('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <if test="sKeyword != null and sKeyword != '' and cbSearchField != null and cbSearchField eq '2'.toString() ">
+    <![CDATA[
+          and #{cbSearchField} = '2'
+          and usr.email like CONCAT('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <if test="sKeyword != null and sKeyword != '' and cbSearchField != null and cbSearchField eq '3'.toString() ">
+    <![CDATA[
+          and #{cbSearchField} = '3'
+          and grp.group_code like CONCAT('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <![CDATA[
+        order by usr.created_date desc
+        limit #{itemNoPerPage} offset #{offset}
+    ]]>
+    </select>
+    
+    <select id="getUserInfoListForExcel" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select usr.user_id as userId
+             , usr.name as userName
+             , usr.email as userEmail
+             , usr.phone as userPhone
+             , usr.company as userCompany
+             , usr.site as userSite
+             , usr.country as countryCode
+             , cntry.name_en as countryName
+             , usr.user_type as userType
+             , cd.code_name as userTypeName
+             , DATE_FORMAT(usr.created_date, '%Y-%m-%d') as creationDate
+             , grp.area as area
+             , grp.group_code as groupCode
+             , grp.group_name as groupName
+             , mber.mdc_id as mdcId
+             , mber.device_code as deviceCode
+             , mber.payment_plan as paymentPlan
+             , mber.payment_key as paymentKey
+             , mber.activation_yn as activationYn
+             , mber.activation_code as activationCode
+             , mber.send_yn as sendYn
+             , DATE_FORMAT(mber.activated_date, '%Y-%m-%d') as activatedDate
+         from tb_user usr
+              left join tb_group_member mber on usr.user_id = mber.user_id
+              left join tb_group grp on grp.group_code = mber.group_code
+              left join tb_country_code cntry on usr.country = cntry.code
+              left join tb_code cd on usr.user_type = cd.code and cd.master_code = 'user_type'
+        where 1=1
+          and usr.user_type != '9'
+    ]]>
+    <if test="cbActivationYn != null and cbActivationYn != ''">
+    <![CDATA[
+          and mber.activation_yn = #{cbActivationYn}
+    ]]>
+    </if>
+    <if test="cbJoinDate != null and cbJoinDate != '' ">
+    <![CDATA[
+          and DATE_FORMAT(usr.created_date, '%Y%m%d') > DATE_FORMAT(DATE_ADD(NOW(), INTERVAL -#{cbJoinDate} DAY), '%Y%m%d')
+    ]]>
+    </if>
+    <if test="sKeyword != null and sKeyword != '' and cbSearchField != null and cbSearchField eq '0'.toString() ">
+    <![CDATA[
+          and #{cbSearchField} = '0'
+          and usr.user_id like CONCAT('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <if test="sKeyword != null and sKeyword != '' and cbSearchField != null and cbSearchField eq '1'.toString() ">
+    <![CDATA[
+          and #{cbSearchField} = '1'
+          and usr.name like CONCAT('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <if test="sKeyword != null and sKeyword != '' and cbSearchField != null and cbSearchField eq '2'.toString() ">
+    <![CDATA[
+          and #{cbSearchField} = '2'
+          and usr.email like CONCAT('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <if test="sKeyword != null and sKeyword != '' and cbSearchField != null and cbSearchField eq '3'.toString() ">
+    <![CDATA[
+          and #{cbSearchField} = '3'
+          and grp.group_code like CONCAT('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <![CDATA[
+        order by usr.created_date desc
+    ]]>
+    </select>
+    
+    <update id="updateUserInfo" parameterType="HashMap">
+    <![CDATA[
+        update tb_group_member
+           set mdc_id = #{syncUser}
+             , device_code = #{deviceCode}
+             , payment_plan = #{paymentPlan}
+             , payment_key = #{paymentKey}
+             , activation_yn = #{activationYn}
+             , activation_code = #{activationCode}
+             , updated_date = CURRENT_TIMESTAMP()
+    ]]>
+    <if test="activationCode != null and activationCode != ''">
+             , activated_date = CURRENT_TIMESTAMP()
+    </if>
+    <![CDATA[
+         where 1=1
+           and user_id = #{userId}
+    ]]>
+    </update>
+    
+    <select id="getAdminInfoListCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+         from tb_user usr
+              left join tb_country_code cntry on usr.country = cntry.code
+        where 1=1
+          and usr.user_type = '9'
+    ]]>
+    <if test="sUser != null and sUser != '' ">
+    <![CDATA[
+          and (usr.user_id like CONCAT('%', #{sUser}, '%')
+              or usr.name like CONCAT('%', #{sUser}, '%'))
+    ]]>
+    </if>
+    </select>
+    
+    <select id="getAdminInfoList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select usr.user_id as userId
+             , usr.name as userName
+             , usr.email as userEmail
+             , usr.country as countryCode
+             , cntry.name_en as countryName
+             , DATE_FORMAT(usr.created_date, '%Y-%m-%d') as creationDate
+         from tb_user usr
+              left join tb_country_code cntry on usr.country = cntry.code
+        where 1=1
+          and usr.user_type = '9'
+          and usr.user_id != 'KoamTacON'
+    ]]>
+    <if test="sUser != null and sUser != '' ">
+    <![CDATA[
+          and (usr.user_id like CONCAT('%', #{sUser}, '%')
+              or usr.name like CONCAT('%', #{sUser}, '%'))
+    ]]>
+    </if>
+    <![CDATA[
+        order by usr.created_date desc
+        limit #{itemNoPerPage} offset #{offset}
+    ]]>
+    </select>
+    
+    <update id="updateAdminInfo" parameterType="HashMap">
+    <![CDATA[
+        update tb_user
+           set name = #{name}
+             , email = #{email}
+             , country = #{cbCountry}
+             , updated_date = CURRENT_TIMESTAMP()
+         where 1=1
+           and user_id = #{userId}
+    ]]>
+    </update>
+    
+    <select id="getGroupListCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_group grp
+               left join tb_user own on own.user_id = grp.owner_id
+               left outer join (select user_id, count(0) as cnt from tb_kdc_registration group by user_id) kdc on kdc.user_id = grp.owner_id
+               left outer join (select user_id, count(0) as cnt from tb_kdc_registration where 1=1 and approval = '0' group by user_id) nta on nta.user_id = grp.owner_id
+               left outer join (select user_id, count(0) as cnt from tb_kdc_registration where 1=1 and approval = '1' group by user_id) apr on apr.user_id = grp.owner_id
+               left outer join (select user_id, count(0) as cnt from tb_kdc_registration where 1=1 and approval = '2' group by user_id) ref on ref.user_id = grp.owner_id
+               left outer join (select area, group_code, count(0) as cnt from tb_group_member group by area, group_code) mem on mem.area = grp.area and mem.group_code = grp.group_code
+               left outer join (select area, group_code, count(0) as cnt from tb_group_member where 1=1 and activation_code is not null group by area, group_code) act on act.area = grp.area and act.group_code = grp.group_code
+             , tb_country_code cou
+         where 1=1
+           and cou.code = own.country
+    ]]>
+    <if test="cbSearchField != null and cbSearchField != '' and sKeyword != null and sKeyword != '' ">
+    <![CDATA[
+           and ${cbSearchField} like concat('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    </select>
+    
+    <select id="getGroupList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select grp.area as area
+             , grp.group_code as groupCode
+             , grp.group_name as groupName
+             , grp.owner_id as ownerId
+             , own.name as ownerName
+             , own.company as company
+             , own.country as countryCode
+             , cou.name_en as countryName
+             , IFNULL(kdc.cnt, 0) as totalKdc
+             , IFNULL(nta.cnt, 0) as notApprovedKdc
+             , IFNULL(apr.cnt, 0) as approvedKdc
+             , IFNULL(ref.cnt, 0) as refusedKdc
+             , IFNULL(mem.cnt, 0) as memberCnt
+             , IFNULL(act.cnt, 0) as activationCnt
+             , DATE_FORMAT(grp.created_date, '%Y-%m-%d') as creationDate
+          from tb_group grp
+               left join tb_user own on own.user_id = grp.owner_id
+               left outer join (select user_id, count(0) as cnt from tb_kdc_registration group by user_id) kdc on kdc.user_id = grp.owner_id
+               left outer join (select user_id, count(0) as cnt from tb_kdc_registration where 1=1 and approval = '0' group by user_id) nta on nta.user_id = grp.owner_id
+               left outer join (select user_id, count(0) as cnt from tb_kdc_registration where 1=1 and approval = '1' group by user_id) apr on apr.user_id = grp.owner_id
+               left outer join (select user_id, count(0) as cnt from tb_kdc_registration where 1=1 and approval = '2' group by user_id) ref on ref.user_id = grp.owner_id
+               left outer join (select area, group_code, count(0) as cnt from tb_group_member group by area, group_code) mem on mem.area = grp.area and mem.group_code = grp.group_code
+               left outer join (select area, group_code, count(0) as cnt from tb_group_member where 1=1 and activation_code is not null group by area, group_code) act on act.area = grp.area and act.group_code = grp.group_code
+             , tb_country_code cou
+         where 1=1
+           and cou.code = own.country
+    ]]>
+    <if test="cbSearchField != null and cbSearchField != '' and sKeyword != null and sKeyword != '' ">
+    <![CDATA[
+           and ${cbSearchField} like concat('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <![CDATA[
+         order by grp.group_code asc
+         limit #{itemNoPerPage} offset #{offset}
+    ]]>
+    </select>
+    
+    <select id="getGroupListForExcel" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select grp.area as area
+             , grp.group_code as groupCode
+             , grp.group_name as groupName
+             , grp.owner_id as ownerId
+             , own.name as ownerName
+             , own.company as company
+             , own.country as countryCode
+             , cou.name_en as countryName
+             , IFNULL(kdc.cnt, 0) as totalKdc
+             , IFNULL(nta.cnt, 0) as notApprovedKdc
+             , IFNULL(apr.cnt, 0) as approvedKdc
+             , IFNULL(ref.cnt, 0) as refusedKdc
+             , IFNULL(mem.cnt, 0) as memberCnt
+             , IFNULL(act.cnt, 0) as activationCnt
+             , DATE_FORMAT(grp.created_date, '%Y-%m-%d') as creationDate
+          from tb_group grp
+               left join tb_user own on own.user_id = grp.owner_id
+               left outer join (select user_id, count(0) as cnt from tb_kdc_registration group by user_id) kdc on kdc.user_id = grp.owner_id
+               left outer join (select user_id, count(0) as cnt from tb_kdc_registration where 1=1 and approval = '0' group by user_id) nta on nta.user_id = grp.owner_id
+               left outer join (select user_id, count(0) as cnt from tb_kdc_registration where 1=1 and approval = '1' group by user_id) apr on apr.user_id = grp.owner_id
+               left outer join (select user_id, count(0) as cnt from tb_kdc_registration where 1=1 and approval = '2' group by user_id) ref on ref.user_id = grp.owner_id
+               left outer join (select area, group_code, count(0) as cnt from tb_group_member group by area, group_code) mem on mem.area = grp.area and mem.group_code = grp.group_code
+               left outer join (select area, group_code, count(0) as cnt from tb_group_member where 1=1 and activation_code is not null group by area, group_code) act on act.area = grp.area and act.group_code = grp.group_code
+             , tb_country_code cou
+         where 1=1
+           and cou.code = own.country
+    ]]>
+    <if test="cbSearchField != null and cbSearchField != '' and sKeyword != null and sKeyword != '' ">
+    <![CDATA[
+           and ${cbSearchField} like concat('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <![CDATA[
+         order by grp.group_code asc
+    ]]>
+    </select>
+    
+    <select id="getMemberListCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_group_member mem
+               left join tb_user usr on usr.user_id = mem.user_id
+         where 1=1
+           and group_code = #{groupCode}
+    ]]>
+    </select>
+    
+    <select id="getMemberList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select usr.user_id as userId
+             , usr.name as userName
+             , usr.email as userEmail
+             , usr.user_type as userType
+             , case usr.user_type when '0' then 'owner'
+                                  else 'member'
+               end as userTypeNm
+             , usr.area as area
+             , mem.activation_code as activationCode
+             , mem.mdc_id as syncUser
+             , mem.device_code as deviceCode
+             , mem.send_yn as sendYn     
+             , DATE_FORMAT(usr.created_date, '%Y-%m-%d') as creationDate
+          from tb_group_member mem
+               left join tb_user usr on usr.user_id = mem.user_id
+         where 1=1
+           and group_code = #{groupCode}
+         order by usr.user_type asc, usr.name asc
+         limit #{itemNoPerPage} offset #{offset}
+    ]]>
+    </select>
+    
+    <select id="getMemberListForExcel" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select usr.user_id as userId
+             , usr.name as userName
+             , usr.email as userEmail
+             , usr.user_type as userType
+             , case usr.user_type when '0' then 'owner'
+                                  else 'member'
+               end as userTypeNm
+             , mem.activation_code as activationCode
+             , mem.mdc_id as syncUser
+             , mem.device_code as deviceCode     
+             , mem.send_yn as sendYn
+             , DATE_FORMAT(usr.created_date, '%Y-%m-%d') as creationDate
+          from tb_group_member mem
+               left join tb_user usr on usr.user_id = mem.user_id
+         where 1=1
+           and group_code = #{groupCode}
+         order by usr.user_type asc, usr.name asc
+    ]]>
+    </select>
+    
+    <select id="getGroupInfoWithMember" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select area
+             , group_code
+          from tb_group_member
+         where 1=1
+           and ${cbSearchField} like concat('%', #{sKeyword}, '%')
+    ]]>
+    </select>
+    
+    <select id="getUserInfo" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select usr.user_id as userId
+             , usr.email as userEmail
+             , usr.name as userName
+             , usr.phone
+             , usr.company
+             , usr.site
+             , usr.country
+             , country_code.name_en as countryName
+             , usr.user_type as userType
+             , usr.area
+             , usr.activation_yn as accountActivationYn
+             , usr.initial_pwd_yn as initialPwdYn
+             , DATE_FORMAT(usr.created_date, '%Y-%m-%d') as creationDate
+             , DATE_FORMAT(usr.updated_date, '%Y-%m-%d') as updatedDate
+             , mem.mdc_id as syncUser
+             , mem.device_code as deviceCode
+             , mem.activation_code as activationCode
+             , mem.send_yn as sendYn
+             , grp.owner_id as ownerId
+             , ownr.email as ownerEmail
+          from tb_user usr
+               left outer join tb_group_member mem on mem.user_id = usr.user_id
+               left outer join tb_country_code country_code on country_code.code = usr.country
+               left outer join tb_group grp on grp.group_code = mem.group_code and grp.area = mem.area
+               left outer join tb_user ownr on ownr.user_id = grp.owner_id and ownr.user_type = '0'
+         where 1=1
+           and usr.user_id = #{userId}
+    ]]>
+    </select>
+    
+    <update id="updateSendYn" parameterType="HashMap">
+    <![CDATA[
+        update tb_group_member
+           set send_yn = #{sendYn}
+         where 1=1
+           and user_id = #{userId}
+    ]]>
+    </update>
+    
+    <select id="getNotSendMemberList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select usr.user_id as userId
+             , usr.name as userName
+             , usr.email as userEmail
+             , usr.user_type as userType
+             , case usr.user_type when '0' then 'owner'
+                                  else 'member'
+               end as userTypeNm
+             , mem.activation_code as activationCode
+             , mem.mdc_id as syncUser
+             , mem.device_code as deviceCode
+             , mem.send_yn as sendYn     
+             , DATE_FORMAT(usr.created_date, '%Y-%m-%d') as creationDate
+          from tb_group_member mem
+               left join tb_user usr on usr.user_id = mem.user_id
+         where 1=1
+           and group_code = #{groupCode}
+           and mem.send_yn = 'N'
+           and mem.activation_code is not null
+           and mem.mdc_id is not null
+           and mem.device_code is not null
+    ]]>
+    </select>
+    
+    <update id="activateUser" parameterType="HashMap">
+    <![CDATA[
+        update tb_user
+           set activation_yn = 'Y'
+             , updated_date = CURRENT_TIMESTAMP()
+         where 1=1
+           and user_id = #{userId}
+    ]]>
+    </update>
+    
+    <select id="getDemoAccountsListCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+    	select count(0) as cnt
+    	  from tb_demo_accounts da
+    	       left outer join tb_country_code ccd on ccd.code = da.country
+    	       left outer join tb_code cod on cod.master_code = 'user_type' and cod.code = da.user_type
+    	 where 1=1
+    ]]>
+    <if test="cbSearchField != null and cbSearchField != '' and sKeyword != null and sKeyword != '' ">
+    <![CDATA[
+           and ${cbSearchField} like concat('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    </select>
+    
+    <select id="getDemoAccountsList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+    	select da.seq
+    	     , da.email
+    	     , da.name
+    	     , da.phone
+    	     , da.company
+    	     , da.site
+    	     , da.country as countryCode
+    	     , ccd.name_en as countryName
+    	     , da.user_type as userTypeCode
+    	     , cod.code_name as userType
+    	     , DATE_FORMAT(da.start_date, '%Y-%m-%d') as startDate
+    	     , da.block_yn as blockYn
+    	     , da.web_id as webId
+    	     , da.password
+    	     , da.area
+    	     , da.group_code as groupCode
+    	     , da.mdc_id as mobileId
+    	     , da.device_code as deviceCode
+    	     , da.activation_code as activationCode
+    	     , DATE_FORMAT(da.created_date, '%Y-%m-%d') as creationDate
+    	     , DATE_FORMAT(da.updated_date, '%Y-%m-%d') as updatedDate
+    	  from tb_demo_accounts da
+    	       left outer join tb_country_code ccd on ccd.code = da.country
+    	       left outer join tb_code cod on cod.master_code = 'user_type' and cod.code = da.user_type
+    	 where 1=1
+    ]]>
+    <if test="cbSearchField != null and cbSearchField != '' and sKeyword != null and sKeyword != '' ">
+    <![CDATA[
+           and ${cbSearchField} like concat('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <![CDATA[
+    	 order by da.created_date desc, da.updated_date desc, da.name asc, da.email asc
+    	 limit #{itemNoPerPage} offset #{offset}
+    ]]>
+    </select>
+    
+    <select id="getDemoAccountsListForExcel" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+    	select da.seq
+    	     , da.email
+    	     , da.name
+    	     , da.phone
+    	     , da.company
+    	     , da.site
+    	     , da.country as countryCode
+    	     , ccd.name_en as countryName
+    	     , da.user_type as userTypeCode
+    	     , cod.code_name as userType
+    	     , DATE_FORMAT(da.start_date, '%Y-%m-%d') as startDate
+    	     , da.block_yn as blockYn
+    	     , da.web_id as webId
+    	     , da.password
+    	     , da.area
+    	     , da.group_code as groupCode
+    	     , da.mdc_id as mobileId
+    	     , da.device_code as deviceCode
+    	     , da.activation_code as activationCode
+    	     , DATE_FORMAT(da.created_date, '%Y-%m-%d') as creationDate
+    	     , DATE_FORMAT(da.updated_date, '%Y-%m-%d') as updatedDate
+    	  from tb_demo_accounts da
+    	       left outer join tb_country_code ccd on ccd.code = da.country
+    	       left outer join tb_code cod on cod.master_code = 'user_type' and cod.code = da.user_type
+         where 1=1
+    ]]>
+    <if test="cbSearchField != null and cbSearchField != '' and sKeyword != null and sKeyword != '' ">
+    <![CDATA[
+           and ${cbSearchField} like concat('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <![CDATA[
+    	 order by da.created_date desc, da.updated_date desc, da.name asc, da.email asc
+    ]]>
+    </select>
+    
+    <select id="getDemoAccount" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+    	select usr.user_id as webId
+    	     , 'zaq@wsx1' as password
+    	     , mbr.area
+    	     , mbr.group_code as groupCode
+    	  from tb_user usr
+    	       left join tb_group_member mbr on mbr.user_id = usr.user_id
+    	 where 1=1
+    	   and usr.use_yn = 'Y'
+    	   and usr.activation_yn = 'Y'
+    	   and usr.user_type = '3'
+    ]]>
+    </select>
+    
+    <update id="updateDemoAccount" parameterType="HashMap">
+    <![CDATA[
+    	update tb_demo_accounts
+    	   set web_id = #{rWebId}
+    	     , password = #{rPassword}
+    	     , area = #{rArea}
+    	     , group_code = #{rGroupCode}
+    	     , mdc_id = #{rMobileId}
+    	     , device_code = #{rDeviceCode}
+    	     , activation_code = #{rActivationCode}
+    	     , updated_date = CURRENT_TIMESTAMP()
+    	 where 1=1
+    	   and seq = #{rSeq}
+    ]]>
+    </update>
+    
+    <select id="getDemoAccountInfo" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+    	select da.seq
+    	     , da.email
+    	     , da.name
+    	     , da.phone
+    	     , da.company
+    	     , da.site
+    	     , da.country as countryCode
+    	     , ccd.name_en as countryName
+    	     , da.user_type as userTypeCode
+    	     , cod.code_name as userType
+    	     , DATE_FORMAT(da.start_date, '%Y-%m-%d') as startDate
+    	     , da.block_yn as blockYn
+    	     , da.web_id as webId
+    	     , da.password
+    	     , da.area
+    	     , da.group_code as groupCode
+    	     , da.mdc_id as mobileId
+    	     , da.device_code as deviceCode
+    	     , da.activation_code as activationCode
+    	     , DATE_FORMAT(da.created_date, '%Y-%m-%d') as creationDate
+    	     , DATE_FORMAT(da.updated_date, '%Y-%m-%d') as updatedDate
+    	  from tb_demo_accounts da
+    	       left outer join tb_country_code ccd on ccd.code = da.country
+    	       left outer join tb_code cod on cod.master_code = 'user_type' and cod.code = da.user_type
+    	 where 1=1
+    	   and seq = #{seq}
+    ]]>
+    </select>
+    
+    <update id="updateDemoAccountStartDate" parameterType="HashMap">
+    <![CDATA[
+    	update tb_demo_accounts
+    	   set start_date = CURRENT_TIMESTAMP()
+    	     , updated_date = CURRENT_TIMESTAMP()
+    	 where 1=1
+    	   and seq = #{seq}
+    ]]>
+    </update>
+    
+    <select id="getNumberOfMemberWithActivationCode" parameterType="HashMap" resultType="int">
+    <![CDATA[
+    	select count(0) as cnt
+    	  from tb_group_member
+    	 where 1=1
+    	   and user_id = #{userId}
+    	   and ((mdc_id is not null and mdc_id != '')
+    	       or (device_code is not null and device_code != '')
+    	       or (activation_code is not null and activation_code != '')
+    	       )
+    ]]>
+    </select>
+    
+    <select id="getBatchUserListCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+    	select count(0) AS cnt
+          FROM tb_user AS usr
+               INNER JOIN tb_group_member AS mem ON mem.user_id = usr.user_id
+         WHERE 1=1
+           AND usr.batch_yn = 'Y'
+    ]]>
+    <if test="cbSearchField != null and cbSearchField != '' and sKeyword != null and sKeyword != '' ">
+    <![CDATA[
+           and ${cbSearchField} like concat('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    </select>
+    
+    <select id="getBatchUserList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+    	select usr.area AS area
+             , usr.user_id AS userId
+             , mem.mdc_id AS mdcId
+             , mem.device_code AS deviceCode
+             , mem.group_code AS groupCode
+             , mem.activation_code AS activationCode
+             , usr.temp_pwd AS tempPwd
+             , DATE_FORMAT(usr.created_date, '%Y-%m-%d') as creationDate
+          FROM tb_user AS usr
+               INNER JOIN tb_group_member AS mem ON mem.user_id = usr.user_id
+         WHERE 1=1
+           AND usr.batch_yn = 'Y'
+    ]]>
+    <if test="cbSearchField != null and cbSearchField != '' and sKeyword != null and sKeyword != '' ">
+    <![CDATA[
+           and ${cbSearchField} like concat('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <![CDATA[
+    	 order by usr.user_id asc
+    	 limit #{itemNoPerPage} offset #{offset}
+    ]]>
+    </select>
+    
+    <select id="getBatchUserListForExcel" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+    	select usr.area AS area
+             , usr.user_id AS userId
+             , mem.mdc_id AS mdcId
+             , mem.device_code AS deviceCode
+             , mem.group_code AS groupCode
+             , mem.activation_code AS activationCode
+             , usr.temp_pwd AS tempPwd
+             , DATE_FORMAT(usr.created_date, '%Y-%m-%d') as creationDate
+          FROM tb_user AS usr
+               INNER JOIN tb_group_member AS mem ON mem.user_id = usr.user_id
+         WHERE 1=1
+           AND usr.batch_yn = 'Y'
+    ]]>
+    <if test="cbSearchField != null and cbSearchField != '' and sKeyword != null and sKeyword != '' ">
+    <![CDATA[
+           and ${cbSearchField} like concat('%', #{sKeyword}, '%')
+    ]]>
+    </if>
+    <![CDATA[
+    	 order by usr.user_id asc
+    ]]>
+    </select>
+    
+    <insert id="createBatchUser" parameterType="HashMap">
+    <![CDATA[
+    	insert into tb_user (
+    		   user_id  , password      , user_type  , temp_pwd      , batch_yn
+    		 , created_date       , updated_date
+    	) values (
+    	       #{userId}, #{decPassword}, #{userType}, #{tmpPassword}, 'Y'     
+    	     , CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()
+    	)
+    ]]>
+    </insert>
+    
+    <select id="getOwnerId" parameterType="HashMap" resultType="String">
+    <![CDATA[
+    	select owner_id as ownerId
+    	  from tb_group
+    	 where 1=1
+    	   and area = #{area}
+    	   and group_code = #{groupCode}
+    ]]>
+    </select>
+</mapper>

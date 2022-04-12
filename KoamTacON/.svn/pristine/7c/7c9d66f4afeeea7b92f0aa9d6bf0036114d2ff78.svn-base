@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aisolution.koamtacon.mapper.service.ApplicationMapper">
+    
+    <select id="getApplicationInfo" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select ap.application_seq as applicationSeq
+             , ap.application_name as applicationName
+             , ap.application_description as applicationDescription
+             , ap.application_introduction as applicationIntroduction
+             , ap.application_url as applicationUrl
+             , ap.tutorial_url as tutorialUrl
+             , ap.idq as idq
+             , ap.codiceq
+             , ap.tabgen_name as tabgenName
+             , fl.files_seq as filesSeq
+             , fl.original_name as originalName
+             , fl.filename as filename
+             , ur.request_target as requestTarget
+             , ur.request_date as requestDate
+             , ur.approval_flag as approvalFlag
+             , cd.code_name as approvalFlagNm
+             , ur.approval_date as approvalDate
+             , ur.comment as comment
+          from tb_applications ap
+               left outer join tb_files fl on fl.linked_table = 'tb_applications'
+                                          and fl.linked_seq = ap.application_seq
+                                          and fl.file_usage = '001'
+               left outer join tb_user_requests ur on ur.user_id = #{userId}
+                                                  and ur.request_type = '0'
+                                                  and ur.request_kind = '0'
+                                                  and ur.request_target = #{applicationSeq}
+               left join tb_code cd on cd.master_code = 'approval_flag'
+                                   and cd.code = ur.approval_flag
+         where 1=1
+           and ap.application_seq = #{applicationSeq}
+    ]]>
+    </select>
+    
+    <insert id="insertApplicationRequest" parameterType="HashMap">
+    <![CDATA[
+        insert into tb_user_requests (
+               user_id        , request_type   , request_kind  , request_target  , request_date
+             , approval_flag
+             , created_date, updated_date
+        ) values (
+               #{userId}      , #{requestType} , #{requestKind}, #{requestTarget}, CURRENT_TIMESTAMP()
+             , #{approvalFlag}
+             , CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()
+        )
+    ]]>
+    </insert>
+    
+    <select id="getFileList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select f.files_seq as filesSeq
+             , f.linked_seq as linkedSeq
+             , f.linked_table as linkedTable
+             , f.file_type as fileType
+             , f.file_usage as fileUsage
+             , f.original_name as originalName
+             , f.filename as filename
+             , f.filesize as filesize
+          from tb_files f
+         where 1=1
+           and f.linked_seq = #{linkedSeq}
+           and f.linked_table = #{linkedTable}
+           and f.file_type = #{fileType}
+           and f.file_Usage = #{fileUsage}
+         order by f.original_name asc, f.updated_date desc
+    ]]>
+    </select>
+</mapper>
