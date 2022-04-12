@@ -318,7 +318,7 @@ mains {
 
 aside {
 	flex-grow: 3;
-	width: 350px;
+	width: 10px;
 	margin: 20px 0 0 20px;
 	font-size: 12px;
 	font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
@@ -327,7 +327,6 @@ aside {
 section {
 	flex-grow: 3;
 	width: 1000px;
-	padding: 30px;
 
 	/* height: 1200px; */
 }
