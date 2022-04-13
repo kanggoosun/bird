@@ -32,7 +32,7 @@
 		<!-- Main -->
 		<div id="main">
 			<!-- Header -->
-			<%@ include file="../include/header.jsp"%>
+			<%@ include file="../include/header_admin.jsp"%>
 			<div class="inner">
 
 				<section>
