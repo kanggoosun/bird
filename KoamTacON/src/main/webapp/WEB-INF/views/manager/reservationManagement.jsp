@@ -23,6 +23,15 @@
 
 <!-- Scripts -->
 <%@ include file="../include/incScripts.jsp"%>
+<style>
+aside {
+	width: 220px;
+	padding: 10px;
+/* 	border: 5px solid green; */
+	margin: auto;
+	display: block;
+}
+</style>
 
 </head>
 
@@ -33,11 +42,16 @@
 		<div id="main">
 			<!-- Header -->
 			<%@ include file="../include/header_admin.jsp"%>
+			<aside>
+				<%@ include file="../include/miniCalendar.jsp"%>
+			</aside>
 			<div class="inner">
 				<section>
-					<div style="width: 200;  text-align: center; font-size: 0.8em;">
-						<%@ include file="../include/miniCalendar.jsp"%>
-					</div>
+
+
+					<%-- <%@ include file="../include/miniCalendar.jsp"%>
+ --%>
+
 					<header class="main">
 						<h2>예약요청 관리</h2>
 					</header>

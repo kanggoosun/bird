@@ -8,19 +8,26 @@
 <!-- <title>air datepicker</title> -->
 <link rel="stylesheet"
 	href="/resources/air-datepicker/dist/css/datepicker.min.css">
-<script src="/resources/air-datepicker/dist/js/jquery-3.1.1.min.js"></script>
+<!-- <script src="/resources/air-datepicker/dist/js/jquery-3.1.1.min.js"></script> -->
 <script src="/resources/air-datepicker/dist/js/datepicker.min.js"></script>
 <script src="/resources/air-datepicker/dist/js/i18n/datepicker.ko.js"></script>
 <style>
 * {
-	margin: 0;
+	margin: auto;
 	padding: 0;
 }
 
 .double div {
 	float: left;
-	width: 200;
+	/* width: 10 */
+	width: 220px;
+	padding: 10px;
+/* 	border: 5px solid green; */
+	margin: auto;
+	display: block;
 }
+
+
 </style>
 </head>
 
@@ -32,11 +39,8 @@
     </div>
 
     <br /><br /><br /> -->
-	<div class="double">
-		<input id="datepicker1" type="text"> - <input id="datepicker2"
-			type="text">
-	</div>
-
+	<cmain> <cdiv class="double"> <input id="datepicker1"
+		type="text"> - <input id="datepicker2" type="text"> </cdiv> </cmain>
 
 	<script>
 		//한개만 단순하게 만들때
