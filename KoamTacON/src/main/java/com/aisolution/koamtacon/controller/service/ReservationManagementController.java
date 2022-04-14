@@ -52,7 +52,7 @@ public class ReservationManagementController {
 		
 		model = initUtil.initMenu(paramMap, model);
 		
-		return "/admin/menuManagement";
+		return "/manager/menuManagement";
 	}
 	
 	@RequestMapping(value="/getMenuList", method={RequestMethod.GET, RequestMethod.POST})
@@ -281,7 +281,7 @@ public class ReservationManagementController {
 		
 		model = initUtil.initMenu(paramMap, model);
 		
-		return "/admin/codeManagement";
+		return "/manager/codeManagement";
 	}
 	
 	@RequestMapping(value="/getCodeMasterList", method={RequestMethod.GET, RequestMethod.POST})
