@@ -34,7 +34,7 @@
             
             <section>
                 <header class="main">
-                    <h2>ccccccccccccccccccccccccccccccccc</h2>
+                    <h2>예약취소 - 신</h2>
                 </header>
                 
                 <form id="frmMainFilter" name="frmMainFilter">
@@ -333,7 +333,7 @@ function fn_getKDCApprovalList(pageNo) {
         param += "cbSearchApproval="+searchApproval;
     }
     
-    gf_send("<c:url value='/admin/approvalManagement/getKdcApprovalList' />", param, "fn_getKDCApprovalListCallback");
+    gf_send("<c:url value='/user/cancelReservation/getReservationList' />", param, "fn_getKDCApprovalListCallback");
 }
 
 function fn_getKDCApprovalListCallback(data) {

@@ -4,33 +4,100 @@
 <mapper namespace="com.aisolution.koamtacon.mapper.service.CancelReservaionMapper">
     <select id="getKDCRegistrationApprovalListCount" parameterType="HashMap" resultType="int">
     <![CDATA[
-        select count(0) as cnt
-          from tb_kdc_registration kdc
-               left join tb_group grp on grp.owner_id = kdc.user_id
-               left outer join tb_code cod on cod.master_code = 'kdc_model'
-                                          and cod.use_yn = 'Y'
-                                          and cod.code = kdc.product_name
-         where 1=1
-    ]]>
-    <if test="cbSearchField != null and cbSearchField == 'kdc.product_name' and sKeyword != null and sKeyword != ''">
+    SELECT COUNT(0) AS CNT
+	FROM tb_reservation A
+	WHERE  1=1
+	]]>
+    <if test="A != null and A != ''">
     <![CDATA[
-           and ${cbSearchField} = #{sKeyword}
+           AND #{A} <= sta_day		/** 조회조건의 시작일자가 존재시 */
     ]]>
-    </if>
-    <if test="cbSearchField != null and cbSearchField != '' and cbSearchField != 'kdc.product_name' and sKeyword != null and sKeyword != ''">
+    </if>	
+    <if test="B != null and B != ''">
     <![CDATA[
-           and ${cbSearchField} like concat('%', #{sKeyword}, '%')
+           AND sta_day  <= #{B}		/** 조회조건의 종료일자가 존재시 */
     ]]>
-    </if>
-    <if test="cbSearchApproval != null and cbSearchApproval != ''">
-    <![CDATA[
-           and kdc.approval = #{cbSearchApproval}
-    ]]>
-    </if>
+    </if>	
     </select>
     
-    <select id="getKDCRegistrationApprovalList" parameterType="HashMap" resultType="HashMap">
+   <select id="getKDCRegistrationApprovalList" parameterType="HashMap" resultType="HashMap">
+        <![CDATA[
+
+	SELECT 
+	ROW_NUMBER() OVER (ORDER BY A.req_dt DESC ) AS no /** 순번 */
+	
+	, (SELECT code_name FROM tb_code WHERE master_code = 'C05' AND CODE = A.place_cd) AS place /** 연수원 */
+	, DATE_FORMAT(A.req_dt, '%Y-%m-%d') AS req_day		/** 요청일자 */
+	
+	, sta_day		/** 시작일 */
+	, end_day		/** 종료일 */
+	
+	, (SELECT code_name FROM tb_code WHERE master_code = 'C08' AND CODE = A.use_aim_cd) AS use_aim /** 이용목적 */
+	, tot_cost		/** 이용요금 */
+	, can_rej_cau		/** 취소 반려 사유 */
+	, (SELECT code_name FROM tb_code WHERE master_code = 'C01' AND CODE = A.res_sts_cd) AS res_sts /** 상태 */
+	, res_sts_cd		/** 상태 코드 */
+	/** 상태변경 : 위 상태코드가 C0102(요청)일때는 요청취소가  C0104(승인)일때는 예약취소 버튼이 나와야 한다. */
+	, CASE WHEN DATEDIFF(sta_day, NOW()) > 0  THEN DATEDIFF(sta_day, NOW()) ELSE '' END AS remain_day /** 체크인 남은 날짜 */
+	, real_use_nm		/** 실제 이용자 대표 이름 */
+	, real_use_phone	/** 실제 이용자 핸드폰번호 */
+	, real_use_email	/** 실제 이용자 이메일 */
+	, real_use_car_no	/** 실제 이용자 차량번호 */
+	, rmk			/** 비고 */
+	, seq			/** SEQ */
+    
+    FROM tb_reservation A
+    WHERE  1=1
+    ]]>
+    
+        <if test="A != null and A != ''">
     <![CDATA[
+           AND #{A} <= sta_day		/** 조회조건의 시작일자가 존재시 */
+    ]]>
+    </if>	
+    <if test="B != null and B != ''">
+    <![CDATA[
+           AND sta_day  <= #{B}		/** 조회조건의 종료일자가 존재시 */
+    ]]>
+    </if>
+   <![CDATA[
+	ORDER BY A.req_dt DESC
+	LIMIT 10 OFFSET 0			/** 페이징 별 조회 숫자 */
+    ]]>
+    </select>
+    
+    <update id="kdcApproval" parameterType="HashMap">
+    <![CDATA[
+        update tb_kdc_registration
+           set serial_no = #{serialNo}
+             , product_name = #{cbProductName}
+             , approval = #{cbApproval}
+             , comment = #{comment}
+         where 1=1
+           and user_id = #{userId}
+           and kdc_seq = #{kdcSeq}
+    ]]>
+    </update> 
+    
+    <select id="getApplicationApprovalListCount" parameterType="HashMap" resultType="int">
+    <![CDATA[
+        select count(0) as cnt
+          from tb_user_requests rq
+               left join tb_user usr on usr.user_id = rq.user_id
+               left join tb_applications ap on ap.application_seq = rq.request_target
+               left join tb_code cd on cd.master_code = 'approval_flag'
+                                   and cd.code = rq.approval_flag
+               left join tb_group gr on gr.area = #{area}
+                                    and gr.owner_id = rq.user_id
+                                    and gr.use_yn = 'Y'
+         where 1=1
+           and request_type = '0'
+           and request_kind = '0'
+    ]]>
+    </select>
+    
+    <select id="getApplicationApprovalList" parameterType="HashMap" resultType="HashMap">
+	   <![CDATA[
         select kdc.kdc_seq as kdcSeq
              , kdc.user_id as userId
              , grp.group_code as groupCode
@@ -72,66 +139,8 @@
          order by kdc.created_date desc, kdc.updated_date desc
          limit #{itemNoPerPage} offset #{offset}
     ]]>    
-    </select>
     
-    <update id="kdcApproval" parameterType="HashMap">
-    <![CDATA[
-        update tb_kdc_registration
-           set serial_no = #{serialNo}
-             , product_name = #{cbProductName}
-             , approval = #{cbApproval}
-             , comment = #{comment}
-         where 1=1
-           and user_id = #{userId}
-           and kdc_seq = #{kdcSeq}
-    ]]>
-    </update>
     
-    <select id="getApplicationApprovalListCount" parameterType="HashMap" resultType="int">
-    <![CDATA[
-        select count(0) as cnt
-          from tb_user_requests rq
-               left join tb_user usr on usr.user_id = rq.user_id
-               left join tb_applications ap on ap.application_seq = rq.request_target
-               left join tb_code cd on cd.master_code = 'approval_flag'
-                                   and cd.code = rq.approval_flag
-               left join tb_group gr on gr.area = #{area}
-                                    and gr.owner_id = rq.user_id
-                                    and gr.use_yn = 'Y'
-         where 1=1
-           and request_type = '0'
-           and request_kind = '0'
-    ]]>
-    </select>
-    
-    <select id="getApplicationApprovalList" parameterType="HashMap" resultType="HashMap">
-    <![CDATA[
-        select rq.user_id as userId
-             , usr.name as userName
-             , rq.request_type as requestType
-             , rq.request_kind as requestKind
-             , rq.request_target as requestTarget
-             , ap.application_name as applicationName
-             , DATE_FORMAT(rq.request_date, '%Y-%m-%d %H:%i:%s') as requestDate
-             , rq.approval_flag as approvalFlag
-             , cd.code_name as approvalFlagNm
-             , DATE_FORMAT(rq.approval_date, '%Y-%m-%d %H:%i:%s') as approvalDate
-             , rq.comment
-             , gr.group_code as groupCode
-          from tb_user_requests rq
-               left join tb_user usr on usr.user_id = rq.user_id
-               left join tb_applications ap on ap.application_seq = rq.request_target
-               left join tb_code cd on cd.master_code = 'approval_flag'
-                                   and cd.code = rq.approval_flag
-               left join tb_group gr on gr.area = #{area}
-                                    and gr.owner_id = rq.user_id
-                                    and gr.use_yn = 'Y'
-         where 1=1
-           and request_type = '0'
-           and request_kind = '0'
-         order by rq.request_date desc
-         limit #{itemNoPerPage} offset #{offset}
-    ]]>
     </select>
     
     <update id="saveApplicationApproval" parameterType="HashMap">

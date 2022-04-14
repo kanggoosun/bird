@@ -58,6 +58,8 @@ public class ApprovalManagementController {
 	public String getKdcApprovalList(@RequestParam Map<String, String> paramMap, Model model) {
 		log.debug("getKdcApprovalList paramMap={}", paramMap);
 		
+		log.debug("---------------¿øº»------------------");
+		
 		int itemNoPerPage = paramMap.get("itemNoPerPage") == null ? ConfigConstants.TEN_ITEMS_NO_PER_PAGE : Integer.parseInt(paramMap.get("itemNoPerPage"));
 		paramMap.put("itemNoPerPage", String.valueOf(itemNoPerPage));
 		Map<String, Object> map = approvalManagementService.getKDCRegistrationApprovalList(paramMap);

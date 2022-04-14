@@ -54,9 +54,11 @@ public class CancelReservationController {
 		return "/user/cancelReservation";
 	}
 	
-	@RequestMapping(value="/getKdcApprovalList", method={RequestMethod.GET, RequestMethod.POST})
-	public String getKdcApprovalList(@RequestParam Map<String, String> paramMap, Model model) {
-		log.debug("getKdcApprovalList paramMap={}", paramMap);
+	@RequestMapping(value="/kdcApprovalList", method={RequestMethod.GET, RequestMethod.POST})
+	public String kdcApprovalList(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("kdcApprovalList paramMap={}", paramMap);
+		
+		log.debug("---------------บนป็บป------------------");
 		
 		int itemNoPerPage = paramMap.get("itemNoPerPage") == null ? ConfigConstants.TEN_ITEMS_NO_PER_PAGE : Integer.parseInt(paramMap.get("itemNoPerPage"));
 		paramMap.put("itemNoPerPage", String.valueOf(itemNoPerPage));
