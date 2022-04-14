@@ -21,6 +21,8 @@
 				test="${__lastRequestURI eq '/signup' || __lastRequestURI eq '/terms' || __lastRequestURI eq '/registrationInfo' }">
 				<li><a href="<c:url value='/sign/signin' />"><spring:message
 							code='WRD-SIGNIN' text='Sign in' /></a></li>
+				<li><a href="<c:url value='/sign/signup' />"><spring:message
+							code='WRD-SIGNUP' text='회원가입' /></a></li>
 			</c:when>
 			<c:otherwise>
 				<c:choose>
@@ -46,13 +48,15 @@
 									code='WRD-SIGNOUT' text='Sign out' /></a></li>
 						<br />
 
+						<li><a href="<c:url value='/main' />"><spring:message
+									text='예약가능일자조회' /></a></li>
 						<li><a href="<c:url value='/applications/introduction' />"><spring:message
 									text='예약상태조회' /></a></li>
-						<li><a href="<c:url value='/applications/introduction' />"><spring:message
-									text='예약가능일자조회' /></a></li>
-						<li><a href="<c:url value='/user/reservationRequest/application' />"><spring:message
+						<li><a
+							href="<c:url value='/user/reservationRequest/application' />"><spring:message
 									text='예약요청' /></a></li>
-						<li><a href="<c:url value='/user/cancelReservation/kdcRegistration' />"><spring:message
+						<li><a
+							href="<c:url value='/user/cancelReservation/kdcRegistration' />"><spring:message
 									text='예약취소' /></a></li>
 					</c:when>
 					<c:otherwise>

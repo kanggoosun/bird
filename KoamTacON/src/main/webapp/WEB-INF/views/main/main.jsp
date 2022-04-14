@@ -1,6 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
 <!-- global header -->
-<%@ include file="../include/gheader.jsp" %>
+<%@ include file="../include/gheader.jsp"%>
 
 <!DOCTYPE HTML>
 <!--
@@ -8,150 +9,140 @@
     html5up.net | @ajlkn
     Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
-<html>
+<html lang='en'>
 <head>
-    <title><spring:message code='MENU-APPLICATIONS' text='Applications' /> - KoamTacON</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <!--[if lte IE 8]><script src="<c:url value='/resources/assets/js/ie/html5shiv.js' />"></script><![endif]-->
-    <link rel="stylesheet" href="<c:url value='/resources/assets/css/main.css' />" />
-    <!--[if lte IE 9]><link rel="stylesheet" href="<c:url value='/resources/assets/css/ie9.css' />" /><![endif]-->
-    <!--[if lte IE 8]><link rel="stylesheet" href="<c:url value='/resources/assets/css/ie8.css' />" /><![endif]-->
+<title><spring:message code='MENU-APPLICATIONS'
+		text='Applications' /> - KoamTacON</title>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, user-scalable=no" />
+<!--[if lte IE 8]><script src="<c:url value='/resources/assets/js/ie/html5shiv.js' />"></script><![endif]-->
+<link rel="stylesheet"
+	href="<c:url value='/resources/assets/css/main.css' />" />
+<!--[if lte IE 9]><link rel="stylesheet" href="<c:url value='/resources/assets/css/ie9.css' />" /><![endif]-->
+<!--[if lte IE 8]><link rel="stylesheet" href="<c:url value='/resources/assets/css/ie8.css' />" /><![endif]-->
 
-    <!-- Scripts -->
-    <%@ include file="../include/incScripts.jsp" %>
-    
+<!-- Scripts -->
+<%@ include file="../include/incScripts.jsp"%>
+<link href="/resources/fullcalendar/main.css" rel='stylesheet' />
+<script src="/resources/fullcalendar/main.js"></script>
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		var calendarEl = document.getElementById('calendar');
+
+		var calendar = new FullCalendar.Calendar(calendarEl, {
+			/* 	headerToolbar : {
+					right : false
+				}, */
+			initialDate : '2020-09-12',
+			navLinks : true, // can click day/week names to navigate views
+			selectable : true,
+			selectMirror : true,
+			select : function(arg) {
+				var title = prompt('Event Title:');
+				if (title) {
+					calendar.addEvent({
+						title : title,
+						start : arg.start,
+						end : arg.end,
+						allDay : arg.allDay
+					})
+				}
+				calendar.unselect()
+			},
+			editable : false,
+			dayMaxEvents : true, // allow "more" link when too many events
+			events : [ {
+				title : 'All Day Event',
+				start : '2020-09-01'
+			}, {
+				title : 'Long Event',
+				start : '2020-09-07',
+				end : '2020-09-10'
+			}, {
+				groupId : 999,
+				title : 'Repeating Event',
+				start : '2020-09-09T16:00:00'
+			}, {
+				groupId : 999,
+				title : 'Repeating Event',
+				start : '2020-09-16T16:00:00'
+			}, {
+				title : 'Conference',
+				start : '2020-09-11',
+				end : '2020-09-13'
+			}, {
+				title : 'Meeting',
+				start : '2020-09-12T10:30:00',
+				end : '2020-09-12T12:30:00'
+			}, {
+				title : 'Lunch',
+				start : '2020-09-12T12:00:00'
+			}, {
+				title : 'Meeting',
+				start : '2020-09-12T14:30:00'
+			}, {
+				title : 'Happy Hour',
+				start : '2020-09-12T17:30:00'
+			}, {
+				title : 'Dinner',
+				start : '2020-09-12T20:00:00'
+			}, {
+				title : 'Birthday Party',
+				start : '2020-09-13T07:00:00'
+			}, {
+				title : 'Click for Google',
+				url : 'http://google.com/',
+				start : '2020-09-28'
+			} ]
+		});
+
+		calendar.render();
+	});
+</script>
+<style>
+/* body {
+	margin: 40px 10px;
+	padding: 0;
+	font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+	font-size: 14px;
+}
+ */
+#calendar {
+	max-width: 1100px;
+	margin: 0 auto;
+}
+</style>
 </head>
 
 <body>
-<!-- Wrapper -->
-<div id="wrapper">
-    <!-- Main -->
-    <div id="main">
-        <!-- Header -->
-        <%@ include file="../include/header.jsp" %>
-        
-        <div class="inner">
-            <!-- Content -->
-            <section>
-                
-                <header class="main">
-                    <h2><spring:message code='MENU-APPLICATIONS' text='Applications' /></h2>
-                </header>
-                <div id="divApplicationList" class="posts"></div>
-                
-            </section>
-            <!-- Footer -->
-            <%@ include file="../include/footer.jsp" %>
-        </div>
-    </div>
-</div>
+	<!-- Wrapper -->
+	<div id="wrapper">
+		<!-- Main -->
+		<div id="main">
+			<!-- Header -->
+			<%@ include file="../include/header.jsp"%>
 
-<!-- popup layer -->
-<%@ include file="../include/popupLayer.jsp" %>
+			<section>
+				<header class="main">
+					<div id='calendar'></div>
+				</header>
+			</section>
 
-<script type="text/javascript">
-var gvGroupCode = '';
-$(document).ready(function(){
-    var msg = "<c:out value='${msg}' />";
-    if (msg != null && msg != "") { gfn_layerPopup(msg); }
-    
-    gvGroupCode = "<c:out value='${__groupCode }' />";
-    fn_getApplicationList();
-});
+			<%-- <div class="inner">
+				<!-- Content -->
+				<section>
 
-function fn_getApplicationList() {
-    var param = "";
-    
-    gf_send("<c:url value='/main/getApplicationList' />", param, "fn_getApplicationListCallback");
-}
+					<header class="main">
+						<h2>
+							<spring:message code='MENU-CALENDAR' text='Calendar' />
+						</h2>
+					</header>
+					<div id="divApplicationList" class="posts"></div>
 
-function fn_getApplicationListCallback(data) {
-    var applicationList = data.applicationList;
-    
-    fn_makeTblApplicationList(applicationList);
-}
-
-function fn_makeTblApplicationList(applicationList) {
-	var divHtml = "";
-	
-	if (applicationList != null && applicationList.length > 0) {
-		for(var i=0; i<applicationList.length; i++) {
-			divHtml += "<article>";
-            divHtml += "    <input type=\"hidden\" id=\"applicationSeq-"+i+"\" name=\"applicationSeq-"+i+"\" value=\""+applicationList[i].applicationSeq+"\">";
-            divHtml += "    <div class=\"12u$ 12u$(small)\">";
-            divHtml += "        <h3>"+applicationList[i].applicationName+"</h3>";
-            
-			var param = "";
-			var cUrl = "";
-            var imgHtml = "";
-            if(applicationList[i].filename != null && applicationList[i].filename.length > 0) {
-				param += "?fileClass=App";
-			    param += "&filename="+applicationList[i].filename;
-			    cUrl = "<c:url value='/common/viewImage"+param+"' />";
-			    imgHtml = "<img src='"+cUrl+"' style='width:auto;max-height:100px;' />";
-			    divHtml += "        <span class=\"image left\">"+imgHtml+"</span>";
-			}
-            
-			divHtml += "        <p style=\"word-wrap:break-all;\">"+applicationList[i].applicationDescription+"</p>";
-			divHtml += "    </div>";
-			divHtml += "    <div class=\"12u$ 12u$(small)\" style=\"text-align:right;\">";
-			divHtml += "        <ul class=\"actions\">";
-			//divHtml += "            <li><input type=\"button\" name=\"btnToAppIntro-"+i+"\" id=\"btnToAppIntro-"+i+"\" value=\"More\" class=\"button small btnDynamic\" /></li>";
-			if (gfn_nullValue(gvGroupCode) != '') {
-			    divHtml += "            <li><input type=\"button\" name=\"btnToAppPage-"+i+"\" id=\"btnToAppPage-"+i+"\" value=\"<spring:message code='WRD-VIEWDATA' text='View Data' />\" class=\"button small special btnDynamic\" /></li>";
-			}
-			divHtml += "        </ul>";
-			divHtml += "    </div>";
-			divHtml += "</article>";
-		}
-	} else {
-		divHtml += "<article><spring:message code='MSG-VW026=' text='There is no application.' /></article>";
-	}
-	
-	$("#divApplicationList").html(divHtml);
-}
-
-var strClickEventNm  = "";
-strClickEventNm += ".btnDynamic ";
-// mouse click event
-$(document).on("click", strClickEventNm, function(e){
-    e.preventDefault();
-
-    var id = $(this).attr("id");
-    var sId = "";
-    var no = "";
-    if (id.indexOf("-") > -1) {
-    	sId = id.split("-")[0];
-    	no = id.split("-")[1];
-    } else {
-    	sId = id;
-    }
-    
-    fn_eventCallFunction(sId, no);
-});
-
-function fn_eventCallFunction(id, no) {
-	if (id === "btnToAppPage") {
-		fn_moveToAppPage(no);
-	} else if (id === "btnToAppIntro") {
-		fn_moveToAppInfo(no);
-	}
-}
-
-function fn_moveToAppPage(no) {
-	var param = "";
-	param += "applicationSeq="+$("#applicationSeq-"+no).val();
-	
-	gf_submitMovePage("<c:url value='/applications/application' />", param);
-}
-
-function fn_moveToAppInfo(no) {
-	var param = "";
-    param += "applicationSeq="+$("#applicationSeq-"+no).val();
-    
-    gf_submitMovePage("<c:url value='/applications/introduction' />", param);
-}
-</script>
+				</section>
+			</div> --%>
+		</div>
+	</div>
 </body>
 </html>

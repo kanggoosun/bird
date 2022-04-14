@@ -320,7 +320,7 @@ function fn_signinCallback(data) {
 	if (data.LoginFlag === "Y") {
 		if (data.userType === '9' || data.userType === '8') {
 			if (gfn_nullValue(gvLastRequestURI,"") === "") {
-				tgtUrl = '<c:out value="${pageContext.request.contextPath}/admin/dashboard/view" />';
+				tgtUrl = '<c:out value="${pageContext.request.contextPath}/manager/main/view" />';
 			} else {
 				tgtUrl = gvLastRequestURI;
 			}

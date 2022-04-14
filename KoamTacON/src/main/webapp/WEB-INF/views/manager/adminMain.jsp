@@ -121,16 +121,14 @@
 		<!-- Main -->
 		<div id="main">
 			<!-- Header -->
-			<%@ include file="../include/header.jsp"%>
-
-			<mains> <%@ include file="../include/side.jsp"%>
+			<%@ include file="../include/header_admin.jsp"%>
 
 			<section>
 				<header class="main">
+				어드민메인
 					<div id='calendar'></div>
 				</header>
 			</section>
-			</mains>
 
 			<%-- <div class="inner">
 				<!-- Content -->

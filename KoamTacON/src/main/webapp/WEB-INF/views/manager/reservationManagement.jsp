@@ -34,7 +34,7 @@
             
             <section>
                 <header class="main">
-                    <h2>Application Management</h2>
+                    <h2>예약요청 관리</h2>
                 </header>
                 
                 <h4>Application List</h4>
