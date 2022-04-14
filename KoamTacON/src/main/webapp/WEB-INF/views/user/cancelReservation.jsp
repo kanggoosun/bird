@@ -333,7 +333,7 @@ function fn_getKDCApprovalList(pageNo) {
         param += "cbSearchApproval="+searchApproval;
     }
     
-    gf_send("<c:url value='/admin/approvalManagement/getKdcApprovalList' />", param, "fn_getKDCApprovalListCallback");
+    gf_send("<c:url value='/user/cancelReservation/getKdcApprovalList' />", param, "fn_getKDCApprovalListCallback");
 }
 
 function fn_getKDCApprovalListCallback(data) {
