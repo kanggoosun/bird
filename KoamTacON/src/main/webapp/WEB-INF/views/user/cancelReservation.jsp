@@ -333,7 +333,7 @@ function fn_getKDCApprovalList(pageNo) {
         param += "cbSearchApproval="+searchApproval;
     }
     
-    gf_send("<c:url value='/user/cancelResevation/getReservationList' />", param, "fn_getKDCApprovalListCallback");
+    gf_send("<c:url value='/admin/approvalManagement/getKdcApprovalList' />", param, "fn_getKDCApprovalListCallback");
 }
 
 function fn_getKDCApprovalListCallback(data) {
@@ -555,7 +555,7 @@ $(document).on("change", "#cbSearchApproval, #cbSearchField, #cbKeyword", functi
     } else if (id === "cbKeyword") {
         $("#sKeyword").val(val);
     }
-    getApplicationApprovalList(1);
+    fn_getKDCApprovalList(1);
 });
 
 $(document).on("input", "#txtKeyword", function(e){
