@@ -151,13 +151,13 @@ public class CancelReservationController {
 		return "jsonView";
 	}
 	
-	@RequestMapping(value="/getKDCPhoto", method={RequestMethod.GET, RequestMethod.POST})
-	public String getKDCPhoto(@RequestParam Map<String, String> paramMap, Model model) {
-		log.debug("getKDCPhoto paramMap={}", paramMap);
-		model.addAttribute("kdcPhoto", kdcService.getKDCPhoto(paramMap));
-		model.addAttribute("flag", "success");
-		return "jsonView";
-	}
+//	@RequestMapping(value="/getKDCPhoto", method={RequestMethod.GET, RequestMethod.POST})
+//	public String getKDCPhoto(@RequestParam Map<String, String> paramMap, Model model) {
+//		log.debug("getKDCPhoto paramMap={}", paramMap);
+//		model.addAttribute("kdcPhoto", kdcService.getKDCPhoto(paramMap));
+//		model.addAttribute("flag", "success");
+//		return "jsonView";
+//	}
 	
 	@RequestMapping(value="/applicationApproval", method={RequestMethod.GET, RequestMethod.POST})
 	public String applicationApproval(@RequestParam Map<String, String> paramMap, Model model) {
@@ -172,9 +172,9 @@ public class CancelReservationController {
 		return "/admin/applicationApprovalManagement";
 	}
 	
-	@RequestMapping(value="/getApplicationApprovalList", method={RequestMethod.GET, RequestMethod.POST})
-	public String getApplicationApprovalList(@RequestParam Map<String, String> paramMap, Model model) {
-		log.debug("getApplicationApprovalList paramMap={}", paramMap);
+	@RequestMapping(value="/getReservationList", method={RequestMethod.GET, RequestMethod.POST})
+	public String getReservationList(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("getReservationList paramMap={}", paramMap);
 		
 		int itemNoPerPage = paramMap.get("itemNoPerPage") == null ? ConfigConstants.TEN_ITEMS_NO_PER_PAGE : Integer.parseInt(paramMap.get("itemNoPerPage"));
 		paramMap.put("itemNoPerPage", String.valueOf(itemNoPerPage));
@@ -195,7 +195,8 @@ public class CancelReservationController {
 			paramMap.put("applicationSeq", paramMap.get("requestTarget"));
 			paramMap.put("area", ConfigConstants.AREA);
 			cancelReservationService.saveApplicationApproval(paramMap);
-			if (paramMap.get("cbApprovalFlag").equals("2")) {
+//			if (paramMap.get("cbApprovalFlag").equals("2")) {
+			if ("2".equals(paramMap.get("cbApprovalFlag")) ) {
 				if (cancelReservationService.getApplicationGroupCount(paramMap) == 0) {
 					cancelReservationService.insertApplicationGroup(paramMap);
 				} else {
