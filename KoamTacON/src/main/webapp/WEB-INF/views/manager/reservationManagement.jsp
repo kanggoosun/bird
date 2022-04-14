@@ -23,16 +23,6 @@
 
 <!-- Scripts -->
 <%@ include file="../include/incScripts.jsp"%>
-<style>
-aside {
-	width: 220px;
-	padding: 10px;
-/* 	border: 5px solid green; */
-	margin: auto;
-	display: block;
-}
-</style>
-
 </head>
 
 <body>
@@ -42,9 +32,9 @@ aside {
 		<div id="main">
 			<!-- Header -->
 			<%@ include file="../include/header_admin.jsp"%>
-			<aside>
-				<%@ include file="../include/miniCalendar.jsp"%>
-			</aside>
+			<br>
+			<%@ include file="../include/miniCalendar.jsp"%>
+			
 			<div class="inner">
 				<section>
 

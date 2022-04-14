@@ -30,6 +30,8 @@
     <div id="main">
         <!-- Header -->
         <%@ include file="../include/header.jsp" %>
+        <br>
+        <%@ include file="../include/miniCalendar.jsp"%>
         <div class="inner">
             
             <section>

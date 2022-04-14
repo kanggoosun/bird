@@ -1,5 +1,7 @@
 <%-- <%@ page language="java" contentType="text/html; charset=EUC-KR"
 	pageEncoding="EUC-KR"%> --%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html>
 
@@ -20,30 +22,48 @@
 .double div {
 	float: left;
 	/* width: 10 */
-	width: 220px;
+	width: 1000px;
 	padding: 10px;
-/* 	border: 5px solid green; */
+	/* 	border: 5px solid green; */
 	margin: auto;
-	display: block;
+	display: inline;
 }
 
-
+aside {
+	width: 1600px;
+	height: 300px;
+	padding: 30px;
+	/* 	border: 5px solid green; */
+	margin: auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 2px solid gray;
+	/* display: inline; */
+	/* display: inline; */
+	/* style="display: inline;" */
+}
 </style>
 </head>
 
 <body>
 
 	<!-- <div class="single">
-        <h1>1°³ Â¥¸®</h1>
+        <h1>1ê°œ ì§œë¦¬</h1>
         <input id="datepicker" type="text">
     </div>
 
     <br /><br /><br /> -->
-	<cmain> <cdiv class="double"> <input id="datepicker1"
-		type="text"> - <input id="datepicker2" type="text"> </cdiv> </cmain>
+	<aside>
+		<div class="double">
+			ì˜ˆì•½ ì‹œì‘ì¼ <input style="width: 220px; display: inline;" id="datepicker1"
+				type="text"> - <input style="width: 250px; display: inline;"
+				id="datepicker2" type="text">
+		</div>
+	</aside>
 
 	<script>
-		//ÇÑ°³¸¸ ´Ü¼øÇÏ°Ô ¸¸µé¶§
+		//í•œê°œë§Œ ë‹¨ìˆœí•˜ê²Œ ë§Œë“¤ë•Œ
 		/*    $("#datepicker").datepicker({
 		       language: 'ko'
 		   });
@@ -52,36 +72,36 @@
 
 		 */
 
-		//µÎ°³Â¥¸® Á¦¾î ¿¬°áµÈ°Å ¸¸µé¾îÁÖ´Â ÇÔ¼ö
-		datePickerSet($("#datepicker1"), $("#datepicker2"), true); //´ÙÁßÀº ½ÃÀÛÇÏ´Â ´Ş·Â ¸ÕÀú, ³¡´Ş·Â 2¹øÂ°
+		//ë‘ê°œì§œë¦¬ ì œì–´ ì—°ê²°ëœê±° ë§Œë“¤ì–´ì£¼ëŠ” í•¨ìˆ˜
+		datePickerSet($("#datepicker1"), $("#datepicker2"), true); //ë‹¤ì¤‘ì€ ì‹œì‘í•˜ëŠ” ë‹¬ë ¥ ë¨¼ì €, ëë‹¬ë ¥ 2ë²ˆì§¸
 
 		/*
-		 * ´Ş·Â »ı¼º±â
-		 * @param sDate ÆÄ¶ó¹ÌÅÍ¸¸ ³ÖÀ¸¸é 1°³Â¥¸® ´Ş·Â »ı¼º
+		 * ë‹¬ë ¥ ìƒì„±ê¸°
+		 * @param sDate íŒŒë¼ë¯¸í„°ë§Œ ë„£ìœ¼ë©´ 1ê°œì§œë¦¬ ë‹¬ë ¥ ìƒì„±
 		 * @example   datePickerSet($("#datepicker"));
 		 * 
 		 * 
 		 * @param sDate, 
-		 * @param eDate 2°³ ³ÖÀ¸¸é ¿¬°á´Ş·Â »ı¼ºµÇ¾î ¼­·ÎÀÇ ³¯Â¥¸¦ ³Ñ¾î°¡Áö ¾ÊÀ½
+		 * @param eDate 2ê°œ ë„£ìœ¼ë©´ ì—°ê²°ë‹¬ë ¥ ìƒì„±ë˜ì–´ ì„œë¡œì˜ ë‚ ì§œë¥¼ ë„˜ì–´ê°€ì§€ ì•ŠìŒ
 		 * @example   datePickerSet($("#datepicker1"), $("#datepicker2"));
 		 */
 		function datePickerSet(sDate, eDate, flag) {
 
-			//½ÃÀÛ ~ Á¾·á 2°³ Â¥¸® ´Ş·Â datepicker	
+			//ì‹œì‘ ~ ì¢…ë£Œ 2ê°œ ì§œë¦¬ ë‹¬ë ¥ datepicker	
 			if (!isValidStr(sDate) && !isValidStr(eDate) && sDate.length > 0
 					&& eDate.length > 0) {
 				var sDay = sDate.val();
 				var eDay = eDate.val();
 
-				if (flag && !isValidStr(sDay) && !isValidStr(eDay)) { //Ã³À½ ÀÔ·Â ³¯Â¥ ¼³Á¤, update...			
+				if (flag && !isValidStr(sDay) && !isValidStr(eDay)) { //ì²˜ìŒ ì…ë ¥ ë‚ ì§œ ì„¤ì •, update...			
 					var sdp = sDate.datepicker().data("datepicker");
-					sdp.selectDate(new Date(sDay.replace(/-/g, "/"))); //ÀÍ½º¿¡¼­´Â ±×³É new DateÇÏ¸é -À» ÀÎ½Ä¸øÇÔ replaceÇÊ¿ä
+					sdp.selectDate(new Date(sDay.replace(/-/g, "/"))); //ìµìŠ¤ì—ì„œëŠ” ê·¸ëƒ¥ new Dateí•˜ë©´ -ì„ ì¸ì‹ëª»í•¨ replaceí•„ìš”
 
 					var edp = eDate.datepicker().data("datepicker");
-					edp.selectDate(new Date(eDay.replace(/-/g, "/"))); //ÀÍ½º¿¡¼­´Â ±×³É new DateÇÏ¸é -À» ÀÎ½Ä¸øÇÔ replaceÇÊ¿ä
+					edp.selectDate(new Date(eDay.replace(/-/g, "/"))); //ìµìŠ¤ì—ì„œëŠ” ê·¸ëƒ¥ new Dateí•˜ë©´ -ì„ ì¸ì‹ëª»í•¨ replaceí•„ìš”
 				}
 
-				//½ÃÀÛÀÏÀÚ ¼¼ÆÃÇÏ±â ³¯Â¥°¡ ¾ø´Â°æ¿ì¿£ Á¦ÇÑÀ» °ÉÁö ¾ÊÀ½
+				//ì‹œì‘ì¼ì ì„¸íŒ…í•˜ê¸° ë‚ ì§œê°€ ì—†ëŠ”ê²½ìš°ì—” ì œí•œì„ ê±¸ì§€ ì•ŠìŒ
 				if (!isValidStr(eDay)) {
 					sDate.datepicker({
 						maxDate : new Date(eDay.replace(/-/g, "/"))
@@ -95,7 +115,7 @@
 					}
 				});
 
-				//Á¾·áÀÏÀÚ ¼¼ÆÃÇÏ±â ³¯Â¥°¡ ¾ø´Â°æ¿ì¿£ Á¦ÇÑÀ» °ÉÁö ¾ÊÀ½
+				//ì¢…ë£Œì¼ì ì„¸íŒ…í•˜ê¸° ë‚ ì§œê°€ ì—†ëŠ”ê²½ìš°ì—” ì œí•œì„ ê±¸ì§€ ì•ŠìŒ
 				if (!isValidStr(sDay)) {
 					eDate.datepicker({
 						minDate : new Date(sDay.replace(/-/g, "/"))
@@ -109,12 +129,12 @@
 					}
 				});
 
-				//ÇÑ°³Â¥¸® ´Ş·Â datepicker
+				//í•œê°œì§œë¦¬ ë‹¬ë ¥ datepicker
 			} else if (!isValidStr(sDate)) {
 				var sDay = sDate.val();
-				if (flag && !isValidStr(sDay)) { //Ã³À½ ÀÔ·Â ³¯Â¥ ¼³Á¤, update...			
+				if (flag && !isValidStr(sDay)) { //ì²˜ìŒ ì…ë ¥ ë‚ ì§œ ì„¤ì •, update...			
 					var sdp = sDate.datepicker().data("datepicker");
-					sdp.selectDate(new Date(sDay.replace(/-/g, "/"))); //ÀÍ½º¿¡¼­´Â ±×³É new DateÇÏ¸é -À» ÀÎ½Ä¸øÇÔ replaceÇÊ¿ä
+					sdp.selectDate(new Date(sDay.replace(/-/g, "/"))); //ìµìŠ¤ì—ì„œëŠ” ê·¸ëƒ¥ new Dateí•˜ë©´ -ì„ ì¸ì‹ëª»í•¨ replaceí•„ìš”
 				}
 
 				sDate.datepicker({
