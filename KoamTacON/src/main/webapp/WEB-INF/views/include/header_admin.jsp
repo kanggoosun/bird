@@ -59,7 +59,7 @@
 									text='회원관리' /></a></li>
 						<li><a
 							href="<c:url value='/manager/reservationManagement/application' />"><spring:message
-									text='예약요청 관리' /></a></li>
+									text='예약요청 관리' /></a></li> 
 					</c:when>
 					<c:otherwise>
 						<li><a>&nbsp;</a></li>
@@ -67,7 +67,7 @@
 				</c:choose>
 			</c:otherwise>
 		</c:choose>
-		<img src="/resources/images/icon/lang.png">
+		<%-- <img src="/resources/images/icon/lang.png">
 		<li><select id="locale" name="locale"
 			onchange="fn_changLocale(this.value)">
 				<option value="en"
@@ -76,7 +76,7 @@
 					<c:if test="${__locale eq 'ko'}"> selected="selected" </c:if>>KOR</option>
 				<option value="jp"
 					<c:if test="${__locale eq 'jp'}"> selected="selected" </c:if>>JPN</option>
-		</select></li>
+		</select></li> --%>
 	</ul>
 	</mini-nav>
 </header>

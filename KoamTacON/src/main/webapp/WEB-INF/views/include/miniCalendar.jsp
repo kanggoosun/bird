@@ -48,23 +48,24 @@ aside {
 
 <body>
 
-	<!-- <div class="single">
-        <h1>1개 짜리</h1>
-        <input id="datepicker" type="text">
-    </div>
+	<!-- <div class="single"></div>
 
-    <br /><br /><br /> -->
+	<br />
+	<br />
+	<br /> -->
 	<aside>
 		<div class="double">
-			예약 시작일 <input style="width: 220px; display: inline;" id="datepicker1"
-				type="text"> - <input style="width: 250px; display: inline;"
-				id="datepicker2" type="text">
+			주말선택불가 테스트 <input style="width: 220px; display: inline;"
+				id="disabled-days" type="text" data-range="true" /> 예약 시작일 <input
+				style="width: 220px; display: inline;" id="datepicker1" type="text">
+			- <input style="width: 250px; display: inline;" id="datepicker2"
+				type="text">
 		</div>
 	</aside>
 
 	<script>
 		//한개만 단순하게 만들때
-		/*    $("#datepicker").datepicker({
+		/*    $("#disabled-days").datepicker({
 		       language: 'ko'
 		   });
 
@@ -85,6 +86,25 @@ aside {
 		 * @param eDate 2개 넣으면 연결달력 생성되어 서로의 날짜를 넘어가지 않음
 		 * @example   datePickerSet($("#datepicker1"), $("#datepicker2"));
 		 */
+
+		var disabledDays = [ 0, 6 ];
+
+		$('#disabled-days').datepicker(
+				{
+					language : 'ko',
+					minDate: new Date(), // Now can select only dates, which goes after today
+					onRenderCell : function(date, cellType) {
+						if (cellType == 'day') {
+							var day = date.getDay(), isDisabled = disabledDays
+									.indexOf(day) != -1;
+
+							return {
+								disabled : isDisabled
+							}
+						}
+					}
+				})
+
 		function datePickerSet(sDate, eDate, flag) {
 
 			//시작 ~ 종료 2개 짜리 달력 datepicker	
@@ -92,6 +112,7 @@ aside {
 					&& eDate.length > 0) {
 				var sDay = sDate.val();
 				var eDay = eDate.val();
+				var disabledDays = [ 0, 6 ];
 
 				if (flag && !isValidStr(sDay) && !isValidStr(eDay)) { //처음 입력 날짜 설정, update...			
 					var sdp = sDate.datepicker().data("datepicker");
@@ -110,9 +131,20 @@ aside {
 				sDate.datepicker({
 					language : 'ko',
 					autoClose : true,
+					minDate: new Date(),
 					onSelect : function() {
 						datePickerSet(sDate, eDate);
 					}
+				/* onRenderCell : function(date, cellType) {
+					if (cellType == 'day') {
+						var day = date.getDay(), isDisabled = disabledDays
+								.indexOf(day) != -1;
+
+						return {
+							disabled : isDisabled
+						}
+					}
+				} */
 				});
 
 				//종료일자 세팅하기 날짜가 없는경우엔 제한을 걸지 않음
@@ -127,6 +159,16 @@ aside {
 					onSelect : function() {
 						datePickerSet(sDate, eDate);
 					}
+				/* 	onRenderCell : function(date, cellType) {
+						if (cellType == 'day') {
+							var day = date.getDay(), isDisabled = disabledDays
+									.indexOf(day) != -1;
+
+							return {
+								disabled : isDisabled
+							}
+						}
+					} */
 				});
 
 				//한개짜리 달력 datepicker

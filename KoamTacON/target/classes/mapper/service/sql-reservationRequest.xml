@@ -22,6 +22,29 @@
     ]]>
     </select>
     
+    
+<!-- <mapper namespace="com.aisolution.koamtacon.mapper.service.ReservationRequestMapper">
+    <select id="getMenuListByDivision" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+        select menu_seq as menuSeq
+             , menu_division as menuDivision
+             , menu_level as menuLevel
+             , parent_menu_seq as parentMenuSeq
+             , menu_order as menuOrder
+             , menu_type as menuType
+             , uri
+             , menu_name as menuName
+             , opener_class as openerClass
+             , description
+             , use_yn as useYn
+          from tb_menu
+         where 1=1
+           and menu_division = #{division}
+         order by menu_level, parent_menu_seq desc, menu_order
+    ]]>
+    </select> -->
+    
+    
     <!-- 
     <select id="getMenuList1" parameterType="HashMap" resultType="HashMap">
     <![CDATA[
@@ -459,32 +482,41 @@
     
     <select id="getApplicationListCount" parameterType="HashMap" resultType="int">
     <![CDATA[
-        select count(0) as cnt
-          from tb_applications
-         where 1=1
+        SELECT COUNT(0) AS CNT
+FROM tb_reservation A
+WHERE  1=1
+	AND '2022-05-01' <= sta_day		/** 조회조건의 시작일자가 존재시 */
+	AND sta_day  <= '2022-05-10'		/** 조회조건의 종료일자가 존재시 */
+
     ]]>
     </select>
     
     <select id="getApplicationList" parameterType="HashMap" resultType="HashMap">
     <![CDATA[
-        select application_seq as applicationSeq
-             , application_name as applicationName
-             , application_description as applicationDescription
-             , application_introduction as applicationIntroduction
-             , application_url as applicationUrl
-             , tutorial_url as tutorialUrl
-             , idq as idq
-             , codiceq as codiceq
-             , tabgen_name as tabgenName
-             , use_yn as useYn
-             , CASE use_yn WHEN 'Y' THEN 'used'
-                           ELSE 'not used'
-               END as useYnNm
-             , display_order as displayOrder
-          from tb_applications
-         where 1=1
-         order by display_order asc, application_name asc
-         limit #{itemNoPerPage} offset #{offset}
+        SELECT 
+	ROW_NUMBER() OVER (ORDER BY A.req_dt DESC ) AS no /** 순번 */
+	, (SELECT code_name FROM tb_code WHERE master_code = 'C05' AND CODE = A.place_cd) AS place /** 연수원 */
+	, DATE_FORMAT(A.req_dt, '%Y-%m-%d') AS req_day		/** 요청일자 */
+	, sta_day		/** 시작일 */
+	, end_day		/** 종료일 */
+	, (SELECT code_name FROM tb_code WHERE master_code = 'C08' AND CODE = A.use_aim_cd) AS use_aim /** 이용목적 */
+	, tot_cost		/** 이용요금 */
+	, DATE_FORMAT(A.app_rej_dt, '%Y-%m-%d') AS app_rej_day		/** 승인 반려 일자 */
+	, (SELECT code_name FROM tb_code WHERE master_code = 'C01' AND CODE = A.res_sts_cd) AS res_sts /** 상태 */
+	, (SELECT code_name FROM tb_code WHERE master_code = 'C03' AND CODE = A.rej_sort_cd) AS rej_sort /** 취소분류 */
+	, can_rej_cau		/** 취소 반려 사유 */
+	, real_use_nm		/** 실제 이용자 대표 이름 */
+	, real_use_phone	/** 실제 이용자 핸드폰번호 */
+	, real_use_email	/** 실제 이용자 이메일 */
+	, real_use_car_no	/** 실제 이용자 차량번호 */
+	, rmk			/** 비고 */
+	, seq			/** SEQ */
+FROM tb_reservation A
+WHERE  1=1
+	AND '2022-05-01' <= sta_day		/** 조회조건의 시작일자가 존재시 */
+	AND sta_day  <= '2022-05-10'		/** 조회조건의 종료일자가 존재시 */
+ORDER BY A.req_dt DESC
+LIMIT 10 OFFSET 0			/** 페이징 별 조회 숫자 */
     ]]>
     </select>
     
