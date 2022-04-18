@@ -59,7 +59,7 @@
 									<td width="6%">승인반려일</td>
 									<td width="6%">상태</td>
 									<td width="6%">취소분류</td>
-									<td width="8%">취소반려사유</td>
+									<td width="8%">승인반려일자</td>
 									<td width="6%">실제이용자대표이름</td>
 									<td width="8%">핸드폰번호</td>
 									<td width="10%">이메일</td>
@@ -350,16 +350,16 @@
 							+ gfn_nullValue(applicationList[i].tot_cost)
 							+ "</td>";
 					bodyHtml += "    <td id=\"tdApp_rej_day-"+i+"\">"
-							+ gfn_nullValue(applicationList[i].app_rej_day)
+							+ gfn_nullValue(applicationList[i].can_rej_cau)
 							+ "</td>";
 					bodyHtml += "    <td id=\"tdRes_sts-"+i+"\">"
 							+ gfn_nullValue(applicationList[i].res_sts)
 							+ "</td>";
 					bodyHtml += "    <td id=\"tdRej_sort-"+i+"\">"
-							+ gfn_nullValue(applicationList[i].rej_sort)
+							+ gfn_nullValue(applicationList[i].res_sts_cd)
 							+ "</td>";
 					bodyHtml += "    <td id=\"tdCan_rej_cau-"+i+"\">"
-							+ gfn_nullValue(applicationList[i].can_rej_cau)
+							+ gfn_nullValue(applicationList[i].remain_day)
 							+ "</td>";
 					bodyHtml += "    <td id=\"tdReal_use_nm-"+i+"\">"
 							+ gfn_nullValue(applicationList[i].real_use_nm)

@@ -56,10 +56,10 @@
 									<td width="6%">종료일</td>
 									<td width="6%">이용목적</td>
 									<td width="6%">이용요금</td>
-									<td width="6%">승인반려일</td>
+									<td width="6%">취소반려일자</td>
 									<td width="6%">상태</td>
-									<td width="6%">취소분류</td>
-									<td width="8%">취소반려사유</td>
+									<td width="6%">상태변경</td>
+									<td width="8%">체크인남은일자</td>
 									<td width="6%">실제이용자대표이름</td>
 									<td width="8%">핸드폰번호</td>
 									<td width="10%">이메일</td>
