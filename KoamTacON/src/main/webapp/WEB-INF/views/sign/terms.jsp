@@ -23,7 +23,7 @@
 
 <!-- Scripts -->
 <%@ include file="../include/incScripts.jsp"%>
-<link href="/resources/fullcalendar/main.css" rel='stylesheet' />
+<!-- <link href="/resources/fullcalendar/main.css" rel='stylesheet' />
 <script src="/resources/fullcalendar/main.js"></script>
 <script>
 	document.addEventListener('DOMContentLoaded', function() {
@@ -305,8 +305,8 @@
 		/* destCalendar.render(); */
 
 	});
-</script>
-<style>
+</script> -->
+<!-- <style>
 /* bodys {
 	margin: 20px 0 0 20px;
 	font-size: 12px;
@@ -341,7 +341,7 @@ section {
 	width: 300px;
 	margin: 0 0px 50px 0;
 }
-</style>
+</style> -->
 </head>
 
 <body>
@@ -349,8 +349,8 @@ section {
 		<div id="main">
 			<%@ include file="../include/header.jsp"%>
 			<div class="inner">
-				<mains>
-				<aside>
+			<!-- 	<mains> -->
+				<!-- <aside>
 
 					<div id='source-calendar1'></div>
 					<div id='source-calendar2'></div>
@@ -365,7 +365,7 @@ section {
 					<div id='source-calendar11'></div>
 					<div id='source-calendar12'></div>
 
-				</aside>
+				</aside> -->
 				<section>
 					<header class="main">
 						<h2>연수원 이용규정</h2>
@@ -918,7 +918,7 @@ section {
 						user.</p>
 
 				</section>
-				</mains>
+				<!-- </mains> -->
 			</div>
 		</div>
 	</div>

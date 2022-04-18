@@ -33,7 +33,7 @@
 			<!-- Header -->
 			<%@ include file="../include/header_admin.jsp"%>
 			<br>
-			<%@ include file="../include/miniCalendar.jsp"%>
+			<%@ include file="../include/miniCalendar_admin.jsp"%>
 			
 			<div class="inner">
 				<section>

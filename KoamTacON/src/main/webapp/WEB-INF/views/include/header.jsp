@@ -56,7 +56,7 @@
 							href="<c:url value='/user/reservationRequest/application' />"><spring:message
 									text='예약요청' /></a></li>
 						<li><a
-							href="<c:url value='/user/cancelReservation/kdcRegistration' />"><spring:message
+							href="<c:url value='/user/cancelRequest/application' />"><spring:message
 									text='예약취소' /></a></li>
 					</c:when>
 					<c:otherwise>

@@ -29,11 +29,14 @@
 <script>
 	document.addEventListener('DOMContentLoaded', function() {
 		var calendarEl = document.getElementById('calendar');
+		var calendarEl1 = document.getElementById('calendar1');
 
 		var calendar = new FullCalendar.Calendar(calendarEl, {
-			/* 	headerToolbar : {
-					right : false
-				}, */
+			headerToolbar : {
+				left : 'title',
+				center : '',
+				right : ''
+			},
 			initialDate : '2020-09-12',
 			navLinks : true, // can click day/week names to navigate views
 			selectable : true,
@@ -52,13 +55,19 @@
 			},
 			editable : false,
 			dayMaxEvents : true, // allow "more" link when too many events
+			eventLimit : true,
 			events : [ {
 				title : 'All Day Event',
-				start : '2020-09-01'
+				start : '2020-09-01',
+				backgroundColor : "rgb(0, 185, 186)",
+				textColor : "#000000",
+
 			}, {
 				title : 'Long Event',
 				start : '2020-09-07',
-				end : '2020-09-10'
+				end : '2020-09-10',
+				backgroundColor : "rgb(0, 185, 186)",
+
 			}, {
 				groupId : 999,
 				title : 'Repeating Event',
@@ -94,11 +103,31 @@
 				title : 'Click for Google',
 				url : 'http://google.com/',
 				start : '2020-09-28'
-			} ]
+			}, {
+				start : '2020-09-21',
+			/* overlap : false, */
+			/* 			display : 'background', */
+			/* 	backgroundColor : "#00b9ba" */
+			}, {
+				title : 'libft 코딩',
+				start : '2020-09-21',
+				backgroundColor : "rgba(0, 185, 186, 0)",
+				/* borderColor : "rgba(0, 185, 186, 0)", */
+				textColor : "#000000"
+			}, ]
 		});
 
 		calendar.render();
+
 	});
+/* 
+	function chageSelectedValue() {
+		var yourTestSelect = document.getElementById("TestSelect");
+
+		// select element에서 선택된 option의 value가 저장됩니다.
+		var selectedValue = yourTestSelect.options[yourTestSelect.selectedIndex].value;
+
+	} */
 </script>
 <style>
 /* body {
@@ -108,9 +137,10 @@
 	font-size: 14px;
 }
  */
-#calendar {
-	max-width: 1100px;
+#calendar, #calendar1 {
+	max-width: 1200px;
 	margin: 0 auto;
+	font-size: 1em;
 }
 </style>
 </head>
@@ -125,7 +155,18 @@
 
 			<section>
 				<header class="main">
+					<!-- <select style="width: 160px; float: right; margin: 0;" -->
+					<!-- <div class="2u 12u$(medium) select-wrapper">
+						<select id="TestSelect" name="SelectValue"
+							onchange="location.href=this.value">
+							<option value="">Select</option>
+							<option value='/board/question'>송도</option>
+							<option value='/board/notice'>제주</option>
+							<option value="reservationRequest/application">서울</option>
+						</select>
+					</div> -->
 					<div id='calendar'></div>
+
 				</header>
 			</section>
 
