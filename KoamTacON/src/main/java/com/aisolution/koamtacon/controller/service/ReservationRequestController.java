@@ -387,6 +387,26 @@ public class ReservationRequestController {
 		model.addAttribute("cbFileUsageOptions", commonService.getComboCode(cbParamMap));
 		log.debug("model={}",model);
 		return "/user/kkk1";
+	
+	}
+	
+	
+	/* 예약상태조회 페이지 */
+	@RequestMapping(value="/main", method={RequestMethod.GET, RequestMethod.POST})
+	public String main(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("application paramMap={}", paramMap);
+		
+		model = initUtil.initMenu(paramMap, model);
+		
+		Map<String, String> cbParamMap = new HashMap<String, String>();
+		cbParamMap.put("masterCode", "file_type");
+		model.addAttribute("cbFileTypeOptions", commonService.getComboCode(cbParamMap));
+		cbParamMap = new HashMap<String, String>();
+		cbParamMap.put("masterCode", "file_usage");
+		model.addAttribute("cbFileUsageOptions", commonService.getComboCode(cbParamMap));
+		log.debug("model={}",model);
+		return "/user/main";
+
 	}
 	
 	@RequestMapping(value="/getApplicationList", method={RequestMethod.GET, RequestMethod.POST})

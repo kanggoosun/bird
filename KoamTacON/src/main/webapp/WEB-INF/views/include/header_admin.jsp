@@ -53,9 +53,9 @@
 						<li><a href="<c:url value='/manager/reservationManagement/code' />"><spring:message
 									text='코드관리' /></a></li>
 						<li><a href="<c:url value='/manager/main/view' />"><spring:message
-									text='예약가능일자조회' /></a></li>
+									text='예약조회' /></a></li>
 						<li><a
-							href="<c:url value='/manager/adminManagement/kdcRegistration' />"><spring:message
+							href="<c:url value='/manager/adminManagement/memberList' />"><spring:message
 									text='회원관리' /></a></li>
 						<li><a
 							href="<c:url value='/manager/reservationManagement/application' />"><spring:message

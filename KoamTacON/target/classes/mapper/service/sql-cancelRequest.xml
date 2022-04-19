@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.aisolution.koamtacon.mapper.service.AdminManagementMapper">
+<mapper namespace="com.aisolution.koamtacon.mapper.service.CancelRequestMapper">
     <select id="getMenuListByDivision" parameterType="HashMap" resultType="HashMap">
     <![CDATA[
         select menu_seq as menuSeq
@@ -482,40 +482,65 @@
     
     <select id="getApplicationListCount" parameterType="HashMap" resultType="int">
     <![CDATA[
-        SELECT COUNT(0) AS CNT
-FROM tb_reservation A
-WHERE  1=1
-	AND '2022-05-01' <= sta_day		/** 조회조건의 시작일자가 존재시 */
-	AND sta_day  <= '2022-05-10'		/** 조회조건의 종료일자가 존재시 */
-
+	SELECT COUNT(0) AS CNT
+	FROM tb_reservation A
+	WHERE  1=1
     ]]>
+    
+    <if test="startDate != null and A != ''">
+    <![CDATA[
+           AND #{startDate} <= sta_day		/** 조회조건의 시작일자가 존재시 */
+    ]]>
+    </if>	
+    <if test="endDate != null and B != ''">
+    <![CDATA[
+           AND sta_day  <= #{endDate}		/** 조회조건의 종료일자가 존재시 */
+    ]]>
+    </if>
+    
     </select>
     
     <select id="getApplicationList" parameterType="HashMap" resultType="HashMap">
     <![CDATA[
-        SELECT
-	ROW_NUMBER() OVER (ORDER BY A.req_dt DESC ) AS NO /** 순번 */
+    SELECT 
+	ROW_NUMBER() OVER (ORDER BY A.req_dt DESC ) AS no /** 순번 */
+	, (SELECT code_name FROM tb_code WHERE master_code = 'C05' AND CODE = A.place_cd) AS place /** 연수원 */
 	, DATE_FORMAT(A.req_dt, '%Y-%m-%d') AS req_day		/** 요청일자 */
-	, (SELECT code_name FROM tb_code WHERE master_code = 'C02' AND CODE = A.corp_cd) AS corp_nm /** 법인 */
-	, dep_nm			/**부서*/
-	, NAME				/** 이름*/
-	, email				/** 이메일 */
-	, phone				/** 핸드폰 번호*/
-	, req_reason		/** 신청 사유*/
-	, (SELECT code_name FROM tb_code WHERE master_code = 'C10' AND CODE = A.member_sts_cd) AS member_sts /** 회원 신청 상태 */
-	, CASE WHEN user_type = '9'  THEN '○' ELSE '' END AS user_type 	/** 관리자 */
-	, CASE WHEN activation_yn = 'N'  THEN '예' ELSE '' END AS activation	/** 탈퇴 여부 */
-FROM tb_user A
-WHERE  1=1
-	AND user_type IN ('0','9')
-	AND corp_cd = 'C0201'					/** 조회조건의 법인을 선택 한 경우*/
-	AND member_sts_cd = 'C1002'					/** 조회조건의 회원 신청 상태를 선택 한 경우*/
- 	AND '2022-04-01' <= DATE_FORMAT(req_dt, '%Y-%m-%d')		/** 조회조건의 요청 시작일자가 존재시 */
- 	AND DATE_FORMAT(req_dt, '%Y-%m-%d')  <= '2022-05-10'		/** 조회조건의 요청 종료일자가 존재시 */
- 	AND activation_yn = 'Y'					/** 조회조건의 가 존재시 */
-ORDER BY req_dt DESC
-LIMIT 20 OFFSET 0			/** 페이징 별 조회 숫자 */
+	
+	, sta_day		/** 시작일 */
+	, end_day		/** 종료일 */
+	
+	, (SELECT code_name FROM tb_code WHERE master_code = 'C08' AND CODE = A.use_aim_cd) AS use_aim /** 이용목적 */
+	, tot_cost		/** 이용요금 */
+	, can_rej_cau		/** 취소 반려 사유 */
+	, (SELECT code_name FROM tb_code WHERE master_code = 'C01' AND CODE = A.res_sts_cd) AS res_sts /** 상태 */
+	, res_sts_cd		/** 상태 코드 */
+	/** 상태변경 : 위 상태코드가 C0102(요청)일때는 요청취소가  C0104(승인)일때는 예약취소 버튼이 나와야 한다. */
+	, CASE WHEN DATEDIFF(sta_day, NOW()) > 0  THEN DATEDIFF(sta_day, NOW()) ELSE '' END AS remain_day /** 체크인 남은 날짜 */
+	, real_use_nm		/** 실제 이용자 대표 이름 */
+	, real_use_phone	/** 실제 이용자 핸드폰번호 */
+	, real_use_email	/** 실제 이용자 이메일 */
+	, real_use_car_no	/** 실제 이용자 차량번호 */
+	, rmk			/** 비고 */
+	, seq			/** SEQ */
+	FROM tb_reservation A
+	WHERE  1=1
     ]]>
+
+    <if test="startDate != null and A != ''">
+    <![CDATA[
+           AND #{startDate} <= sta_day		/** 조회조건의 시작일자가 존재시 */
+    ]]>
+    </if>	
+    <if test="endDate != null and B != ''">
+    <![CDATA[
+           AND sta_day  <= #{endDate}		/** 조회조건의 종료일자가 존재시 */
+    ]]>
+    </if>
+    <![CDATA[
+	ORDER BY A.req_dt DESC
+	LIMIT 10 OFFSET 0			/** 페이징 별 조회 숫자 */
+       ]]> 
     </select>
     
     <select id="getApplicationInfo" parameterType="HashMap" resultType="HashMap">

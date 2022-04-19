@@ -50,7 +50,7 @@
 
 						<li><a href="<c:url value='/main' />"><spring:message
 									text='예약가능일자조회' /></a></li>
-						<li><a href="<c:url value='/applications/introduction' />"><spring:message
+						<li><a href="<c:url value='/user/reservationRequest/main' />"><spring:message
 									text='예약상태조회' /></a></li>
 						<li><a
 							href="<c:url value='/user/reservationRequest/application' />"><spring:message

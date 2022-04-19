@@ -37,7 +37,7 @@
 				center : '',
 				right : ''
 			},
-			initialDate : '2020-09-12',
+			/* initialDate : '2020-09-12', */
 			navLinks : true, // can click day/week names to navigate views
 			selectable : true,
 			selectMirror : true,
@@ -57,77 +57,62 @@
 			dayMaxEvents : true, // allow "more" link when too many events
 			eventLimit : true,
 			events : [ {
-				title : 'All Day Event',
-				start : '2020-09-01',
-				backgroundColor : "rgb(0, 185, 186)",
-				textColor : "#000000",
+				title : '라인 색',
+				start : '2022-04-15',
+				backgroundColor : "#00b9ba",
+				textColor : "#ffffff"
+			}, {
+				title : '바탕색',
+				start : '2022-04-12',
+				display : 'background',
+				backgroundColor : "#00b9ba",
+				textColor : "black",
+				eventColor: "black",
+				eventTextColor: "black"
 
 			}, {
-				title : 'Long Event',
-				start : '2020-09-07',
-				end : '2020-09-10',
-				backgroundColor : "rgb(0, 185, 186)",
+				title : '라인 색',
+				start : '2022-04-20',
+				display : 'background',
+				backgroundColor : "#00b9ba",
+				textColor : "#ffffff"
+			}, {
+				title : '라인 색ddd',
+				start : '2022-04-25',
+				display : 'background',
+				backgroundColor : "#00ff00",
+				borderColor : "rgba(100, 185, 186, 0)",
+				textColor : "#ffffff",
+				color : "#000000"
+
+			}, {
+				title : "빨강색 배경 & 글자색 노랑색",
+				start : "2022-04-27",
+				end : "2022-04-28",
+				eventBackgroundColor : 'red'
 
 			}, {
 				groupId : 999,
 				title : 'Repeating Event',
-				start : '2020-09-09T16:00:00'
-			}, {
-				groupId : 999,
-				title : 'Repeating Event',
-				start : '2020-09-16T16:00:00'
-			}, {
-				title : 'Conference',
-				start : '2020-09-11',
-				end : '2020-09-13'
-			}, {
-				title : 'Meeting',
-				start : '2020-09-12T10:30:00',
-				end : '2020-09-12T12:30:00'
-			}, {
-				title : 'Lunch',
-				start : '2020-09-12T12:00:00'
-			}, {
-				title : 'Meeting',
-				start : '2020-09-12T14:30:00'
-			}, {
-				title : 'Happy Hour',
-				start : '2020-09-12T17:30:00'
-			}, {
-				title : 'Dinner',
-				start : '2020-09-12T20:00:00'
-			}, {
-				title : 'Birthday Party',
-				start : '2020-09-13T07:00:00'
-			}, {
-				title : 'Click for Google',
-				url : 'http://google.com/',
-				start : '2020-09-28'
-			}, {
-				start : '2020-09-21',
-			/* overlap : false, */
-			/* 			display : 'background', */
-			/* 	backgroundColor : "#00b9ba" */
-			}, {
-				title : 'libft 코딩',
-				start : '2020-09-21',
-				backgroundColor : "rgba(0, 185, 186, 0)",
-				/* borderColor : "rgba(0, 185, 186, 0)", */
-				textColor : "#000000"
-			}, ]
+				start : '2022-04-08',
+				display : 'background',
+				backgroundColor : "#00b9ba",
+			},
+
+			],
 		});
 
 		calendar.render();
 
 	});
-/* 
-	function chageSelectedValue() {
-		var yourTestSelect = document.getElementById("TestSelect");
+	/* 
+	 function chageSelectedValue() {
+	 var yourTestSelect = document.getElementById("TestSelect");
 
-		// select element에서 선택된 option의 value가 저장됩니다.
-		var selectedValue = yourTestSelect.options[yourTestSelect.selectedIndex].value;
+	 // select element에서 선택된 option의 value가 저장됩니다.
+	 var selectedValue = yourTestSelect.options[yourTestSelect.selectedIndex].value;
 
-	} */
+	 } */
 </script>
 <style>
 /* body {

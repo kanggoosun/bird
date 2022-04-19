@@ -1,235 +1,552 @@
 package com.aisolution.koamtacon.controller.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartRequest;
 
 import com.aisolution.common.config.ConfigConstants;
 import com.aisolution.common.service.CommonService;
-import com.aisolution.common.service.MailService;
 import com.aisolution.common.util.InitUtil;
 import com.aisolution.common.util.MessageUtils;
 import com.aisolution.koamtacon.service.service.AdminManagementService;
-import com.aisolution.koamtacon.service.service.KDCService;
-import com.aisolution.koamtacon.service.service.UserManagementService;
 
 @Controller
 @RequestMapping("/manager/adminManagement")
 public class AdminManagementController {
 	private static final Logger log = LoggerFactory.getLogger(AdminManagementController.class);
 
-	@Autowired
-	private AdminManagementService adminManagementService;
+	@Value("#{koamtacon_config['koamtacon.upload.base']}")
+	private String uploadedBase;
+	@Value("#{koamtacon_config['koamtacon.upload.applications']}")
+	private String applicationUploadPath;
+	@Value("#{koamtacon_config['koamtacon.upload.file.size.limit']}")
+	private long fileSizeLimit;
 	
-	@Autowired
-	private KDCService kdcService;
-	@Autowired
-	private InitUtil initUtil;
+	@Value("#{koamtacon_config['koamtacon.bak.base']}")
+	private String bakBase;
+	@Value("#{koamtacon_config['koamtacon.bak.applications']}")
+	private String applicationsBakPath;
+	
 	@Autowired
 	private CommonService commonService;
-	@Autowired
-	private UserManagementService userManagementService;
-	@Autowired
-	private MailService mailService;
 	
-	@RequestMapping(value="/kdcRegistration", method={RequestMethod.GET, RequestMethod.POST})
-	public String kdcRegistration(@RequestParam Map<String, String> paramMap, Model model) {
-		log.debug("kdcRegistration paramMap={}", paramMap);
+	@Autowired
+	private AdminManagementService adminManagementService;
+	@Autowired
+	private InitUtil initUtil;
+	
+	@RequestMapping(value="/menu", method={RequestMethod.GET, RequestMethod.POST})
+	public String menu(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("menu paramMap={}", paramMap);
+		
+		model = initUtil.initMenu(paramMap, model);
+		
+		return "/admin/menuManagement";
+	}
+	
+	@RequestMapping(value="/getMenuList", method={RequestMethod.GET, RequestMethod.POST})
+	public String getMenuList(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("getMenuList paramMap={}", paramMap);
+		
+		paramMap.put("division", "0");
+		List<Map<String, Object>> orgList = adminManagementService.getMenuListByDivision(paramMap);
+		List<Map<String, Object>> menuList = adminManagementService.makeTreeWithMenu(orgList);
+		
+		paramMap.put("division", "1");
+		List<Map<String, Object>> orgList2 = adminManagementService.getMenuListByDivision(paramMap);
+		List<Map<String, Object>> menuList2 = adminManagementService.makeTreeWithMenu(orgList2);
+		
+		menuList.addAll(menuList2);
+		
+		model.addAttribute("tblMenuList", menuList);
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/insertMenu", method={RequestMethod.GET, RequestMethod.POST})
+	public String insertMenu(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("insertMenu paramMap={}", paramMap);
+		
+		try {
+			if (paramMap.get("parentMenuSeq").equals("")) {
+				paramMap.remove("parentMenuSeq");
+			}
+			adminManagementService.insertMenu(paramMap);
+			//model.addAttribute("menuList", adminManagementService. getMenuList(paramMap));
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV037"));
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV015"));
+		}
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/updateMenu", method={RequestMethod.GET, RequestMethod.POST})
+	public String updateMenu(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("updateMenu paramMap={}", paramMap);
+		
+		try {
+			adminManagementService.updateMenu(paramMap);
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV037"));
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV015"));
+		}
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/getMenuInfo", method={RequestMethod.GET, RequestMethod.POST})
+	public String getMenuInfo(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("getMenuInfo paramMap={}", paramMap);
+		model.addAttribute("menuInfoMap", adminManagementService.getMenuInfo(paramMap));
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/role", method={RequestMethod.GET, RequestMethod.POST})
+	public String role(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("role paramMap={}", paramMap);
+		
+		model = initUtil.initMenu(paramMap, model);
+		
+		return "/admin/roleManagement";
+	}
+	
+	@RequestMapping(value="/insertRole", method={RequestMethod.GET, RequestMethod.POST})
+	public String insertRole(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("insertRole paramMap={}", paramMap);
+		try {
+			adminManagementService.insertRole(paramMap);
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV037"));
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV015"));
+		}
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/updateRole", method={RequestMethod.GET, RequestMethod.POST})
+	public String updateRole(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("updateRole paramMap={}", paramMap);
+		try {
+			adminManagementService.updateRole(paramMap);
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV037"));
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV015"));
+		}
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/getRoleList", method={RequestMethod.GET, RequestMethod.POST})
+	public String getRoleList(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("getRoleList paramMap={}", paramMap);
+		
+		int itemNoPerPage = paramMap.get("itemNoPerPage") == null ? ConfigConstants.FIVE_ITEMS_NO_PER_PAGE : Integer.parseInt(paramMap.get("itemNoPerPage"));
+		paramMap.put("itemNoPerPage", String.valueOf(itemNoPerPage));
+		Map<String, Object> map = adminManagementService.getRoleList(paramMap);
+		model.addAttribute("roleList", map.get("roleList"));
+		model.addAttribute("pageInfo", map.get("pageInfo"));
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/getRoleUserList", method={RequestMethod.GET, RequestMethod.POST})
+	public String getRoleUserList(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("getRoleUserList paramMap={}", paramMap);
+		
+		int itemNoPerPage = paramMap.get("itemNoPerPage") == null ? ConfigConstants.TEN_ITEMS_NO_PER_PAGE : Integer.parseInt(paramMap.get("itemNoPerPage"));
+		paramMap.put("itemNoPerPage", String.valueOf(itemNoPerPage));
+		Map<String, Object> map = adminManagementService.getRoleUserList(paramMap);
+		model.addAttribute("roleUserList", map.get("roleUserList"));
+		model.addAttribute("pageInfo", map.get("pageInfo"));
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/getUserList", method={RequestMethod.GET, RequestMethod.POST})
+	public String getUserList(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("getUserList paramMap={}", paramMap);
+		model.addAttribute("userList", adminManagementService.getUserList(paramMap));
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/insertRoleUser", method={RequestMethod.GET, RequestMethod.POST})
+	public String insertRoleUser(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("insertRoleUser paramMap={}", paramMap);
+		try {
+			adminManagementService.insertRoleUser(paramMap);
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV037"));
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV015"));
+		}
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/deleteRoleUser", method={RequestMethod.GET, RequestMethod.POST})
+	public String deleteRoleUser(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("deleteRoleUser paramMap={}", paramMap);
+		try {
+			adminManagementService.deleteRoleUser(paramMap);
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV034"));
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV012"));
+		}
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/getRoleMenuList", method={RequestMethod.GET, RequestMethod.POST})
+	public String getRoleMenuList(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("getRoleMenuList paramMap={}", paramMap);
+		
+		paramMap.put("division", "1");
+		List<Map<String, Object>> orgList = adminManagementService.getRoleMenuList(paramMap);
+		List<Map<String, Object>> menuList = adminManagementService.makeTreeWithMenu(orgList);
+		
+		model.addAttribute("menuList", menuList);
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/getMenuListNotInRole", method={RequestMethod.GET, RequestMethod.POST})
+	public String getMenuListNotInRole(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("getMenuListNotInRole paramMap={}", paramMap);
+		
+		paramMap.put("division", "1");
+		List<Map<String, Object>> orgList = adminManagementService.getMenuListNotInRole(paramMap);
+		List<Map<String, Object>> menuList = adminManagementService.makeTreeWithMenu(orgList);
+		
+		model.addAttribute("tblMenuList", menuList);
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/insertRoleMenu", method={RequestMethod.GET, RequestMethod.POST})
+	public String insertRoleMenu(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("insertRoleMenu paramMap={}", paramMap);
+		try {
+			adminManagementService.insertRoleMenu(paramMap);
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV037"));
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV015"));
+		}
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/deleteRoleMenu", method={RequestMethod.GET, RequestMethod.POST})
+	public String deleteRoleMenu(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("deleteRoleMenu paramMap={}", paramMap);
+		try {
+			adminManagementService.deleteRoleMenu(paramMap);
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV034"));
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV012"));
+		}
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/code", method={RequestMethod.GET, RequestMethod.POST})
+	public String code(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("code paramMap={}", paramMap);
+		
+		model = initUtil.initMenu(paramMap, model);
+		
+		return "/admin/codeManagement";
+	}
+	
+	@RequestMapping(value="/getCodeMasterList", method={RequestMethod.GET, RequestMethod.POST})
+	public String getCodeMasterList(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("getCodeMasterList paramMap={}", paramMap);
+		int itemNoPerPage = paramMap.get("itemNoPerPage") == null ? ConfigConstants.TEN_ITEMS_NO_PER_PAGE : Integer.parseInt(paramMap.get("itemNoPerPage"));
+		paramMap.put("itemNoPerPage", String.valueOf(itemNoPerPage));
+		Map<String, Object> map = adminManagementService.getCodeMasterList(paramMap);
+		model.addAttribute("codeMasterList", map.get("codeMasterList"));
+		model.addAttribute("pageInfo", map.get("pageInfo"));
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/getCodeDetailList", method={RequestMethod.GET, RequestMethod.POST})
+	public String getCodeDetailList(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("getCodeDetailList paramMap={}", paramMap);
+		int itemNoPerPage = paramMap.get("itemNoPerPage") == null ? ConfigConstants.TEN_ITEMS_NO_PER_PAGE : Integer.parseInt(paramMap.get("itemNoPerPage"));
+		paramMap.put("itemNoPerPage", String.valueOf(itemNoPerPage));
+		Map<String, Object> map = adminManagementService.getCodeDetailList(paramMap);
+		model.addAttribute("codeDetailList", map.get("codeDetailList"));
+		model.addAttribute("pageInfo", map.get("pageInfo"));
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/checkCodeMasterDuplication", method={RequestMethod.GET, RequestMethod.POST})
+	public String checkCodeMasterDuplication(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("checkCodeMasterDuplication paramMap={}", paramMap);
+		model.addAttribute("flag", adminManagementService.checkCodeMasterDuplication(paramMap));
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/insertCodeMaster", method={RequestMethod.GET, RequestMethod.POST})
+	public String insertCodeMaster(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("insertCodeMaster paramMap={}", paramMap);
+		try {
+			adminManagementService.insertCodeMaster(paramMap);
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV037"));
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV015"));
+		}
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/updateCodeMaster", method={RequestMethod.GET, RequestMethod.POST})
+	public String updateCodeMaster(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("updateCodeMaster paramMap={}", paramMap);
+		try {
+			adminManagementService.updateCodeMaster(paramMap);
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV037"));
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV015"));
+		}
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/insertCodeDetail", method={RequestMethod.GET, RequestMethod.POST})
+	public String insertCodeDetail(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("insertCodeDetail paramMap={}", paramMap);
+		try {
+			adminManagementService.insertCodeDetail(paramMap);
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV037"));
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV015"));
+		}
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/updateCodeDetail", method={RequestMethod.GET, RequestMethod.POST})
+	public String updateCodeDetail(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("updateCodeDetail paramMap={}", paramMap);
+		try {
+			adminManagementService.updateCodeDetail(paramMap);
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV037"));
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV015"));
+		}
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/memberList", method={RequestMethod.GET, RequestMethod.POST})
+	public String application(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("application paramMap={}", paramMap);
 		
 		model = initUtil.initMenu(paramMap, model);
 		
 		Map<String, String> cbParamMap = new HashMap<String, String>();
-		cbParamMap.put("masterCode", "kdc_model");
-		model.addAttribute("cbProductNameOptions", commonService.getComboCode(cbParamMap));
-		
+		cbParamMap.put("masterCode", "file_type");
+		model.addAttribute("cbFileTypeOptions", commonService.getComboCode(cbParamMap));
+		cbParamMap = new HashMap<String, String>();
+		cbParamMap.put("masterCode", "file_usage");
+		model.addAttribute("cbFileUsageOptions", commonService.getComboCode(cbParamMap));
+		log.debug("model={}",model);
 		return "/manager/adminManagement";
+	
 	}
 	
-	@RequestMapping(value="/getKdcApprovalList", method={RequestMethod.GET, RequestMethod.POST})
-	public String getKdcApprovalList(@RequestParam Map<String, String> paramMap, Model model) {
-		log.debug("getKdcApprovalList paramMap={}", paramMap);
-		
-		int itemNoPerPage = paramMap.get("itemNoPerPage") == null ? ConfigConstants.TEN_ITEMS_NO_PER_PAGE : Integer.parseInt(paramMap.get("itemNoPerPage"));
-		paramMap.put("itemNoPerPage", String.valueOf(itemNoPerPage));
-		Map<String, Object> map = adminManagementService.getKDCRegistrationApprovalList(paramMap);
-		model.addAttribute("kdcApprovalList", map.get("kdcApprovalList"));
-		model.addAttribute("pageInfo", map.get("pageInfo"));
-		
-		return "jsonView";
-	}
 	
-	@RequestMapping(value="/kdcApproval", method={RequestMethod.GET, RequestMethod.POST})
-	public String kdcApproval(@RequestParam Map<String, String> paramMap, Model model) {
-		log.debug("kdcApproval paramMap={}", paramMap);
-		
-		try {
-			adminManagementService.kdcApproval(paramMap);
-			String approvalFlag = paramMap.get("cbApproval");
-			/*
-			String approvalFlag = paramMap.get("cbApproval");
-			if (approvalFlag.equals("1")) {
-				paramMap.put("area", ConfigConstants.AREA);
-				
-				if (groupService.getGroupCount(paramMap) < 1) {
-					paramMap.put("groupCode", CommonUtils.makeNextGroupCode(groupService.getMaxGroupCode(paramMap)));
-					
-					try {
-						groupService.createGroup(paramMap);
-						groupService.insertMember(paramMap);
-					} catch(Exception e) {
-						log.error(e.getMessage());
-						log.error("Group creation error.");
-					}
-				} else {
-					log.error("Group creation error.");
-				}
-			} else {
-				log.error("Group creation error.");
-			}
-			*/
-			model.addAttribute("flag", "success");
-			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV004"));
-			
-			Map<String, Object> map = userManagementService.getUserInfo(paramMap);
-			//String lineBreak = "\r\n";
-			String lineBreak = "<br>";
-			String sender = ConfigConstants.fromAddress;
-			String receiver = map.get("userEmail").toString();
-			String cc = ConfigConstants.fromAddress;
-			String title = "";
-			StringBuffer sbContents = new StringBuffer();
-			if (approvalFlag.equals("1")) {
-				title = "Your KDC Registration has been approved!";
-				
-				sbContents.append("Dear ").append(map.get("userName").toString()).append(",").append(lineBreak).append(lineBreak);
-				sbContents.append("You recently signed up for KOAMTACON utilizing ").append(map.get("userId")).append(" as the User ID.").append(lineBreak);
-				sbContents.append("Congratulations! Your registration for the following KDC has been approved: ").append(lineBreak).append(lineBreak);
-				sbContents.append("Model: ").append(paramMap.get("cbProductName")).append(lineBreak);
-				sbContents.append("S/N: ").append(paramMap.get("serialNo")).append(lineBreak).append(lineBreak);
-				sbContents.append("As a next step, you'll receive ID, Password, and activation code. To ensure you receive this email, please add <a href='mailto:koamtacon@koamtac.com'>koamtacon@koamtac.com</a> to your safe senders list.").append(lineBreak).append(lineBreak);
-				sbContents.append("Should you have any questions regarding this process please contact the KOAMTACON team at <a href='mailto:koamtacon@koamtac.com'>koamtacon@koamtac.com</a>.").append(lineBreak).append(lineBreak);
-				sbContents.append("Thank you,").append(lineBreak).append(lineBreak);
-				sbContents.append("The KOAMTACON team").append(lineBreak);
-				
-				// Group 생성 여부 및 Mobile user 생성 여부 체크
-				if (userManagementService.getNumberOfMemberWithActivationCode(paramMap) > 0) {
-					model.addAttribute("activated", "Y");
-				} else {
-					model.addAttribute("activated", "N");
-				}
-			} else if (approvalFlag.equals("2")) {
-				title = "More information needed to complete your KOAMTACON registration";
-				
-				sbContents.append("Dear ").append(map.get("userName").toString()).append(",").append(lineBreak).append(lineBreak);
-				sbContents.append("You recently signed up for KOAMTACON utilizing ").append(map.get("userId")).append(" as the User ID.").append(lineBreak);
-				sbContents.append("Unfortunately, Your registration for the following KDC has been rejected due to the following reasons: ").append(lineBreak).append(lineBreak);
-				sbContents.append("Reason: ").append(paramMap.get("comment")).append(lineBreak);
-				sbContents.append("Model: ").append(paramMap.get("cbProductName")).append(lineBreak);
-				sbContents.append("S/N: ").append(paramMap.get("serialNo")).append(lineBreak).append(lineBreak);
-				sbContents.append("Please review and correct the above information then complete <a href='http://services.koamtacon.com/'>KDC registration again</a>.").append(lineBreak).append(lineBreak);
-				sbContents.append("Should you have any questions regarding this process please contact the KOAMTACON team at <a href='mailto:koamtacon@koamtac.com'>koamtacon@koamtac.com</a>.").append(lineBreak).append(lineBreak);
-				sbContents.append("Thank you and we look forward to your updated registration,").append(lineBreak).append(lineBreak);
-				sbContents.append("The KOAMTACON team").append(lineBreak);
-			}
-			
-			mailService.sendHtmlMail(sender, receiver, cc, title, sbContents.toString());
-			//System.out.println("========== Mail OK !!! ==========");
-		} catch(Exception e) {
-			log.error(e.getMessage());
-			model.addAttribute("flag", "fail");
-			model.addAttribute("msg",  MessageUtils.getMessage("MSG-SV003"));
-		}
-		return "jsonView";
-	}
-	
-	@RequestMapping(value="/getKDCPhoto", method={RequestMethod.GET, RequestMethod.POST})
-	public String getKDCPhoto(@RequestParam Map<String, String> paramMap, Model model) {
-		log.debug("getKDCPhoto paramMap={}", paramMap);
-		model.addAttribute("kdcPhoto", kdcService.getKDCPhoto(paramMap));
-		model.addAttribute("flag", "success");
-		return "jsonView";
-	}
-	
-	@RequestMapping(value="/applicationApproval", method={RequestMethod.GET, RequestMethod.POST})
-	public String applicationApproval(@RequestParam Map<String, String> paramMap, Model model) {
-		log.debug("applicationApproval paramMap={}", paramMap);
+	/* 예약상태조회 페이지 */
+	@RequestMapping(value="/main", method={RequestMethod.GET, RequestMethod.POST})
+	public String main(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("application paramMap={}", paramMap);
 		
 		model = initUtil.initMenu(paramMap, model);
 		
 		Map<String, String> cbParamMap = new HashMap<String, String>();
-		cbParamMap.put("masterCode", "approval_flag");
-		model.addAttribute("cbApprovalFlagOptions", commonService.getComboCode(cbParamMap));
-		
-		return "/admin/applicationApprovalManagement";
+		cbParamMap.put("masterCode", "file_type");
+		model.addAttribute("cbFileTypeOptions", commonService.getComboCode(cbParamMap));
+		cbParamMap = new HashMap<String, String>();
+		cbParamMap.put("masterCode", "file_usage");
+		model.addAttribute("cbFileUsageOptions", commonService.getComboCode(cbParamMap));
+		log.debug("model={}",model);
+		return "/user/main";
+
 	}
 	
-	@RequestMapping(value="/getApplicationApprovalList", method={RequestMethod.GET, RequestMethod.POST})
-	public String getApplicationApprovalList(@RequestParam Map<String, String> paramMap, Model model) {
-		log.debug("getApplicationApprovalList paramMap={}", paramMap);
+	@RequestMapping(value="/getApplicationList", method={RequestMethod.GET, RequestMethod.POST})
+	public String getApplicationList(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("getApplicationList paramMap={}", paramMap);
 		
 		int itemNoPerPage = paramMap.get("itemNoPerPage") == null ? ConfigConstants.TEN_ITEMS_NO_PER_PAGE : Integer.parseInt(paramMap.get("itemNoPerPage"));
 		paramMap.put("itemNoPerPage", String.valueOf(itemNoPerPage));
-		paramMap.put("area", ConfigConstants.AREA);
-		Map<String, Object> map = adminManagementService.getApplicationApprovalList(paramMap);
-		model.addAttribute("applicationApprovalList", map.get("applicationApprovalList"));
+		Map<String, Object> map = adminManagementService.getApplicationList(paramMap);
+		model.addAttribute("applicationList", map.get("applicationList"));
 		model.addAttribute("pageInfo", map.get("pageInfo"));
 		
 		return "jsonView";
 	}
 	
-	@Transactional
-	@RequestMapping(value="/saveApplicationApproval", method={RequestMethod.GET, RequestMethod.POST})
-	public String saveApplicationApproval(@RequestParam Map<String, String> paramMap, Model model) {
-		log.debug("saveApplicationApproval paramMap={}", paramMap);
-		
+	@RequestMapping(value="/getApplicationInfo", method={RequestMethod.GET, RequestMethod.POST})
+	public String getApplicationInfo(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("getApplicationInfo paramMap={}", paramMap);
+		model.addAttribute("applicationInfo", adminManagementService.getApplicationInfo(paramMap));
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/insertApplication", method={RequestMethod.GET, RequestMethod.POST})
+	public String insertApplication(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("insertApplication paramMap={}", paramMap);
 		try {
-			paramMap.put("applicationSeq", paramMap.get("requestTarget"));
-			paramMap.put("area", ConfigConstants.AREA);
-			adminManagementService.saveApplicationApproval(paramMap);
-			if (paramMap.get("cbApprovalFlag").equals("2")) {
-				if (adminManagementService.getApplicationGroupCount(paramMap) == 0) {
-					adminManagementService.insertApplicationGroup(paramMap);
-				} else {
-					paramMap.put("useYn", "Y");
-					adminManagementService.updateApplicationGroup(paramMap);
-				}
-			} else if (paramMap.get("cbApprovalFlag").equals("3")) {
-				if (adminManagementService.getApplicationGroupCount(paramMap) > 0) {
-					paramMap.put("useYn", "N");
-					adminManagementService.updateApplicationGroup(paramMap);
-				}
-			}
+			adminManagementService.insertApplication(paramMap);
 			model.addAttribute("flag", "success");
-			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV004"));
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV037"));
 		} catch(Exception e) {
 			log.error(e.getMessage());
 			model.addAttribute("flag", "fail");
-			model.addAttribute("msg",  MessageUtils.getMessage("MSG-SV003"));
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV015"));
 		}
 		return "jsonView";
 	}
 	
-	@RequestMapping(value="/getOwnerInfo", method={RequestMethod.GET, RequestMethod.POST})
-	public String getOwnerInfo(@RequestParam Map<String, String> paramMap, Model model) {
-		log.debug("getOwnerInfo paramMap={}", paramMap);
-		
-		paramMap.put("userId", paramMap.get("ownerId"));
+	@RequestMapping(value="/updateApplication", method={RequestMethod.GET, RequestMethod.POST})
+	public String updateApplication(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("updateApplication paramMap={}", paramMap);
 		try {
-			model.addAttribute("ownerMap", userManagementService.getUserInfo(paramMap));
+			adminManagementService.updateApplication(paramMap);
 			model.addAttribute("flag", "success");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV037"));
 		} catch(Exception e) {
 			log.error(e.getMessage());
 			model.addAttribute("flag", "fail");
-			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV042"));
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV015"));
+		}
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/insertApplicationFiles", method={RequestMethod.GET, RequestMethod.POST})
+	public String insertApplicationFiles(@RequestParam Map<String, String> paramMap, Model model, MultipartRequest multipartRequest) {
+		log.debug("insertApplicationFiles paramMap={}", paramMap);
+		StringBuffer sbUploadPath = new StringBuffer();
+		sbUploadPath.append(uploadedBase).append(applicationUploadPath);
+		StringBuffer sbBakPath = new StringBuffer();
+		sbBakPath.append(bakBase).append(applicationsBakPath);
+		
+		if (adminManagementService.insertFiles(paramMap, multipartRequest, sbUploadPath.toString(), sbBakPath.toString(), fileSizeLimit)) {
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV037"));
+		} else {
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV015"));
+		}
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/updateApplicationFiles", method={RequestMethod.GET, RequestMethod.POST})
+	public String updateApplicationFiles(@RequestParam Map<String, String> paramMap, Model model, MultipartRequest multipartRequest) {
+		log.debug("updateApplicationFiles paramMap={}", paramMap);
+		StringBuffer sbUploadPath = new StringBuffer();
+		sbUploadPath.append(uploadedBase).append(applicationUploadPath);
+		StringBuffer sbBakPath = new StringBuffer();
+		sbBakPath.append(bakBase).append(applicationsBakPath);
+		
+		if (adminManagementService.updateFiles(paramMap, multipartRequest, sbUploadPath.toString(), sbBakPath.toString(), fileSizeLimit)) {
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV037"));
+		} else {
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV015"));
+		}
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/updateApplicationFilesWithNofile", method={RequestMethod.GET, RequestMethod.POST})
+	public String updateApplicationFilesWithNofile(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("updateApplicationFilesWithNofile paramMap={}", paramMap);
+		try {
+			adminManagementService.updateFilesWithNoFile(paramMap);
+			model.addAttribute("flag", "success");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV037"));
+		} catch(Exception e) {
+			log.error(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV015"));
+		}
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/getApplicationFileList", method={RequestMethod.GET, RequestMethod.POST})
+	public String getApplicationFileList(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("getApplicationFileList paramMap={}", paramMap);
+		
+		int itemNoPerPage = paramMap.get("itemNoPerPage") == null ? ConfigConstants.TEN_ITEMS_NO_PER_PAGE : Integer.parseInt(paramMap.get("itemNoPerPage"));
+		paramMap.put("itemNoPerPage", String.valueOf(itemNoPerPage));
+		Map<String, Object> map = adminManagementService.getFileList(paramMap);
+		model.addAttribute("fileList", map.get("fileList"));
+		model.addAttribute("pageInfo", map.get("pageInfo"));
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/getApplicationFileInfo", method={RequestMethod.GET, RequestMethod.POST})
+	public String getApplicationFileInfo(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("getApplicationFileInfo paramMap={}", paramMap);
+		model.addAttribute("fileInfo", adminManagementService.getFileInfo(paramMap));
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/deleteApplicationFiles", method={RequestMethod.GET, RequestMethod.POST})
+	public String deleteApplicationFiles(@RequestParam Map<String, String> paramMap, Model model) {
+		log.debug("deleteApplicationFiles paramMap={}", paramMap);
+		try {
+			StringBuffer sbUploadPath = new StringBuffer();
+			sbUploadPath.append(uploadedBase).append(applicationUploadPath);
+			if (adminManagementService.deleteFiles(paramMap, sbUploadPath.toString())) {
+				model.addAttribute("flag", "success");
+				model.addAttribute("msg", MessageUtils.getMessage("MSG-SV007"));
+			} else {
+				model.addAttribute("flag", "fail");
+				model.addAttribute("msg", MessageUtils.getMessage("MSG-SV011"));
+			}
+		} catch(Exception e) {
+			log.debug(e.getMessage());
+			model.addAttribute("flag", "fail");
+			model.addAttribute("msg", MessageUtils.getMessage("MSG-SV011"));
 		}
 		return "jsonView";
 	}

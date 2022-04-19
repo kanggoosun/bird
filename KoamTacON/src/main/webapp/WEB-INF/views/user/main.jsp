@@ -32,9 +32,9 @@
 		<!-- Main -->
 		<div id="main">
 			<!-- Header -->
-			<%@ include file="../include/header_admin.jsp"%>
+			<%@ include file="../include/header.jsp"%>
 			<br>
-			<%@ include file="../include/miniCalendar_admin.jsp"%>
+			<%@ include file="../include/miniCalendar.jsp"%>
 			<div class="inner">
 
 				<section>
@@ -44,7 +44,7 @@
 
 					</header>
 
-					<h4>예약요청 관리</h4>
+					<h4>예약상태조회</h4>
 					<div id="tblApplicationList" class="table-wrapper">
 						<table class="alt">
 							<thead style="text-align: center; font-size: 0.8em;">
@@ -311,7 +311,7 @@
 			param += "callFunction=fn_getApplicationList";
 
 			gf_send(
-					"<c:url value='/manager/reservationManagement/getApplicationList' />",
+					"<c:url value='/user/reservationRequest/getApplicationList' />",
 					param, "fn_getApplicationListCallback");
 		}
 
