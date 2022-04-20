@@ -48,9 +48,9 @@
 									code='WRD-SIGNOUT' text='Sign out' /></a></li>
 						<br />
 
-						<li><a href="<c:url value='/main' />"><spring:message
+						<li><a href="<c:url value='/user/main/view' />"><spring:message
 									text='예약가능일자조회' /></a></li>
-						<li><a href="<c:url value='/user/reservationRequest/main' />"><spring:message
+						<li><a href="<c:url value='/user/reservationRequest/application' />"><spring:message
 									text='예약상태조회' /></a></li>
 						<li><a
 							href="<c:url value='/user/reservationRequest/application' />"><spring:message
