@@ -137,8 +137,6 @@
 	}
 
 	function fn_getDayEventListCallback(data) {
-		console.log("12313131313 1312312312312311331 ------------------------->  "+data);
-		
 		
 		var calendarEl = document.getElementById('calendar');
 		

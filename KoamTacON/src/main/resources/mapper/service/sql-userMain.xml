@@ -195,7 +195,7 @@
 	
 	/** 요청, 승인 추가분 */
 	SELECT 
-		 		CONCAT(cop_cd, '(',NAME, ',',(SELECT code_name FROM tb_code WHERE master_code = 'C01' AND CODE = m.res_sts_cd),')') AS title
+		 		(SELECT code_name FROM tb_code WHERE master_code = 'C01' AND CODE = m.res_sts_cd) AS title
 	 			, m.sta_day AS start
 	 			, m.end_day AS end
 				, CASE m.place_cd WHEN 'SONGDO' THEN '#E04A0E' WHEN 'SOKCHO' THEN '#1EB422' WHEN 'JEJU' THEN '#2B34ED' END AS backgroundColor
