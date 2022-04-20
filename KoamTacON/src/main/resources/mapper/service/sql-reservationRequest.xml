@@ -551,36 +551,123 @@ LIMIT 10 OFFSET 0			/** 페이징 별 조회 숫자 */
     
     <insert id="insertApplication" parameterType="HashMap">
     <![CDATA[
-        insert into tb_applications (
-               application_seq  , application_name  , application_description  , application_introduction
-             , application_url  , tutorial_url      , idq                      , codiceq
-             , tabgen_name      , use_yn            , display_order
-             , created_date, updated_date
+               insert into tb_reservation (
+		seq			/** SEQ */
+		, cop_cd		/** 법인 코드 */ 
+		, dep_nm		/** 부서 */ 
+		, name			/** 이름 */ 
+		, email			/** 이메일 */ 
+		, phone			/** 핸드폰번호 */ 
+		, place_cd		/** 연수원 코드 */ 
+		, sta_day		/** 시작일 */ 
+		, end_day		/** 종료일 */ 
+		, use_aim_cd		/** 이용목적 코드 */ 
+		, tot_cost		/** 이용요금 */
+		, req_dt		/** 요청일시 */
+		, res_sts_cd		/** 예약 상태 코드 */ 
+		, real_use_nm		/** 실제 이용자 대표 이름 */ 
+		, real_use_phone	/** 실제 이용자 핸드폰번호 */ 
+		, real_use_email	/** 실제 이용자 이메일 */ 
+		, real_use_car_no	/** 실제 이용자 차량번호 */ 
+		, rmk			/** 비고 */ 
+		, reg_id		/** 등록자 */ 
         ) values (
-               #{applicationSeq}, #{applicationName}, #{applicationDescription}, #{applicationIntroduction}
-             , #{applicationUrl}, #{tutorialUrl}    , #{idq}                   , #{codiceq}
-             , #{tabgenName}    , #{cbUseYn}        , #{displayOrder}
-             , CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()
+		IFNULL(null,nextval(rsv_seq))						/** SEQ */
+		, (SELECT corp_cd FROM tb_user WHERE user_id = null)		/** 법인 코드 (session)*/ 
+		, (SELECT dep_nm FROM tb_user WHERE user_id = null)		/** 부서 (session)*/ 
+		, '하하하'								/** 이름 (session)*/ 
+		, null								/** 이메일 (session)*/ 
+		, null								/** 핸드폰번호 (session)*/  
+		, null								/** 연수원 코드 */ 
+		, null								/** 시작일 */ 
+		, null								/** 종료일 */ 
+		, null							/** 이용목적 코드 */ 
+		, 99999									/** 이용요금 (일단 99990로 넣고 나중에 function으로 수정)*/
+		, now()									/** 요청일시 */
+		, CASE null WHEN 'tmp' THEN 'C0101' WHEN 'req' THEN 'C0102' END	/** 예약 상태 코드 (임시저장 : C0101, 요청 : C0102)*/
+		, null							/** 실제 이용자 대표 이름 */ 
+		, null							/** 실제 이용자 핸드폰번호 */ 
+		, null							/** 실제 이용자 이메일 */ 
+		, null							/** 실제 이용자 차량번호 */ 
+		, null								/** 비고 */ 
+		, null								/** 등록자 */ 
         )
+	ON DUPLICATE KEY UPDATE
+		place_cd			=	null			/** 연수원 코드 */                                                   
+		, sta_day			=	null			/** 시작일 */                                                        
+		, end_day			=	null			/** 종료일 */                                                        
+		, use_aim_cd			=	null		/** 이용목적 코드 */                                                 
+		, tot_cost			=	99999				/** 이용요금 (일단 99990로 넣고 나중에 function으로 수정)*/               
+		, req_dt			=	now()				/** 요청일시 */                                                         
+		, res_sts_cd			=	'C0102'				/** 예약 상태 코드 (임시저장 : C0101, 요청 : C0102)*/ 		/** 예약 상태 코드 */
+		, real_use_nm			=	null			/** 실제 이용자 대표 이름 */                                                 
+		, real_use_phone		=	null		/** 실제 이용자 핸드폰번호 */                                        
+		, real_use_email		=	null		/** 실제 이용자 이메일 */                                            
+		, real_use_car_no		=	null		/** 실제 이용자 차량번호 */                                          
+		, rmk				=	null				/** 비고 */                                                          
+		, upt_id			=	null			/** 수정자 */                                                        
+		, updated_date			=	now()				/** last updated date */
     ]]>
     </insert>
     
     <update id="updateApplication" parameterType="HashMap">
     <![CDATA[
-        update tb_applications
-           set application_name = #{applicationName}
-             , application_description = #{applicationDescription}
-             , application_introduction = #{applicationIntroduction}
-             , application_url = #{applicationUrl}
-             , tutorial_url = #{tutorialUrl}
-             , idq = #{idq}
-             , codiceq = #{codiceq}
-             , tabgen_name = #{tabgenName}
-             , use_yn = #{cbUseYn}
-             , display_order = #{displayOrder}
-             , updated_date = CURRENT_TIMESTAMP()
-         where 1=1
-           and application_seq = #{applicationSeq}
+               insert into tb_reservation (
+		seq			/** SEQ */
+		, cop_cd		/** 법인 코드 */ 
+		, dep_nm		/** 부서 */ 
+		, name			/** 이름 */ 
+		, email			/** 이메일 */ 
+		, phone			/** 핸드폰번호 */ 
+		, place_cd		/** 연수원 코드 */ 
+		, sta_day		/** 시작일 */ 
+		, end_day		/** 종료일 */ 
+		, use_aim_cd		/** 이용목적 코드 */ 
+		, tot_cost		/** 이용요금 */
+		, req_dt		/** 요청일시 */
+		, res_sts_cd		/** 예약 상태 코드 */ 
+		, real_use_nm		/** 실제 이용자 대표 이름 */ 
+		, real_use_phone	/** 실제 이용자 핸드폰번호 */ 
+		, real_use_email	/** 실제 이용자 이메일 */ 
+		, real_use_car_no	/** 실제 이용자 차량번호 */ 
+		, rmk			/** 비고 */ 
+		, reg_id		/** 등록자 */ 
+        ) values (
+		IFNULL(null,nextval(rsv_seq))						/** SEQ */
+		, (SELECT corp_cd FROM tb_user WHERE user_id = null)		/** 법인 코드 (session)*/ 
+		, (SELECT dep_nm FROM tb_user WHERE user_id = null)		/** 부서 (session)*/ 
+		, '하하하'								/** 이름 (session)*/ 
+		, null								/** 이메일 (session)*/ 
+		, null								/** 핸드폰번호 (session)*/ 
+		, null								/** 연수원 코드 */ 
+		, null								/** 시작일 */ 
+		, null								/** 종료일 */ 
+		, null							/** 이용목적 코드 */ 
+		, 99999									/** 이용요금 (일단 99990로 넣고 나중에 function으로 수정)*/
+		, now()									/** 요청일시 */
+		, CASE null WHEN 'tmp' THEN 'C0101' WHEN 'req' THEN 'C0102' END	/** 예약 상태 코드 (임시저장 : C0101, 요청 : C0102)*/
+		, null							/** 실제 이용자 대표 이름 */ 
+		, null							/** 실제 이용자 핸드폰번호 */ 
+		, null							/** 실제 이용자 이메일 */ 
+		, null							/** 실제 이용자 차량번호 */ 
+		, null								/** 비고 */ 
+		, null								/** 등록자 */ 
+        )
+	ON DUPLICATE KEY UPDATE
+		place_cd			=	null			/** 연수원 코드 */                                                   
+		, sta_day			=	null			/** 시작일 */                                                        
+		, end_day			=	null			/** 종료일 */                                                        
+		, use_aim_cd			=	null		/** 이용목적 코드 */                                                 
+		, tot_cost			=	99999				/** 이용요금 (일단 99990로 넣고 나중에 function으로 수정)*/               
+		, req_dt			=	now()				/** 요청일시 */                                                         
+		, res_sts_cd			=	'C0102'				/** 예약 상태 코드 (임시저장 : C0101, 요청 : C0102)*/ 		/** 예약 상태 코드 */
+		, real_use_nm			=	null			/** 실제 이용자 대표 이름 */                                                 
+		, real_use_phone		=	null		/** 실제 이용자 핸드폰번호 */                                        
+		, real_use_email		=	null		/** 실제 이용자 이메일 */                                            
+		, real_use_car_no		=	null		/** 실제 이용자 차량번호 */                                          
+		, rmk				=	null				/** 비고 */                                                          
+		, upt_id			=	null			/** 수정자 */                                                        
+		, updated_date			=	now()				/** last updated date */
     ]]>
     </update>
     

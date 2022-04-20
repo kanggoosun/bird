@@ -83,11 +83,18 @@
 	</mini-nav>
 </header>
 <header id="header">
-	<a href=<c:url value='/manager/main/view' /> target="_top" class="image"> EchoIT 연수원 예약 시스템</a>
+	<!-- <a href=<c:url value='/manager/main/view' /> target="_top" class="image"> EchoIT 연수원 예약 시스템</a> -->
 	<mini-nav>
 	<ul>
 
 		<div class="row">
+			<h3></h3>
+			<h3></h3>
+			<h3></h3>
+			<h3></h3>
+			<h3></h3>
+			<h3></h3>
+			<h3></h3>
 			<h3></h3>
 			<h3></h3>
 			<h3></h3>
