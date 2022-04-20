@@ -330,7 +330,7 @@ function fn_signinCallback(data) {
 				if (data.initialPwdYn === "Y") {
 				    gfn_customLayerPopup('confirmPopupLayer', 'dimBgConfirmPopup', 'confirm_layer', 'closeConfirmPopup');
 				} else {
-					gf_submitMovePage('<c:out value="${pageContext.request.contextPath}/main" />');
+					gf_submitMovePage('<c:out value="${pageContext.request.contextPath}/user/main/view" />');
 				}
             } else {
                 tgtUrl = gvLastRequestURI;

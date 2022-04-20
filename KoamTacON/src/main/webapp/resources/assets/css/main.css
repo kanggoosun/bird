@@ -4540,7 +4540,7 @@ button:disabled,
   display: -ms-flex;
   display: flex;
   background-color: #ccc;
-  padding: 1em 2em 0.25em 1em;
+  padding: 0em 2em 0.25em 1em;
   position: relative;
 }
 
@@ -4600,7 +4600,7 @@ button:disabled,
   display: -ms-flex;
   display: flex;
   border-bottom: solid 5px #99cc33;
-  padding: 1em 0em 1em 2em;
+  padding: .5em 0em .5em 2em;
   position: relative;
 }
 

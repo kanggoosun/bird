@@ -15,17 +15,51 @@
 <meta charset="utf-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
-<!--[if lte IE 8]><script src="<c:url value='/resources/assets/js/ie/html5shiv.js' />"></script><![endif]-->
+<link rel="stylesheet"
+	href="/resources/air-datepicker/dist/css/datepicker.min.css">
 <link rel="stylesheet"
 	href="<c:url value='/resources/assets/css/main.css' />" />
 <!--[if lte IE 9]><link rel="stylesheet" href="<c:url value='/resources/assets/css/ie9.css' />" /><![endif]-->
 <!--[if lte IE 8]><link rel="stylesheet" href="<c:url value='/resources/assets/css/ie8.css' />" /><![endif]-->
 
+<script src="/resources/air-datepicker/dist/js/datepicker.min.js"></script>
+<script src="/resources/air-datepicker/dist/js/i18n/datepicker.ko.js"></script>
 <!-- Scripts -->
 <%@ include file="../include/incScripts.jsp"%>
 
 </head>
+<style>
+h5 {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 
+.double div {
+	float: left;
+	/* width: 10 */
+	width: 1000px;
+	padding: 10px;
+	/* 	border: 5px solid green; */
+	/* margin: auto; */
+	/* 	display: inline; */
+}
+
+aside {
+	width: 1600px;
+	height: 300px;
+	padding: 30px;
+	/* 	border: 5px solid green; */
+	margin: auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 2px solid gray;
+	/* display: inline; */
+	/* display: inline; */
+	/* style="display: inline;" */
+}
+</style>
 <body>
 	<!-- Wrapper -->
 	<div id="wrapper">
@@ -34,246 +68,217 @@
 			<!-- Header -->
 			<%@ include file="../include/header_admin.jsp"%>
 			<br>
-			<%@ include file="../include/miniCalendar_admin.jsp"%>
+			<%-- 		<%@ include file="../include/miniCalendar_admin.jsp"%> --%>
+			<div class="inner">
+				<section style="opacity: 1;">
+					<form id="frmMainFilter" name="frmMainFilter">
+						<div style="margin: 0 0 0.5em 0;" class="row">
+							<div class="2u 12u$(medium) select-wrapper">
+								<select id="cbSearchField" name="cbSearchField">
+									<option value="usr.user_id">Owner ID</option>
+									<option value="usr.name">Owner name</option>
+									<option value="usr.company">Company</option>
+									<option value="grp.group_code">Group code</option>
+									<option value="grp.area">Area</option>
+								</select>
+							</div>
+						</div>
+
+						<div style="margin: 0 0 0.5em 0;" class="row">
+							<!-- 	<div style="opacity: 0.8; position: relative;"
+								class="2u 12u$(medium)">
+								<input type="text" name="sKeyword" id="datepicker1" value=""
+									placeholder="예약 시작일" />
+							</div>
+
+							<h4></h4>
+							<div class="2u 12u$(medium)">
+								<input type="text" name="sKeyword" id="datepicker2" value=""
+									placeholder="예약 종료일" />
+							</div> -->
+							<%@ include file="../include/miniCalendar.jsp"%>
+
+						</div>
+						<div style="margin: 0 0 0.5em 0;" class="row">
+							<div class="2u 12u$(medium) select-wrapper">
+								<select id="cbSearchField" name="cbSearchField">
+									<option value="usr.user_id">Owner ID</option>
+									<option value="usr.name">Owner name</option>
+									<option value="usr.company">Company</option>
+									<option value="grp.group_code">Group code</option>
+									<option value="grp.area">Area</option>
+								</select>
+							</div>
+							<h4></h4>
+							<div class="2u 12u$(medium)">
+								<input type="text" name="sKeyword" id="sKeyword" value=""
+									placeholder="이름" />
+							</div>
+							<!-- <div class="6u$ 12u$"> -->
+							<div class="2u 12u$(medium) select-wrapper">
+								<!-- 	<ul class="actions vertical"> -->
+								<input type="button" name="btnSaveAdminInfo"
+									id="btnSaveAdminInfo" value="Save" class="button special fit" />
+								<!-- 	</ul> -->
+							</div>
+						</div>
+					</form>
+				</section>
+			</div>
+
+
 			<div class="inner">
 
-				<section>
-					<header class="main">
-						<%-- <%@ include file="../include/minicalendar.jsp" %>  --%>
-						<%-- <%@ include file="../include/footer.jsp" %> --%>
+				<!-- 	<section> -->
+				<header class="main">
+					<%-- <%@ include file="../include/minicalendar.jsp" %>  --%>
+					<%-- <%@ include file="../include/footer.jsp" %> --%>
 
-					</header>
+				</header>
 
-					<h4>예약요청 관리</h4>
-					<div id="tblApplicationList" class="table-wrapper">
-						<table class="alt">
-							<thead style="text-align: center; font-size: 0.8em;">
-								<tr>
-									<td width="3%">순번</td>
-									<td width="4%">연수원</td>
-									<td width="6%">요청일자</td>
-									<td width="6%">시작일</td>
-									<td width="6%">종료일</td>
-									<td width="6%">이용목적</td>
-									<td width="6%">이용요금</td>
-									<td width="6%">승인반려일자</td>
-									<td width="6%">상태</td>
-									<td width="6%">취소분류</td>
-									<td width="8%">취소반려사유</td>
-									<td width="6%">실제이용자대표이름</td>
-									<td width="8%">핸드폰번호</td>
-									<td width="10%">이메일</td>
-									<td width="5%">차량번호</td>
-									<td width="8%">비고</td>
-								</tr>
-							</thead>
-
-
-							<tbody style="text-align: center; font-size: 0.8em;">
-								<tr>
-									<td colspan="7" style="text-align: center;">55555555555555</td>
-								</tr>
-							</tbody>
-							<tfoot style="font-size: 0.7em;">
-								<tr>
-									<td colspan="7" style="text-align: center;"
-										id="tdPaginationApplication"></td>
-								</tr>
-								<tr>
-									<td colspan="7" style="text-align: right;">
-										<ul class="actions">
-											<!--   <li><input type="button" name="btnNewApplication" id="btnNewApplication" value="New Application" class="button small special" /></li> -->
-										</ul>
-									</td>
-								</tr>
-							</tfoot>
-						</table>
-					</div>
-
-					<!--  
-                <h4>File List</h4>
-                <div id="tblFileList" class="table-wrapper">
-                    <input type="hidden" name="sLinkedSeq" id="sLinkedSeq" value="" />
-                    <input type="hidden" name="sLinkedTable" id="sLinkedTable" value="tb_applications" />
-                    <table class="alt">
-                        <thead style="text-align:center;font-size:0.8em;">
-                            <tr>
-                                <td width="10%">Sequence</td>
-                                <td>Name</td>
-                                <td width="15%">Type</td>
-                                <td width="15%">Usage</td>
-                                <td width="20%">Action</td>
-                            </tr>
-                        </thead>
-                        <tbody style="text-align:center;font-size:0.8em;">
-                            <tr>
-                                <td colspan="5" style="text-align:center;">There is no data.</td>
-                            </tr>
-                        </tbody>
-                        <tfoot style="font-size:0.7em;">
-                            <tr><td colspan="5" style="text-align:center;" id="tdPaginationFile"></td></tr>
-                            <tr>
-                                <td colspan="5" style="text-align:right;">
-                                    <ul class="actions">
-                                        <li><input type="button" name="btnNewFile" id="btnNewFile" value="New File" class="button small special" /></li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-            </section>
-            ------------
-            -->
-					<!-- Footer -->
-					<%@ include file="../include/footer.jsp"%>
-			</div>
-		</div>
-	</div>
+				<h4>예약요청 관리</h4>
+				<div id="tblApplicationList" class="table-wrapper">
+					<table class="alt">
+						<thead style="text-align: center; font-size: 0.8em;">
+							<tr>
+								<td width="3%">순번</td>
+								<td width="4%">연수원</td>
+								<td width="6%">요청일자</td>
+								<td width="6%">시작일</td>
+								<td width="6%">종료일</td>
+								<td width="6%">이용목적</td>
+								<td width="6%">이용요금</td>
+								<td width="6%">승인반려일자</td>
+								<td width="6%">상태</td>
+								<td width="6%">취소분류</td>
+								<td width="8%">취소반려사유</td>
+								<td width="6%">실제이용자대표이름</td>
+								<td width="8%">핸드폰번호</td>
+								<td width="10%">이메일</td>
+								<td width="5%">차량번호</td>
+								<td width="8%">비고</td>
+							</tr>
+						</thead>
 
 
-
-	<!-- Application popup layer -->
-	<div id="dim-layer-app" class="dim-layer">
-		<div id="dimBgApp" class="dimBg"></div>
-		<div id="app_layer" class="popcont-layer"
-			style="overflow: auto; max-width: 600px; height: 600px;">
-			<div class="pop-container">
-				<div class="pop-conts">
-					<!--content //-->
-					<div id="appDiv">
-						<form id="frmAppPop" method="post">
-							<input type="hidden" id="saveFlag" name="saveFlag" value="">
-							<div class="row uniform">
-								<div class="12u 12u$(small)">
-									<input type="text" name="applicationSeq" id="applicationSeq"
-										value="" readonly="readonly"
-										placeholder="Application sequence" />
-								</div>
-								<div class="12u 12u$(small)">
-									<input type="text" name="applicationName" id="applicationName"
-										value="" placeholder="Application name" required="required"
-										maxlength="200" />
-								</div>
-								<div class="12u 12u$(small)">
-									<textarea name="applicationDescription"
-										id="applicationDescription"
-										placeholder="Enter Application description" rows="3"
-										maxlength="2000"></textarea>
-								</div>
-								<div class="12u 12u$(small)">
-									<textarea name="applicationIntroduction"
-										id="applicationIntroduction"
-										placeholder="Enter Application Introduction" rows="6"
-										maxlength="2000"></textarea>
-								</div>
-								<div class="12u 12u$(small)">
-									<input type="text" name="applicationUrl" id="applicationUrl"
-										value="" placeholder="Application url" maxlength="200" />
-								</div>
-								<div class="12u 12u$(small)">
-									<input type="text" name="tutorialUrl" id="tutorialUrl" value=""
-										placeholder="Tutorial url" maxlength="200" />
-								</div>
-								<div class="12u 12u$(small)">
-									<input type="text" name="displayOrder" id="displayOrder"
-										value="" placeholder="Display order" maxlength="3" />
-								</div>
-								<!-- iv class="12u 12u$(small)">
-                                <input type="text" name="idq" id="idq" value="" placeholder="idq" maxlength="11" />
-                            </div>
-                            <div class="12u 12u$(small)">
-                                <input type="text" name="codiceq" id="codiceq" value="" placeholder="codiceq" maxlength="20" />
-                            </div>
-                            <div class="12u 12u$(small)">
-                                <input type="text" name="tabgenName" id="tabgenName" value="" placeholder="Tabgen table name" maxlength="20" />
-                            </div -->
-								<div class="12u 12u$(small)">
-									<div class="select-wrapper">
-										<select id="cbUseYn" name="cbUseYn">
-											<option value="">-- select --</option>
-											<option value="Y">Yes</option>
-											<option value="N">No</option>
-										</select>
-									</div>
-								</div>
-								<div class="12u 12u$">
-									<ul class="actions vertical">
-										<li><input type="button" name="btnSaveApplication"
-											id="btnSaveApplication" value="Submit"
-											class="button special fit" /></li>
+						<tbody style="text-align: center; font-size: 0.8em;">
+							<tr>
+								<td colspan="7" style="text-align: center;">55555555555555</td>
+							</tr>
+						</tbody>
+						<tfoot style="font-size: 0.7em;">
+							<tr>
+								<td colspan="7" style="text-align: center;"
+									id="tdPaginationApplication"></td>
+							</tr>
+							<tr>
+								<td colspan="7" style="text-align: right;">
+									<ul class="actions">
+										<!--   <li><input type="button" name="btnNewApplication" id="btnNewApplication" value="New Application" class="button small special" /></li> -->
 									</ul>
-								</div>
-							</div>
-						</form>
-					</div>
-
-					<!--// content-->
-					<div class="btn-r">
-						<a href="#" id="closeAppPopup" class="btn-layerClose">Close</a>
-					</div>
+								</td>
+							</tr>
+						</tfoot>
+					</table>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<!-- File popup layer -->
-	<div id="dim-layer-file" class="dim-layer">
-		<div id="dimBgFile" class="dimBg"></div>
-		<div id="file_layer" class="popcont-layer" style="max-width: 600px;">
+
+	<!-- Admin Information popup layer -->
+	<div id="dim-layer-admin-info" class="dim-layer">
+		<div id="dimBgAdminInfo" class="dimBg"></div>
+		<div id="admin_info_layer" class="popcont-layer 12u$"
+			style="width: 600px;">
 			<div class="pop-container">
 				<div class="pop-conts">
 					<!--content //-->
-					<div id="fileDiv">
-						<form id="frmFilePop" method="post" enctype="multipart/form-data">
-							<input type="hidden" id="fileSaveFlag" name="fileSaveFlag"
-								value=""> <input type="hidden" id="linkedSeq"
-								name="linkedSeq" value=""> <input type="hidden"
-								id="linkedTable" name="linkedTable" value=""> <input
-								type="hidden" id="curPage" name="curPage" value=""> <input
-								type="hidden" id="callFunction" name="callFunction" value="">
+					<div id="adminInfoDiv">
+						<form id="frmAdminInfoPop" method="post">
 							<div class="row uniform">
-								<div class="12u 12u$(small)">
-									<input type="text" name="filesSeq" id="filesSeq" value=""
-										readonly="readonly" placeholder="File sequence" />
+								<h3 style="width: 300px;">예약</h3>
+								<div class="6u 12u$(small)">
+									<input type="text" name="userId" id="userId" value=""
+										placeholder="이름" required="required" maxlength="15" /> <input
+										type="hidden" name="flagIdDupeChk" id="flagIdDupeChk"
+										value="false" /> <input type="hidden" name="flagSave"
+										id="flagSave" value="" />
 								</div>
-								<div class="12u 12u$(small)">
-									<div class="select-wrapper">
-										<select id="cbFileType" name="cbFileType">
-											<option value="">-- Select File Type --</option>
-											<c:out value="${cbFileTypeOptions }" escapeXml="false" />
+								<!-- <div class="6u$ 12u$(small)">
+									<input type="button" name="btnIdDupeChk" id="btnIdDupeChk"
+										value="ID Duplication Check" class="button" />
+								</div> -->
+								<div class="6u 12u$(small)">
+									<input type="text" name="name" id="name" value=""
+										placeholder="법인" required="required" maxlength="50" />
+								</div>
+								<div class="6u$ 12u$(small)">
+									<input type="email" name="email" id="email" value=""
+										placeholder="부서" required="required" maxlength="50" />
+								</div>
+								<div class="6u 12u$(small)">
+									<input type="text" name="name" id="name" value=""
+										placeholder="이메일" required="required" maxlength="50" />
+								</div>
+								<div class="6u$ 12u$(small)">
+									<input type="email" name="email" id="email" value=""
+										placeholder="핸드폰번호" required="required" maxlength="50" />
+								</div>
+								<div class="6u 12u$(small)">
+									<input type="text" name="name" id="name" value=""
+										placeholder="연수원" required="required" maxlength="50" />
+								</div>
+								<div class="6u$ 12u$(small)">
+									<input type="email" name="email" id="email" value=""
+										placeholder="이용목적" required="required" maxlength="50" />
+								</div>
+								<div class="6u 12u$(small)">
+									<input type="text" name="name" id="name" value=""
+										placeholder="시작일" required="required" maxlength="50" />
+								</div>
+								<div class="6u$ 12u$(small)">
+									<input type="email" name="email" id="email" value=""
+										placeholder="종료일" required="required" maxlength="50" />
+								</div>
+								<div style="width: 550px; display: flex; align-items: center;">
+									<h3 style="display: flex; align-items: center;">실제 이용자 정보</h3>
+								</div>
+
+								<div class="6u 12u(small)">
+									<input type="text" name="name" id="name" value=""
+										placeholder="이름" required="required" maxlength="50" />
+								</div>
+
+								<div class="6u 12u$(small)">
+									<input type="email" name="email" id="email" value=""
+										placeholder="핸드폰번호" required="required" maxlength="50" />
+								</div>
+								<div class="6u 12u$(small)">
+									<input type="text" name="name" id="name" value=""
+										placeholder="이메일" required="required" maxlength="50" />
+								</div>
+								<div class="6u$ 12u$(small)">
+									<input type="email" name="email" id="email" value=""
+										placeholder="차량번호" required="required" maxlength="50" />
+								</div>
+								<div class="6u 12u$(small)">
+									<input type="text" name="name" id="name" value=""
+										placeholder="비고" required="required" maxlength="50" />
+								</div>
+
+								<%-- <div class="6u 12u$(small)">
+									<div class="select-wrappecr" id="divForCBCountry">
+										<select id="cbCountry" name="cbCountry">
+											<option value="">-- Select country --</option>
+											<c:out value="${listCountryCode}" escapeXml="false" />
 										</select>
 									</div>
-								</div>
-								<div class="12u 12u$(small)">
-									<div class="select-wrapper">
-										<select id="cbFileUsage" name="cbFileUsage">
-											<option value="">-- Select File Usage --</option>
-											<c:out value="${cbFileUsageOptions }" escapeXml="false" />
-										</select>
-									</div>
-								</div>
-								<div class="12u 12u$(small)">
-									<input type="text" name="originalName" id="originalName"
-										value="" placeholder="Original Name" maxlength="11" />
-								</div>
-								<div class="12u 12u$(small)">
-									<input type="text" name="filename" id="filename" value=""
-										placeholder="File name" maxlength="20" />
-								</div>
-								<div class="12u 12u$(small)">
-									<input type="text" name="filesize" id="filesize" value=""
-										placeholder="File size" maxlength="20" />
-								</div>
-								<div class="12u 12u$">
-									<input type="file" name="uploadFile" id="uploadFile" value=""
-										required="required" placeholder="File for upload"
-										maxlength="200" />
-								</div>
-								<div class="12u 12u$">
+								</div> --%>
+								<div class="6u$ 12u$">
 									<ul class="actions vertical">
-										<li><input type="button" name="btnSaveFile"
-											id="btnSaveFile" value="Submit" class="button special fit" /></li>
+										<li><input type="button" name="btnSaveAdminInfo"
+											id="btnSaveAdminInfo" value="Save" class="button special fit" /></li>
 									</ul>
 								</div>
 							</div>
@@ -282,7 +287,7 @@
 
 					<!--// content-->
 					<div class="btn-r">
-						<a href="#" id="closeFilePopup" class="btn-layerClose">Close</a>
+						<a href="#" id="closeAdminInfoPopup" class="btn-layerClose">Close</a>
 					</div>
 				</div>
 			</div>
@@ -389,334 +394,201 @@
 					pageHtml);
 		}
 
-		var strClickEventNm = "";
-		strClickEventNm += "#btnNewApplication, #btnSaveApplication, #btnNewFile, #btnSaveFile";
-		// mouse click event
-		$(document).on("click", strClickEventNm, function(e) {
-			e.preventDefault();
-
-			var id = $(this).attr("id");
-
-			if (id === "btnNewApplication") {
-				fn_applicationPopup("");
-			} else if (id === "btnSaveApplication") {
-				fn_saveApplication();
-			} else if (id === "btnNewFile") {
-				fn_filePopup("");
-			} else if (id === "btnSaveFile") {
-				fn_saveFile();
-			}
-		});
-
 		$(document).on("click", "#tblApplicationList tbody td", function(e) {
 			e.preventDefault();
 
 			var id = $(this).attr("id");
-			var sId = id.split("-")[0];
 			var no = id.split("-")[1];
 
-			$("#applicationSeq").val($("#tdApplicationSeq-" + no).text());
-			$("#sLinkedSeq").val($("#applicationSeq").val());
-			$("#sLinkedTable").val("tb_applications");
-
-			for (var i = 0; i < $("#tblApplicationList tbody tr").length; i++) {
-				if (!$("#btnEdit-" + i).hasClass("special")) {
-					$("#btnEdit-" + i).toggleClass("special");
-				}
-			}
-			$("#btnEdit-" + no).toggleClass("special");
-
-			if (sId === "tdButton") {
-				fn_applicationPopup(no);
-			} else {
-				fn_getFileList(1);
-			}
+			fn_AdminInfoPop(no);
 		});
 
-		function fn_applicationPopup(no) {
-			gfn_clearForm("frmAppPop");
+		function fn_clearFrmAdminInfoPop() {
+			$("#userId").val("");
+			$("#name").val("");
+			$("#email").val("");
+			$("#cbCountry").val("");
+			$('#cbCountry option:eq(0)').attr('selected', 'selected');
+			$("#flagIdDupeChk").val("false");
+			$("#flagSave").val("");
+		}
+		function fn_AdminInfoPop(no) {
+			fn_clearFrmAdminInfoPop();
 
-			if (no === "") {
-				$("#saveFlag").val("I");
+			if (no === null || no === "") {
+				$("#flagSave").val("I");
 			} else {
-				$("#saveFlag").val("U");
-				fn_setFrmAppPop(no);
+				$("#flagSave").val("U");
+				$("#userId").val($("#userId-" + no).val());
+				$("#name").val($("#tdReal_use_nm-" + no).text());
+				$("#email").val($("#tdUserEmail-" + no).text());
+				$("#cbCountry").val($("#countryCode-" + no).val()).prop(
+						"selected", true);
 			}
 
-			gfn_customLayerPopup('dim-layer-app', 'dimBgApp', 'app_layer',
-					'closeAppPopup');
+			gfn_customLayerPopup('dim-layer-admin-info', 'dimBgAdminInfo',
+					'admin_info_layer', 'closeAdminInfoPopup');
 		}
 
-		function fn_setFrmAppPop(no) {
-			var param = "";
-			param += "applicationSeq=" + $("#tdApplicationSeq-" + no).text();
+		function fn_submitAdminInfo() {
+			var frmId = "frmAdminInfoPop";
 
-			gf_send(
-					"<c:url value='/admin/systemManagement/getApplicationInfo' />",
-					param, "fn_setFrmAppPopCallback");
-		}
+			if ($("#flagSave").val() === "I"
+					&& eval($("#flagIdDupeChk").val()) === false) {
+				gfn_layerPopup("Click the ID Duplication Check button to check whether id exists already, if not, you can create the id.");
+				return false;
+			}
 
-		function fn_setFrmAppPopCallback(data) {
-			var applicationInfo = data.applicationInfo;
-
-			$("#applicationSeq").val(applicationInfo.applicationSeq);
-			$("#applicationName").val(applicationInfo.applicationName);
-			$("#applicationDescription").val(
-					applicationInfo.applicationDescription);
-			$("#applicationIntroduction").val(
-					applicationInfo.applicationIntroduction);
-			$("#applicationUrl").val(applicationInfo.applicationUrl);
-			$("#tutorialUrl").val(applicationInfo.tutorialUrl);
-			$("#idq").val(applicationInfo.idq);
-			$("#codiceq").val(applicationInfo.codiceq);
-			$("#tabgenName").val(applicationInfo.tabgenName);
-			$("#cbUseYn").val(applicationInfo.useYn);
-			$("#cbUseYn option:eq(" + applicationInfo.useYn + ")").attr(
-					'selected', 'selected');
-			$("#displayOrder").val(applicationInfo.displayOrder);
-		}
-
-		function fn_saveApplication() {
-			var frmId = "frmAppPop";
 			if (gfn_checkRequired(frmId) === true) {
-				if ($("#saveFlag").val() === "I") {
-					gf_sendForm(
-							frmId,
-							"<c:url value='/admin/systemManagement/insertApplication' />",
-							"fn_saveApplicationCallback");
-				} else {
-					gf_sendForm(
-							frmId,
-							"<c:url value='/admin/systemManagement/updateApplication' />",
-							"fn_saveApplicationCallback");
-				}
-				$('#dim-layer-app').fadeOut();
-			}
-		}
-
-		function fn_saveApplicationCallback(data) {
-			gfn_layerPopup(data.msg);
-
-			if (data.flag === "success") {
-				fn_getApplicationList(1);
-			}
-		}
-
-		function fn_getFileList(pageNo) {
-			var frmId = "frmFilePop";
-
-			if (!$("#sLinkedSeq").val()) {
-				gfn_layerPopup("Choose application name to upload files.");
-				return false;
-			}
-
-			$("#linkedSeq").val($("#sLinkedSeq").val());
-			$("#linkedTable").val("tb_applications");
-			$("#curPage").val(pageNo);
-			$("#callFunction").val("fn_getFileList");
-
-			gf_sendForm(
-					frmId,
-					"<c:url value='/admin/systemManagement/getApplicationFileList' />",
-					"fn_getFileListCallback")
-		}
-
-		function fn_getFileListCallback(data) {
-			var fileList = data.fileList;
-			var paginationHtml = data.pageInfo.paginationHtml;
-
-			fn_makeTblFileList(fileList, paginationHtml);
-		}
-
-		function fn_makeTblFileList(fileList, paginationHtml) {
-			var bodyHtml = "";
-			var pageHtml = "";
-
-			if (fileList != null && fileList.length > 0) {
-				for (var i = 0; i < fileList.length; i++) {
-					bodyHtml += "<tr>";
-					bodyHtml += "    <td id=\"tdFileSeq-"+i+"\">"
-							+ fileList[i].filesSeq + "</td>";
-					bodyHtml += "    <td id=\"tdOriginalName-"+i+"\">";
-					bodyHtml += "        <input type=\"hidden\" id=\"listFilename-"+i+"\" name=\"listFilename-"+i+"\" value=\""+fileList[i].filename+"\" />";
-					bodyHtml += fileList[i].originalName + "</td>";
-					bodyHtml += "    <td id=\"tdFileType-"+i+"\">"
-							+ fileList[i].fileTypeNm + "</td>";
-					bodyHtml += "    <td id=\"tdFileUsage-"+i+"\">"
-							+ fileList[i].fileUsageNm + "</td>";
-					bodyHtml += "    <td id=\"tdAction-"+i+"\">";
-					bodyHtml += "        <input type=\"button\" id=\"btnEditFile-"+i+"\" value=\"Edit\" class=\"button small special btnDynamic\" />";
-					bodyHtml += "        <input type=\"button\" id=\"btnDeleteFile-"+i+"\" value=\"Delete\" class=\"button small special btnDynamic\" />";
-					bodyHtml += "    </td>";
-					bodyHtml += "</tr>";
-				}
-				pageHtml = paginationHtml;
-			} else {
-				bodyHtml += "<tr><td colspan=\"5\" style=\"text-align:center;\">There is no data.</td></tr>";
-			}
-
-			$("#tblFileList tbody").html(bodyHtml);
-			$("#tblFileList tfoot #tdPaginationFile").html(pageHtml);
-		}
-
-		function fn_filePopup(no) {
-			if (!$("#sLinkedSeq").val()) {
-				gfn_layerPopup("Choose application name to upload files.");
-				return false;
-			}
-
-			gfn_clearForm("frmFilePop");
-
-			if (no === "") {
-				$("#fileSaveFlag").val("I");
-				$("#linkedSeq").val($("#sLinkedSeq").val());
-				$("#linkedTable").val($("#sLinkedTable").val());
-			} else {
-				$("#fileSaveFlag").val("U");
-				$("#filesSeq").val($("#tdFileSeq-" + no).text());
-				fn_setFrmFilePop();
-			}
-
-			gfn_customLayerPopup('dim-layer-file', 'dimBgFile', 'file_layer',
-					'closeFilePopup');
-		}
-
-		function fn_setFrmFilePop() {
-			var param = "";
-			param += "filesSeq=" + $("#filesSeq").val();
-
-			gf_send(
-					"<c:url value='/admin/systemManagement/getApplicationFileInfo' />",
-					param, "fn_setFrmFilePopCallback");
-		}
-
-		function fn_setFrmFilePopCallback(data) {
-			var fileInfo = data.fileInfo;
-
-			$("#filesSeq").val(fileInfo.filesSeq);
-			$("#linkedSeq").val(fileInfo.linkedSeq);
-			$("#linkedTable").val(fileInfo.linkedTable);
-			//$("#cbFileType").val(fileInfo.fileType);
-			//$("#cbFileType option:eq("+fileInfo.fileType+")").attr('selected', 'selected');
-			$("select[id=cbFileType]").val(fileInfo.fileType);
-			//$("#cbFileUsage").val(fileInfo.fileUsage);
-			//$("#cbFileUsage option:eq("+fileInfo.fileUsage+")").attr('selected', 'selected');
-			$("select[id=cbFileUsage]").val(fileInfo.fileUsage);
-			$("#originalName").val(fileInfo.originalName);
-			$("#filename").val(fileInfo.filename);
-			$("#filesize").val(fileInfo.filesize);
-		}
-
-		function fn_saveFile() {
-			var frmId = "frmFilePop";
-
-			if ($("#fileSaveFlag").val() === "I") {
-				gf_sendFileForm(
-						frmId,
-						"<c:url value='/admin/systemManagement/insertApplicationFiles' />",
-						"fn_saveFileCallback");
-			} else {
-				if (!$("#uploadFile").val()) {
-					gf_sendFileForm(
-							frmId,
-							"<c:url value='/admin/systemManagement/updateApplicationFilesWithNofile' />",
-							"fn_saveFileCallback");
-				} else {
-					gf_sendFileForm(
-							frmId,
-							"<c:url value='/admin/systemManagement/updateApplicationFiles' />",
-							"fn_saveFileCallback");
-				}
-			}
-			$('#dim-layer-file').fadeOut();
-		}
-
-		function fn_saveFileCallback(data) {
-			gfn_layerPopup(data.msg);
-
-			if (data.flag === "success") {
-				fn_getFileList(1);
-			}
-		}
-
-		$(document).on("click", "#tblFileList tbody td", function(e) {
-			e.preventDefault();
-
-			var id = $(this).attr("id");
-			var sId = id.split("-")[0];
-			var no = id.split("-")[1];
-
-			fn_toggleClass(no)
-
-		});
-
-		$(document).on(
-				"click",
-				".btnDynamic",
-				function(e) {
-					e.preventDefault();
-
-					var id = $(this).attr("id");
-					var sId = id.split("-")[0];
-					var no = id.split("-")[1];
-
-					fn_toggleClass(no)
-
-					if (sId === "btnEditFile") {
-						fn_filePopup(no);
-					} else if (sId === "btnDeleteFile") {
-						fn_deleteFile($("#tdFileSeq-" + no).text(), $(
-								"#listFilename-" + no).val());
+				if (gfn_checkFormat(frmId) === true) {
+					if ($("#flagSave").val() === "I") {
+						gf_sendForm(
+								frmId,
+								"<c:url value='/manager/reservationManagement/insertApplication' />",
+								"fn_submitAdminInfoCallback");
+					} else {
+						gf_sendForm(
+								frmId,
+								"<c:url value='/manager/reservationManagement/updateApplication' />",
+								"fn_submitAdminInfoCallback");
 					}
+				}
+			}
+		}
+
+		function fn_submitAdminInfoCallback(data) {
+			$('#dim-layer-admin-info').fadeOut();
+			gfn_layerPopup(data.msg);
+
+			fn_getAdminInfoList(1);
+		}
+
+		//한개만 단순하게 만들때
+		/*    $("#disabled-days").datepicker({
+		       language: 'ko'
+		   });
+
+
+
+		 */
+
+		//두개짜리 제어 연결된거 만들어주는 함수
+		datePickerSet($("#datepicker1"), $("#datepicker2"), true); //다중은 시작하는 달력 먼저, 끝달력 2번째
+
+		/*
+		 * 달력 생성기
+		 * @param sDate 파라미터만 넣으면 1개짜리 달력 생성
+		 * @example   datePickerSet($("#datepicker"));
+		 * 
+		 * 
+		 * @param sDate, 
+		 * @param eDate 2개 넣으면 연결달력 생성되어 서로의 날짜를 넘어가지 않음
+		 * @example   datePickerSet($("#datepicker1"), $("#datepicker2"));
+		 */
+
+		var disabledDays = [ 0, 6 ];
+
+		$('#disabled-days').datepicker(
+				{
+					language : 'ko',
+					minDate : new Date(), // Now can select only dates, which goes after today
+					onRenderCell : function(date, cellType) {
+						if (cellType == 'day') {
+							var day = date.getDay(), isDisabled = disabledDays
+									.indexOf(day) != -1;
+
+							return {
+								disabled : isDisabled
+							}
+						}
+					}
+				})
+
+		function datePickerSet(sDate, eDate, flag) {
+
+			//시작 ~ 종료 2개 짜리 달력 datepicker	
+			if (!isValidStr(sDate) && !isValidStr(eDate) && sDate.length > 0
+					&& eDate.length > 0) {
+				var sDay = sDate.val();
+				var eDay = eDate.val();
+				var disabledDays = [ 0, 6 ];
+
+				if (flag && !isValidStr(sDay) && !isValidStr(eDay)) { //처음 입력 날짜 설정, update...			
+					var sdp = sDate.datepicker().data("datepicker");
+					sdp.selectDate(new Date(sDay.replace(/-/g, "/"))); //익스에서는 그냥 new Date하면 -을 인식못함 replace필요
+
+					var edp = eDate.datepicker().data("datepicker");
+					edp.selectDate(new Date(eDay.replace(/-/g, "/"))); //익스에서는 그냥 new Date하면 -을 인식못함 replace필요
+				}
+
+				//시작일자 세팅하기 날짜가 없는경우엔 제한을 걸지 않음
+				if (!isValidStr(eDay)) {
+					sDate.datepicker({
+						maxDate : new Date(eDay.replace(/-/g, "/"))
+					});
+				}
+				sDate.datepicker({
+					language : 'ko',
+					autoClose : true,
+					minDate : new Date(),
+					onSelect : function() {
+						datePickerSet(sDate, eDate);
+					}
+				/* onRenderCell : function(date, cellType) {
+					if (cellType == 'day') {
+						var day = date.getDay(), isDisabled = disabledDays
+								.indexOf(day) != -1;
+
+						return {
+							disabled : isDisabled
+						}
+					}
+				} */
 				});
 
-		function fn_toggleClass(no) {
-			for (var i = 0; i < $("#tblFileList tbody tr").length; i++) {
-				if (!$("#btnEditFile-" + i).hasClass("special")) {
-					$("#btnEditFile-" + i).toggleClass("special");
+				//종료일자 세팅하기 날짜가 없는경우엔 제한을 걸지 않음
+				if (!isValidStr(sDay)) {
+					eDate.datepicker({
+						minDate : new Date(sDay.replace(/-/g, "/"))
+					});
 				}
-				if (!$("#btnDeleteFile-" + i).hasClass("special")) {
-					$("#btnDeleteFile-" + i).toggleClass("special");
+				eDate.datepicker({
+					language : 'ko',
+					autoClose : true,
+					onSelect : function() {
+						datePickerSet(sDate, eDate);
+					}
+				/* 	onRenderCell : function(date, cellType) {
+						if (cellType == 'day') {
+							var day = date.getDay(), isDisabled = disabledDays
+									.indexOf(day) != -1;
+
+							return {
+								disabled : isDisabled
+							}
+						}
+					} */
+				});
+
+				//한개짜리 달력 datepicker
+			} else if (!isValidStr(sDate)) {
+				var sDay = sDate.val();
+				if (flag && !isValidStr(sDay)) { //처음 입력 날짜 설정, update...			
+					var sdp = sDate.datepicker().data("datepicker");
+					sdp.selectDate(new Date(sDay.replace(/-/g, "/"))); //익스에서는 그냥 new Date하면 -을 인식못함 replace필요
 				}
+
+				sDate.datepicker({
+					language : 'ko',
+					autoClose : true
+				});
 			}
-			$("#btnEditFile-" + no).toggleClass("special");
-			$("#btnDeleteFile-" + no).toggleClass("special");
-		}
 
-		function fn_deleteFile(filesSeq, filename) {
-			var param = "";
-			param += "filesSeq=" + filesSeq;
-			param += "&";
-			param += "filename=" + filename;
-
-			gf_send(
-					"<c:url value='/admin/systemManagement/deleteApplicationFiles' />",
-					param, "fn_deleteFileCallback");
-		}
-
-		function fn_deleteFileCallback(data) {
-			gfn_layerPopup(data.msg);
-
-			if (data.flag === "success") {
-				fn_getFileList(1);
-			}
-		}
-
-		function fn_editFile(filesSeq) {
-			var param = "";
-			param += "filesSeq=" + filesSeq;
-
-			gf_send(
-					"<c:url value='/admin/systemManagement/getApplicationFileInfo' />",
-					param, "fn_editFileCallback");
-			$('#dim-layer-file').fadeOut();
-		}
-
-		function fn_editFileCallback(data) {
-			gfn_layerPopup(data.msg);
-
-			if (data.flag === "success") {
-				fn_getFileList(1);
+			function isValidStr(str) {
+				if (str == null || str == undefined || str == "")
+					return true;
+				else
+					return false;
 			}
 		}
 	</script>

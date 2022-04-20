@@ -133,7 +133,7 @@
 // 	    param += "&";
 // 	    param += "callFunction=fn_getDayEventList";
 	    
-		gf_send("<c:url value='/manager/main/getDayEventList' />", param, "fn_getDayEventListCallback");
+		gf_send("<c:url value='/user/main/getDayEventList' />", param, "fn_getDayEventListCallback");
 	}
 
 	function fn_getDayEventListCallback(data) {
@@ -181,7 +181,7 @@
 		<!-- Main -->
 		<div id="main">
 			<!-- Header -->
-			<%@ include file="../include/header_admin.jsp"%>
+			<%@ include file="../include/header.jsp"%>
 
 			<section>
 				<header class="main">

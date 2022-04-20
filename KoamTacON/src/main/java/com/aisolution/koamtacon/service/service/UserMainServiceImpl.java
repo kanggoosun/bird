@@ -8,33 +8,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.aisolution.common.util.CommonUtils;
-import com.aisolution.koamtacon.mapper.service.AdminMainMapper;
+import com.aisolution.koamtacon.mapper.service.UserMainMapper;
 
 @Service
-public class AdminMainServiceImpl implements AdminMainService {
-	private static final Logger log = LoggerFactory.getLogger(AdminMainServiceImpl.class);
+public class UserMainServiceImpl implements UserMainService {
+	private static final Logger log = LoggerFactory.getLogger(UserMainServiceImpl.class);
 	
 	@Autowired
-	private AdminMainMapper adminMainMapper;
+	private UserMainMapper userMainMapper;
 	
 	public Map<String, Object> getNumberOfUsers() {
 		log.debug("getNumberOfUsers");
-		return adminMainMapper.getNumberOfUsers();
+		return userMainMapper.getNumberOfUsers();
 	}
 
 	public Map<String, Object> getNumberOfGroups() {
 		log.debug("getNumberOfGroups");
-		return adminMainMapper.getNumberOfGroups();
+		return userMainMapper.getNumberOfGroups();
 	}
 	
 	public Map<String, Object> getNumberOfKDC(){
 		log.debug("getNumberOfKDC");
-		return adminMainMapper.getNumberOfKDC();
+		return userMainMapper.getNumberOfKDC();
 	}
 	
 	public Map<String, Object> getNumberOfQuestions() {
 		log.debug("getNumberOfQuestions");
-		return adminMainMapper.getNumberOfQuestions();
+		return userMainMapper.getNumberOfQuestions();
 	}
 	
 	public Map<String, Object> getDayEventList(Map<String, String> paramMap) {
@@ -42,7 +42,7 @@ public class AdminMainServiceImpl implements AdminMainService {
 		
 		Map<String, Object> map = CommonUtils.setParams(paramMap);
 		
-		map.put("applicationList", adminMainMapper.getDayEventList(map));
+		map.put("applicationList", userMainMapper.getDayEventList(map));
 		
 		log.debug("getDayEventList ServiceImple return={}", map.get("applicationList"));
 		

@@ -23,6 +23,7 @@
 
 <!-- Scripts -->
 <%@ include file="../include/incScripts.jsp"%>
+
 </head>
 
 <body>
@@ -34,34 +35,43 @@
 			<%@ include file="../include/header_admin.jsp"%>
 			<br>
 			<%@ include file="../include/miniCalendar_admin.jsp"%>
-			
 			<div class="inner">
+
 				<section>
-
-
-					<%-- <%@ include file="../include/miniCalendar.jsp"%>
- --%>
-
 					<header class="main">
-						<h2>예약요청 관리</h2>
+						<%-- <%@ include file="../include/minicalendar.jsp" %>  --%>
+						<%-- <%@ include file="../include/footer.jsp" %> --%>
+
 					</header>
 
-					<h4>Application List</h4>
+					<h4>예약요청 관리</h4>
 					<div id="tblApplicationList" class="table-wrapper">
 						<table class="alt">
 							<thead style="text-align: center; font-size: 0.8em;">
 								<tr>
-									<td width="10%">Sequence</td>
-									<td>Name</td>
-									<td width="10%">Usable</td>
-									<td width="10%">Order</td>
-									<td width="10%">Edit</td>
+									<td width="3%">순번</td>
+									<td width="4%">연수원</td>
+									<td width="6%">요청일자</td>
+									<td width="6%">시작일</td>
+									<td width="6%">종료일</td>
+									<td width="6%">이용목적</td>
+									<td width="6%">이용요금</td>
+									<td width="6%">승인반려일자</td>
+									<td width="6%">상태</td>
+									<td width="6%">취소분류</td>
+									<td width="8%">취소반려사유</td>
+									<td width="6%">실제이용자대표이름</td>
+									<td width="8%">핸드폰번호</td>
+									<td width="10%">이메일</td>
+									<td width="5%">차량번호</td>
+									<td width="8%">비고</td>
 								</tr>
 							</thead>
+
+
 							<tbody style="text-align: center; font-size: 0.8em;">
 								<tr>
-									<td colspan="7" style="text-align: center;">There is no
-										data.</td>
+									<td colspan="7" style="text-align: center;">55555555555555</td>
 								</tr>
 							</tbody>
 							<tfoot style="font-size: 0.7em;">
@@ -72,9 +82,7 @@
 								<tr>
 									<td colspan="7" style="text-align: right;">
 										<ul class="actions">
-											<li><input type="button" name="btnNewApplication"
-												id="btnNewApplication" value="New Application"
-												class="button small special" /></li>
+											<!--   <li><input type="button" name="btnNewApplication" id="btnNewApplication" value="New Application" class="button small special" /></li> -->
 										</ul>
 									</td>
 								</tr>
@@ -82,50 +90,48 @@
 						</table>
 					</div>
 
-					<h4>File List</h4>
-					<div id="tblFileList" class="table-wrapper">
-						<input type="hidden" name="sLinkedSeq" id="sLinkedSeq" value="" />
-						<input type="hidden" name="sLinkedTable" id="sLinkedTable"
-							value="tb_applications" />
-						<table class="alt">
-							<thead style="text-align: center; font-size: 0.8em;">
-								<tr>
-									<td width="10%">Sequence</td>
-									<td>Name</td>
-									<td width="15%">Type</td>
-									<td width="15%">Usage</td>
-									<td width="20%">Action</td>
-								</tr>
-							</thead>
-							<tbody style="text-align: center; font-size: 0.8em;">
-								<tr>
-									<td colspan="5" style="text-align: center;">There is no
-										data.</td>
-								</tr>
-							</tbody>
-							<tfoot style="font-size: 0.7em;">
-								<tr>
-									<td colspan="5" style="text-align: center;"
-										id="tdPaginationFile"></td>
-								</tr>
-								<tr>
-									<td colspan="5" style="text-align: right;">
-										<ul class="actions">
-											<li><input type="button" name="btnNewFile"
-												id="btnNewFile" value="New File"
-												class="button small special" /></li>
-										</ul>
-									</td>
-								</tr>
-							</tfoot>
-						</table>
-					</div>
-				</section>
-				<!-- Footer -->
-				<%@ include file="../include/footer.jsp"%>
+					<!--  
+                <h4>File List</h4>
+                <div id="tblFileList" class="table-wrapper">
+                    <input type="hidden" name="sLinkedSeq" id="sLinkedSeq" value="" />
+                    <input type="hidden" name="sLinkedTable" id="sLinkedTable" value="tb_applications" />
+                    <table class="alt">
+                        <thead style="text-align:center;font-size:0.8em;">
+                            <tr>
+                                <td width="10%">Sequence</td>
+                                <td>Name</td>
+                                <td width="15%">Type</td>
+                                <td width="15%">Usage</td>
+                                <td width="20%">Action</td>
+                            </tr>
+                        </thead>
+                        <tbody style="text-align:center;font-size:0.8em;">
+                            <tr>
+                                <td colspan="5" style="text-align:center;">There is no data.</td>
+                            </tr>
+                        </tbody>
+                        <tfoot style="font-size:0.7em;">
+                            <tr><td colspan="5" style="text-align:center;" id="tdPaginationFile"></td></tr>
+                            <tr>
+                                <td colspan="5" style="text-align:right;">
+                                    <ul class="actions">
+                                        <li><input type="button" name="btnNewFile" id="btnNewFile" value="New File" class="button small special" /></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </section>
+            ------------
+            -->
+					<!-- Footer -->
+					<%@ include file="../include/footer.jsp"%>
 			</div>
 		</div>
 	</div>
+
+
 
 	<!-- Application popup layer -->
 	<div id="dim-layer-app" class="dim-layer">
@@ -305,7 +311,7 @@
 			param += "callFunction=fn_getApplicationList";
 
 			gf_send(
-					"<c:url value='/admin/systemManagement/getApplicationList' />",
+					"<c:url value='/manager/reservationManagement/getApplicationList' />",
 					param, "fn_getApplicationListCallback");
 		}
 
@@ -323,18 +329,54 @@
 			if (applicationList != null && applicationList.length > 0) {
 				for (var i = 0; i < applicationList.length; i++) {
 					bodyHtml += "<tr id=\"trApplicationList-"+i+"\">";
-					bodyHtml += "    <td id=\"tdApplicationSeq-"+i+"\">"
-							+ applicationList[i].applicationSeq + "</td>";
-					bodyHtml += "    <td id=\"tdApplicationName-"+i+"\">"
-							+ applicationList[i].applicationName + "</td>";
-					//bodyHtml += "    <td id=\"tdIdq-"+i+"\">"+gfn_nullValue(applicationList[i].idq)+"</td>";
-					//bodyHtml += "    <td id=\"tdCodiceq-"+i+"\">"+gfn_nullValue(applicationList[i].codiceq)+"</td>";
-					//bodyHtml += "    <td id=\"tdTabgen-"+i+"\">"+gfn_nullValue(applicationList[i].tabgenName)+"</td>";
-					bodyHtml += "    <td id=\"tdUsable-"+i+"\">"
-							+ applicationList[i].useYnNm + "</td>";
-					bodyHtml += "    <td id=\"tdDisplayOrder-"+i+"\">"
-							+ applicationList[i].displayOrder + "</td>";
-					bodyHtml += "    <td id=\"tdButton-"+i+"\"><input type=\"button\" id=\"btnEdit-"+i+"\" value=\"Edit\" class=\"button small special\" /></td>";
+
+					bodyHtml += "    <td id=\"tdNo-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].no) + "</td>";
+					bodyHtml += "    <td id=\"tdPlace-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].place) + "</td>";
+					bodyHtml += "    <td id=\"tdReq_day-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].req_day)
+							+ "</td>";
+					bodyHtml += "    <td id=\"tdSta_day-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].sta_day)
+							+ "</td>";
+					bodyHtml += "    <td id=\"tdEnd_day-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].end_day)
+							+ "</td>";
+					bodyHtml += "    <td id=\"tdUse_aim-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].use_aim)
+							+ "</td>";
+					bodyHtml += "    <td id=\"tdTot_cost-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].tot_cost)
+							+ "</td>";
+					bodyHtml += "    <td id=\"tdApp_rej_day-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].app_rej_day)
+							+ "</td>";
+					bodyHtml += "    <td id=\"tdRes_sts-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].res_sts)
+							+ "</td>";
+					bodyHtml += "    <td id=\"tdRej_sort-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].rej_sort)
+							+ "</td>";
+					bodyHtml += "    <td id=\"tdCan_rej_cau-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].can_rej_cau)
+							+ "</td>";
+					bodyHtml += "    <td id=\"tdReal_use_nm-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].real_use_nm)
+							+ "</td>";
+					bodyHtml += "    <td id=\"tdReal_use_phone-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].real_use_phone)
+							+ "</td>";
+					bodyHtml += "    <td id=\"tdReal_use_email-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].real_use_email)
+							+ "</td>";
+					bodyHtml += "    <td id=\"tdReal_use_car_no-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].real_use_car_no)
+							+ "</td>";
+					bodyHtml += "    <td id=\"tdRmk-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].rmk) + "</td>";
+					//bodyHtml += "    <td id=\"tdSeq-"+i+"\">"+gfn_nullValue(applicationList[i].seq)+"</td>";	
+
 					bodyHtml += "</tr>";
 				}
 				pageHtml = paginationHtml;

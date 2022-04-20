@@ -480,6 +480,7 @@ a.fc-event:hover {
 .fc-event .fc-event-main {
     position: relative;
     z-index: 2;
+    
   }
 /* dragging */
 /* ---------------------------------------------------------------------------------------------------- */
@@ -604,6 +605,7 @@ A HORIZONTAL event
     right: 0; /* for sticky */
     max-width: 100%; /* clip overflow on this element */
     overflow: hidden;
+    font-size: .9em;
   }
 .fc-h-event.fc-event-selected:before {
     /* expand hit area */

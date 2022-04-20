@@ -53,12 +53,16 @@ aside {
 	<br />
 	<br />
 	<br /> -->
-	<div class="double">
-		<input style="width: 257.09px; display: inline;" id="datepicker1"
-			type="text" placeholder="시작일">&nbsp;&nbsp;&nbsp;&nbsp;ㅡ&nbsp;&nbsp;&nbsp;&nbsp;<input
-			style="width: 257.09px; display: inline;" id="datepicker2"
-			type="text" placeholder="종료일">
-	</div>
+	<aside>
+		<div class="double">
+			주말선택불가 테스트 <input style="width: 220px; display: inline;"
+				id="disabled-days" type="text" data-range="true" /> 예약 시작일 <input
+				style="width: 220px; display: inline;" id="datepicker1" type="text">
+			- <input style="width: 250px; display: inline;" id="datepicker2"
+				type="text">
+		</div>
+	</aside>
+
 	<script>
 		//한개만 단순하게 만들때
 		/*    $("#disabled-days").datepicker({
@@ -88,7 +92,7 @@ aside {
 		$('#disabled-days').datepicker(
 				{
 					language : 'ko',
-					minDate : new Date(), // Now can select only dates, which goes after today
+					minDate: new Date(), // Now can select only dates, which goes after today
 					onRenderCell : function(date, cellType) {
 						if (cellType == 'day') {
 							var day = date.getDay(), isDisabled = disabledDays
@@ -127,7 +131,7 @@ aside {
 				sDate.datepicker({
 					language : 'ko',
 					autoClose : true,
-					minDate : new Date(),
+					minDate: new Date(),
 					onSelect : function() {
 						datePickerSet(sDate, eDate);
 					}

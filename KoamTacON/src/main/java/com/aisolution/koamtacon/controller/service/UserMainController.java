@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.aisolution.common.util.InitUtil;
-import com.aisolution.koamtacon.service.service.AdminMainService;
+import com.aisolution.koamtacon.service.service.UserMainService;
 
 @Controller
-@RequestMapping("/manager/main")
-public class AdminMainController {
-	private static final Logger log = LoggerFactory.getLogger(AdminMainController.class);
+@RequestMapping("/user/main")
+public class UserMainController {
+	private static final Logger log = LoggerFactory.getLogger(UserMainController.class);
 	
 	@Autowired
-	private AdminMainService adminMainService;
+	private UserMainService userMainService;
 	@Autowired
 	private InitUtil initUtil;
 	
@@ -30,18 +30,18 @@ public class AdminMainController {
 		
 		model = initUtil.initMenu(paramMap, model);
 		
-		model.addAttribute("usersMap", adminMainService.getNumberOfUsers());
-		model.addAttribute("groupsMap", adminMainService.getNumberOfGroups());
-		model.addAttribute("kdcMap", adminMainService.getNumberOfKDC());
+		model.addAttribute("usersMap", userMainService.getNumberOfUsers());
+		model.addAttribute("groupsMap", userMainService.getNumberOfGroups());
+		model.addAttribute("kdcMap", userMainService.getNumberOfKDC());
 		
-		return "/manager/adminMain";
+		return "/user/userMain";
 	}
 	
 	@RequestMapping(value="/getDayEventList", method={RequestMethod.GET, RequestMethod.POST})
 	public String getDayEventList(@RequestParam Map<String, String> paramMap, Model model) {
 		log.debug("getDayEventList controller paramMap={}", paramMap);
 		
-		Map<String, Object> map = adminMainService.getDayEventList(paramMap);
+		Map<String, Object> map = userMainService.getDayEventList(paramMap);
 		
 		log.debug("map.get---------------------- :  "+ map.get("applicationList"));
 		

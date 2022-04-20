@@ -13,7 +13,7 @@
 				+ locale, "");
 	}
 </script>
-<header id="header1">
+<header id="header1" style="padding: 0em 2em 0.25em 1em;">
 	<mini-nav>
 	<ul>
 		<c:choose>
@@ -46,11 +46,13 @@
 						<!-- li><a href="<c:url value='http://www.koamtacon.com/' />" target="_blank">KoamTacON - admin console</a></li -->
 						<li><a href="<c:url value='/sign/signout' />"><spring:message
 									code='WRD-SIGNOUT' text='Sign out' /></a></li>
-						<br />
+						<%-- <br />
 
-						<li><a href="<c:url value='/manager/reservationManagement/menu' />"><spring:message
+						<li><a
+							href="<c:url value='/manager/reservationManagement/menu' />"><spring:message
 									text='메뉴관리' /></a></li>
-						<li><a href="<c:url value='/manager/reservationManagement/code' />"><spring:message
+						<li><a
+							href="<c:url value='/manager/reservationManagement/code' />"><spring:message
 									text='코드관리' /></a></li>
 						<li><a href="<c:url value='/manager/main/view' />"><spring:message
 									text='예약조회' /></a></li>
@@ -59,7 +61,7 @@
 									text='회원관리' /></a></li>
 						<li><a
 							href="<c:url value='/manager/reservationManagement/application' />"><spring:message
-									text='예약요청 관리' /></a></li> 
+									text='예약요청 관리' /></a></li> --%>
 					</c:when>
 					<c:otherwise>
 						<li><a>&nbsp;</a></li>
@@ -81,25 +83,56 @@
 	</mini-nav>
 </header>
 <header id="header">
-	<div class="row">
-		<div class="3u 12u$(medium)">
-			<c:choose>
-				<c:when test="${__userType eq '9'}">
-					<a href="<c:url value='/admin/dashboard/view' />" class="image"><img
-						src="/resources/images/KoamTacON.png"></a>
-				</c:when>
-				<c:when test="${__userType eq '8'}">
-					<a href="<c:url value='/admin/dashboard/view' />" class="image"><img
-						src="/resources/images/KoamTacON.png"></a>
-				</c:when>
-				<c:otherwise>
-					<a href="http://www.koamtacon.com/" target="_top" class="image"><img
-						class="logo-img" src="/resources/images/KoamTacON.png"></a>
-				</c:otherwise>
-			</c:choose>
-		</div>
-		<div class="9u 12u$(medium)">
+	<a href=<c:url value='/manager/main/view' /> target="_top" class="image"> EchoIT 연수원 예약 시스템</a>
+	<mini-nav>
+	<ul>
+
+		<div class="row">
+			<h3></h3>
+			<h3></h3>
+			<h3></h3>
+			<h3></h3>
+			<h3></h3>
+			<h3></h3>
+			<div class="3u 12u$(medium)">
+				<%-- <c:choose>
+					<c:when test="${__userType eq '9'}">
+						<a href="<c:url value='/admin/dashboard/view' />" class="image"><img
+							src="/resources/images/KoamTacON.png"></a>
+					</c:when>
+					<c:when test="${__userType eq '8'}">
+						<a href="<c:url value='/admin/dashboard/view' />" class="image"><img
+							src="/resources/images/KoamTacON.png"></a>
+					</c:when>
+					<c:otherwise>
+						<a href="http://www.koamtacon.com/" target="_top" class="image"><img
+							class="logo-img" src="/resources/images/KoamTacON.png"></a>
+					</c:otherwise>
+				</c:choose> --%>
+			</div>
+			<%-- <div class="9u 12u$(medium)">
 			<c:out value="${mainMenuHtml}" escapeXml="false"></c:out>
+		</div> --%>
+
+			<div class="9u 12u$(medium)">
+
+				<li><a
+					href="<c:url value='/manager/reservationManagement/menu' />"><spring:message
+							text='메뉴관리' /></a></li> &nbsp;&nbsp;&nbsp;&nbsp;
+				<li><a
+					href="<c:url value='/manager/reservationManagement/code' />"><spring:message
+							text='코드관리' /></a></li> &nbsp;&nbsp;&nbsp;&nbsp;
+				<li><a href="<c:url value='/manager/main/view' />"><spring:message
+							text='예약조회' /></a></li> &nbsp;&nbsp;&nbsp;&nbsp;
+				<li><a
+					href="<c:url value='/manager/adminManagement/memberList' />"><spring:message
+							text='회원관리' /></a></li> &nbsp;&nbsp;&nbsp;&nbsp;
+				<li><a
+					href="<c:url value='/manager/reservationManagement/application' />"><spring:message
+							text='예약요청 관리' /></a></li>
+			</div>
+
 		</div>
-	</div>
+	</ul>
+	</mini-nav>
 </header>

@@ -3,7 +3,7 @@ package com.aisolution.koamtacon.mapper.service;
 import java.util.List;
 import java.util.Map;
 
-public interface AdminMainMapper {
+public interface UserMainMapper {
 
 	public Map<String, Object> getNumberOfUsers();
 	

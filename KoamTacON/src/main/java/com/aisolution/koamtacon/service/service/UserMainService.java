@@ -1,9 +1,8 @@
-package com.aisolution.koamtacon.mapper.service;
+package com.aisolution.koamtacon.service.service;
 
-import java.util.List;
 import java.util.Map;
 
-public interface AdminMainMapper {
+public interface UserMainService {
 
 	public Map<String, Object> getNumberOfUsers();
 	
@@ -13,5 +12,5 @@ public interface AdminMainMapper {
 	
 	public Map<String, Object> getNumberOfQuestions();
 	
-	public List<Map<String, Object>> getDayEventList(Map<String, Object> map);
+	public Map<String, Object> getDayEventList(Map<String, String> paramMap);
 }
