@@ -76,7 +76,7 @@ public class Interceptor extends HandlerInterceptorAdapter {
         	} else {
         		request.setAttribute("lastRequestURI", request.getRequestURI());
             	StringBuffer sb = new StringBuffer();
-            	sb.append(request.getContextPath()).append("/sign/signin");
+            	sb.append(request.getContextPath()).append("/noLogin/signin");
             	RequestDispatcher dispatcher = request.getRequestDispatcher(sb.toString());
             	dispatcher.forward(request, response);
         	}

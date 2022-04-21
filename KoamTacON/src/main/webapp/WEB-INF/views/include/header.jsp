@@ -19,10 +19,12 @@
 		<c:choose>
 			<c:when
 				test="${__lastRequestURI eq '/signup' || __lastRequestURI eq '/terms' || __lastRequestURI eq '/registrationInfo' }">
-				<li><a href="<c:url value='/sign/signin' />"><spring:message
-							code='WRD-SIGNIN' text='Sign in' /></a></li>
+				<li><a href="<c:url value='/noLogin/signin' />"><spring:message
+							text='로그인' /></a></li>
+				<li><a href="<c:url value='/noLogin/signup' />"><spring:message
+							text='회원가입' /></a></li>
 				<li><a href="<c:url value='/sign/signup' />"><spring:message
-							code='WRD-SIGNUP' text='회원가입' /></a></li>
+							text='회원가입2' /></a></li>
 			</c:when>
 			<c:otherwise>
 				<c:choose>
@@ -44,13 +46,14 @@
 							</c:otherwise>
 						</c:choose>
 						<!-- li><a href="<c:url value='http://www.koamtacon.com/' />" target="_blank">KoamTacON - admin console</a></li -->
-						<li><a href="<c:url value='/sign/signout' />"><spring:message
+						<li><a href="<c:url value='/noLogin/signout' />"><spring:message
 									code='WRD-SIGNOUT' text='Sign out' /></a></li>
 						<br />
 
 						<li><a href="<c:url value='/user/main/view' />"><spring:message
 									text='예약가능일자조회' /></a></li>
-						<li><a href="<c:url value='/user/reservationRequest/application' />"><spring:message
+						<li><a
+							href="<c:url value='/user/reservationRequest/application' />"><spring:message
 									text='예약상태조회' /></a></li>
 						<li><a
 							href="<c:url value='/user/reservationRequest/application' />"><spring:message
@@ -65,7 +68,7 @@
 				</c:choose>
 			</c:otherwise>
 		</c:choose>
-		<img src="/resources/images/icon/lang.png">
+		<!-- <img src="/resources/images/icon/lang.png"> -->
 		<li><select id="locale" name="locale"
 			onchange="fn_changLocale(this.value)">
 				<option value="en"

@@ -1,2 +1,2 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-<% response.sendRedirect("/sign/terms"); %>
+<% response.sendRedirect("/noLogin/terms"); %>
