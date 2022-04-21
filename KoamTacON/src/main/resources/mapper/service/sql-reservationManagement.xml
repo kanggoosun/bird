@@ -495,6 +495,11 @@ WHERE  1=1
     <![CDATA[
         SELECT 
 	ROW_NUMBER() OVER (ORDER BY A.req_dt DESC ) AS no /** 순번 */
+	, A.name		 /** 이름 */
+	, A.cop_cd	 /** 법인 */
+	, A.dep_nm	 /** 부서 */
+	, A.email	 /** 이메일 */
+	, A.phone	 /** 핸드폰번호 */
 	, (SELECT code_name FROM tb_code WHERE master_code = 'C05' AND CODE = A.place_cd) AS place /** 연수원 */
 	, DATE_FORMAT(A.req_dt, '%Y-%m-%d') AS req_day		/** 요청일자 */
 	, sta_day		/** 시작일 */
@@ -513,8 +518,11 @@ WHERE  1=1
 	, seq			/** SEQ */
 FROM tb_reservation A
 WHERE  1=1
-	AND '2022-05-01' <= sta_day		/** 조회조건의 시작일자가 존재시 */
-	AND sta_day  <= '2022-05-10'		/** 조회조건의 종료일자가 존재시 */
+	AND cop_cd  = 'ECHOIT'				/** 조회조건의 법인이 존재시 */
+	AND '2022-04-01' <= sta_day		/** 조회조건의 시작일자가 존재시 */
+	AND sta_day  <= '2022-05-20'		/** 조회조건의 종료일자가 존재시 */
+	AND res_sts_cd  = 'C0106'				/** 조회조건의 상태가 존재시 */
+	AND NAME like CONCAT('%', '사용자1', '%')		/** 조회조건의 이름이 존재시 */
 ORDER BY A.req_dt DESC
 LIMIT 10 OFFSET 0			/** 페이징 별 조회 숫자 */
     ]]>

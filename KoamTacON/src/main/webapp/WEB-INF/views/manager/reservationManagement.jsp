@@ -142,21 +142,26 @@ aside {
 						<thead style="text-align: center; font-size: 0.8em;">
 							<tr>
 								<td width="3%">순번</td>
-								<td width="4%">연수원</td>
+								<td width="4%">이름</td>
+								<td width="6%">법인</td>
+								<td width="6%">부서</td>
+								<td width="6%">이메일</td>
+								<td width="6%">핸드폰번호</td>
+								<td width="6%">연수원</td>
 								<td width="6%">요청일자</td>
 								<td width="6%">시작일</td>
 								<td width="6%">종료일</td>
-								<td width="6%">이용목적</td>
+								<td width="5%">이용목적</td>
 								<td width="6%">이용요금</td>
-								<td width="6%">승인반려일자</td>
-								<td width="6%">상태</td>
-								<td width="6%">취소분류</td>
-								<td width="8%">취소반려사유</td>
-								<td width="6%">실제이용자대표이름</td>
-								<td width="8%">핸드폰번호</td>
-								<td width="10%">이메일</td>
-								<td width="5%">차량번호</td>
-								<td width="8%">비고</td>
+								<td width="7%">승인 반려 일자</td>
+								<td width="5%">상태</td>
+								<td width="5%">취소분류</td>
+								<td width="8%">취소 반려 사유</td>
+								<td width="17%">실제 이용자 대표 이름</td>
+								<td width="10%">실제 이용자 핸드폰번호</td>
+								<td width="6%">실제 이용자 이메일</td>
+								<td width="4%">차량번호</td>
+								<td width="6%">비고</td>				
 							</tr>
 						</thead>
 
@@ -337,8 +342,23 @@ aside {
 
 					bodyHtml += "    <td id=\"tdNo-"+i+"\">"
 							+ gfn_nullValue(applicationList[i].no) + "</td>";
-					bodyHtml += "    <td id=\"tdPlace-"+i+"\">"
-							+ gfn_nullValue(applicationList[i].place) + "</td>";
+					bodyHtml += "    <td id=\"tdName-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].name) + "</td>";
+					bodyHtml += "    <td id=\"tdCop_cd-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].cop_cd)
+							+ "</td>";
+					bodyHtml += "    <td id=\"tdDep_nm-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].dep_nm)
+							+ "</td>";
+					bodyHtml += "    <td id=\"tdEmail-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].email)
+							+ "</td>";
+					bodyHtml += "    <td id=\"tdPhone-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].phone)
+							+ "</td>";
+					bodyHtml += "    <td id=\"tdPlace_cd-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].place_cd)
+							+ "</td>";
 					bodyHtml += "    <td id=\"tdReq_day-"+i+"\">"
 							+ gfn_nullValue(applicationList[i].req_day)
 							+ "</td>";
@@ -348,8 +368,8 @@ aside {
 					bodyHtml += "    <td id=\"tdEnd_day-"+i+"\">"
 							+ gfn_nullValue(applicationList[i].end_day)
 							+ "</td>";
-					bodyHtml += "    <td id=\"tdUse_aim-"+i+"\">"
-							+ gfn_nullValue(applicationList[i].use_aim)
+					bodyHtml += "    <td id=\"tdUse_aim_cd-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].use_aim_cd)
 							+ "</td>";
 					bodyHtml += "    <td id=\"tdTot_cost-"+i+"\">"
 							+ gfn_nullValue(applicationList[i].tot_cost)
@@ -357,11 +377,11 @@ aside {
 					bodyHtml += "    <td id=\"tdApp_rej_day-"+i+"\">"
 							+ gfn_nullValue(applicationList[i].app_rej_day)
 							+ "</td>";
-					bodyHtml += "    <td id=\"tdRes_sts-"+i+"\">"
-							+ gfn_nullValue(applicationList[i].res_sts)
+					bodyHtml += "    <td id=\"tdRes_sts_cd-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].res_sts_cd)
 							+ "</td>";
-					bodyHtml += "    <td id=\"tdRej_sort-"+i+"\">"
-							+ gfn_nullValue(applicationList[i].rej_sort)
+					bodyHtml += "    <td id=\"tdRej_sort_cd-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].rej_sort_cd)
 							+ "</td>";
 					bodyHtml += "    <td id=\"tdCan_rej_cau-"+i+"\">"
 							+ gfn_nullValue(applicationList[i].can_rej_cau)
@@ -377,11 +397,13 @@ aside {
 							+ "</td>";
 					bodyHtml += "    <td id=\"tdReal_use_car_no-"+i+"\">"
 							+ gfn_nullValue(applicationList[i].real_use_car_no)
-							+ "</td>";
+							+ "</td>";	
 					bodyHtml += "    <td id=\"tdRmk-"+i+"\">"
-							+ gfn_nullValue(applicationList[i].rmk) + "</td>";
-					//bodyHtml += "    <td id=\"tdSeq-"+i+"\">"+gfn_nullValue(applicationList[i].seq)+"</td>";	
-
+							+ gfn_nullValue(applicationList[i].rmk) 
+							+ "</td>";
+					bodyHtml += "    <td id=\"tdSeq-"+i+"\">"
+							+gfn_nullValue(applicationList[i].seq)
+							+ "</td>";	
 					bodyHtml += "</tr>";
 				}
 				pageHtml = paginationHtml;
