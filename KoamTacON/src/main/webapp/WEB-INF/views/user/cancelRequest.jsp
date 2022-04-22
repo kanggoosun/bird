@@ -83,6 +83,9 @@
 									<td colspan="7" style="text-align: right;">
 										<ul class="actions">
 											<!--   <li><input type="button" name="btnNewApplication" id="btnNewApplication" value="New Application" class="button small special" /></li> -->
+											 <li><input type="button" name="btnCancelRequest" id="btnCancelRequest" value="요청 취소" class="button small special" /></li>
+											 <li><input type="button" name="btnCancelReservation" id="btnCancelReservation" value="예약 취소" class="button small special" /></li>
+										
 										</ul>
 									</td>
 								</tr>
@@ -125,6 +128,10 @@
             </section>
             ------------
             -->
+            
+            
+            
+            
 					<!-- Footer -->
 					<%@ include file="../include/footer.jsp"%>
 			</div>
@@ -134,13 +141,13 @@
 
 
 	<!-- Application popup layer -->
-	<div id="dim-layer-app" class="dim-layer">
+<!-- 	<div id="dim-layer-app" class="dim-layer">
 		<div id="dimBgApp" class="dimBg"></div>
 		<div id="app_layer" class="popcont-layer"
 			style="overflow: auto; max-width: 600px; height: 600px;">
 			<div class="pop-container">
 				<div class="pop-conts">
-					<!--content //-->
+					content //
 					<div id="appDiv">
 						<form id="frmAppPop" method="post">
 							<input type="hidden" id="saveFlag" name="saveFlag" value="">
@@ -177,7 +184,7 @@
 								</div>
 								<div class="12u 12u$(small)">
 									<input type="text" name="displayOrder" id="displayOrder"
-										value="" placeholder="Display order" maxlength="3" />
+										value="" placeholder="Display order" maxlength="3" /> -->
 								</div>
 								<!-- iv class="12u 12u$(small)">
                                 <input type="text" name="idq" id="idq" value="" placeholder="idq" maxlength="11" />
@@ -188,7 +195,7 @@
                             <div class="12u 12u$(small)">
                                 <input type="text" name="tabgenName" id="tabgenName" value="" placeholder="Tabgen table name" maxlength="20" />
                             </div -->
-								<div class="12u 12u$(small)">
+	<!-- 							<div class="12u 12u$(small)">
 									<div class="select-wrapper">
 										<select id="cbUseYn" name="cbUseYn">
 											<option value="">-- select --</option>
@@ -208,14 +215,220 @@
 						</form>
 					</div>
 
-					<!--// content-->
+					// content
 					<div class="btn-r">
 						<a href="#" id="closeAppPopup" class="btn-layerClose">Close</a>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div> -->
+	
+	
+	<!-- Admin Information popup layer -->
+	<div id="dim-layer-admin-info" class="dim-layer">
+		<div id="dimBgAdminInfo" class="dimBg"></div>
+		<div id="admin_info_layer" class="popcont-layer 12u$"
+			style="width: 600px;">
+			<div class="pop-container">
+				<div class="pop-conts">
+					<!--content //-->
+					<div id="adminInfoDiv">
+						<form id="fn_CancelRequestPop" method="post">
+							<div class="row uniform">
+								<h3 style="width: 300px;">예약</h3>
+								 <div class="6u 12u$(small)">
+								<!--	<input type="text" name="userId" id="userId" value=""
+										placeholder="이름" required="required" maxlength="15" />  <input
+										type="hidden" name="flagIdDupeChk" id="flagIdDupeChk"
+										value="false" /> <input type="hidden" name="flagSave"
+										id="flagSave" value="" /> -->
+								</div> 
+								<!-- <div class="6u$ 12u$(small)">
+									<input type="button" name="btnIdDupeChk" id="btnIdDupeChk"
+										value="ID Duplication Check" class="button" />
+								</div> -->
+<!-- 								<div class="6u 12u$(small)">
+									<input type="text" name="name" id="name" value=""
+										placeholder="이름"  maxlength="50" />
+								</div> -->
+								<!-- <div class="6u$ 12u$(small)">
+									<input type="email" name="email" id="email" value=""
+										placeholder="부서" required="required" maxlength="50" />
+								</div>
+								<div class="6u 12u$(small)">
+									<input type="text" name="name" id="name" value=""
+										placeholder="이메일" required="required" maxlength="50" />
+								</div>
+								<div class="6u$ 12u$(small)">
+									<input type="email" name="email" id="email" value=""
+										placeholder="핸드폰번호" required="required" maxlength="50" />
+								</div>-->
+								<div class="6u 12u$(small)">
+									<input type="text" name="place" id="place" value=""
+										placeholder="연수원" required="required" maxlength="50" />
+								</div>
+								<div class="6u 12u$(small)">
+									<input type="text" name="sta_day" id="sta_day" value=""
+										placeholder="시작일" required="required" maxlength="50" />
+								</div>
+								<div class="6u$ 12u$(small)">
+									<input type="text" name="end_day" id="end_day" value=""
+										placeholder="종료일" required="required" maxlength="50" />
+								</div>
+								<div class="6u$ 12u$(small)">
+									<input type="text" name="use_aim" id="use_aim" value=""
+										placeholder="이용목적" required="required" maxlength="50" />
+								</div>
+								<!-- <div style="width: 550px; display: flex; align-items: center;">
+									<h3 style="display: flex; align-items: center;">실제 이용자 정보</h3>
+								</div>
+
+								<div class="6u 12u(small)">
+									<input type="text" name="name" id="name" value=""
+										placeholder="이름" required="required" maxlength="50" />
+								</div>
+
+								<div class="6u 12u$(small)">
+									<input type="email" name="email" id="email" value=""
+										placeholder="핸드폰번호" required="required" maxlength="50" />
+								</div>
+								<div class="6u 12u$(small)">
+									<input type="text" name="name" id="name" value=""
+										placeholder="이메일" required="required" maxlength="50" />
+								</div>
+								<div class="6u$ 12u$(small)">
+									<input type="email" name="email" id="email" value=""
+										placeholder="차량번호" required="required" maxlength="50" />
+								</div>
+								<div class="6u 12u$(small)">
+									<input type="text" name="name" id="name" value=""
+										placeholder="비고" required="required" maxlength="50" />
+								</div>
+
+								<div class="6u 12u$(small)">
+									<div class="select-wrappecr" id="divForCBCountry">
+										<select id="cbCountry" name="cbCountry">
+											<option value="">-- Select country --</option>
+											<c:out value="${listCountryCode}" escapeXml="false" />
+										</select>
+									</div>
+								</div>
+								<div class="6u$ 12u$">
+									<ul class="actions vertical">
+										<li><input type="button" name="btnSaveAdminInfo"
+											id="btnSaveAdminInfo" value="Save" class="button special fit" /></li>
+									</ul>
+								</div> -->
+								
+							</div>
+						</form>
+						<form id="fn_CancelReservationPop" method="post">
+							<div class="row uniform">
+								<h3 style="width: 300px;">예약</h3>
+								 <div class="6u 12u$(small)">
+								<!--	<input type="text" name="userId" id="userId" value=""
+										placeholder="이름" required="required" maxlength="15" />  <input
+										type="hidden" name="flagIdDupeChk" id="flagIdDupeChk"
+										value="false" /> <input type="hidden" name="flagSave"
+										id="flagSave" value="" /> -->
+								</div> 
+								<!-- <div class="6u$ 12u$(small)">
+									<input type="button" name="btnIdDupeChk" id="btnIdDupeChk"
+										value="ID Duplication Check" class="button" />
+								</div> -->
+<!-- 								<div class="6u 12u$(small)">
+									<input type="text" name="name" id="name" value=""
+										placeholder="이름"  maxlength="50" />
+								</div> -->
+								<!-- <div class="6u$ 12u$(small)">
+									<input type="email" name="email" id="email" value=""
+										placeholder="부서" required="required" maxlength="50" />
+								</div>
+								<div class="6u 12u$(small)">
+									<input type="text" name="name" id="name" value=""
+										placeholder="이메일" required="required" maxlength="50" />
+								</div>
+								<div class="6u$ 12u$(small)">
+									<input type="email" name="email" id="email" value=""
+										placeholder="핸드폰번호" required="required" maxlength="50" />
+								</div>-->
+								<div class="6u 12u$(small)">
+									<input type="text" name="name" id="name" value=""
+										placeholder="연수원" required="required" maxlength="50" />
+								</div>
+								<div class="6u 12u$(small)">
+									<input type="text" name="sta_day" id="sta_day" value=""
+										placeholder="시작일" required="required" maxlength="50" />
+								</div>
+								<div class="6u$ 12u$(small)">
+									<input type="text" name="end_day" id="end_day" value=""
+										placeholder="종료일" required="required" maxlength="50" />
+								</div>
+								<div class="6u$ 12u$(small)">
+									<input type="text" name="use_aim" id="use_aim" value=""
+										placeholder="이용목적" required="required" maxlength="50" />
+								</div>
+								<div class="6u 12u(small)">
+									<input type="text" name="rej_sort_cd" id="rej_sort_cd" value=""
+										placeholder="취소사유" required="required" maxlength="50" />
+								</div>
+								
+								<!-- <div style="width: 550px; display: flex; align-items: center;">
+									<h3 style="display: flex; align-items: center;">실제 이용자 정보</h3>
+								</div>
+
+								<div class="6u 12u(small)">
+									<input type="text" name="name" id="name" value=""
+										placeholder="이름" required="required" maxlength="50" />
+								</div>
+
+								<div class="6u 12u$(small)">
+									<input type="email" name="email" id="email" value=""
+										placeholder="핸드폰번호" required="required" maxlength="50" />
+								</div>
+								<div class="6u 12u$(small)">
+									<input type="text" name="name" id="name" value=""
+										placeholder="이메일" required="required" maxlength="50" />
+								</div>
+								<div class="6u$ 12u$(small)">
+									<input type="email" name="email" id="email" value=""
+										placeholder="차량번호" required="required" maxlength="50" />
+								</div>
+								<div class="6u 12u$(small)">
+									<input type="text" name="name" id="name" value=""
+										placeholder="비고" required="required" maxlength="50" />
+								</div>
+
+								<div class="6u 12u$(small)">
+									<div class="select-wrappecr" id="divForCBCountry">
+										<select id="cbCountry" name="cbCountry">
+											<option value="">-- Select country --</option>
+											<c:out value="${listCountryCode}" escapeXml="false" />
+										</select>
+									</div>
+								</div>
+								<div class="6u$ 12u$">
+									<ul class="actions vertical">
+										<li><input type="button" name="btnSaveAdminInfo"
+											id="btnSaveAdminInfo" value="Save" class="button special fit" /></li>
+									</ul>
+								</div> -->
+								
+							</div>
+						</form>
+					</div>
+
+					<!--// content-->
+					<div class="btn-r">
+						<a href="#" id="closeAdminInfoPopup" class="btn-layerClose">Close</a>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
+	
+	
 
 	<!-- File popup layer -->
 	<div id="dim-layer-file" class="dim-layer">
@@ -303,7 +516,7 @@
 
 		fn_getApplicationList(1);
 	});
-
+	
 	function fn_getApplicationList(pageNo) {
 		var param = "";
 		param += "curPage=" + pageNo;
@@ -314,6 +527,98 @@
 				"<c:url value='/user/cancelRequest/getApplicationList' />",
 				param, "fn_getApplicationListCallback");
 	}
+
+
+	
+	var strClickEventNm  = "";
+	strClickEventNm += "#btnCancelRequest, #btnCancelReservation";
+	// mouse click event
+	$(document).on("click", strClickEventNm, function(e){
+	    e.preventDefault();
+
+	    var id = $(this).attr("id");
+	    fn_eventCallFunction(id);
+	});
+	
+	function fn_eventCallFunction() {
+	    var args = fn_eventCallFunction.arguments;
+	    
+	    if (args[0] === "btnCancelRequest") {
+	    	fn_CancelRequestPop();
+	    } else if (args[0] === "btnCancelReservation") {
+	    	fn_CancelReservationPop();
+	    }
+	    
+/* 	    else if (args[0] === "groupName") {
+	        $("#mdcId").focus();
+	    } else if (args[0] === "mdcId") {
+	        $("#deviceCode").focus();
+	    } else if (args[0] === "deviceCode") {
+	        $("#activationCode").focus();
+	    } else if (args[0] === "activationCode") {
+	        return false;
+	    } */
+	}
+
+
+	function fn_CancelRequestPop() {
+
+
+
+			$("#flagSave").val("S");
+			$("#place").val($("#place-").val());
+		    $("#sta_day").val($("#sta_day-").val());
+		    $("#end_day").val($("#end_day-").val());
+		    $("#use_aim").val($("#use_aim-").val());
+	    
+	    gfn_customLayerPopup('dim-layer-admin-info', 'dimBgAdminInfo', 'admin_info_layer', 'closeAdminInfoPopup');
+	}
+	
+
+	function fn_CancelReservationPop() {
+
+
+			$("#flagSave").val("U");
+            $("#place").val($("#place-").val());
+		    $("#sta_day").val($("#sta_day-").val());
+		    $("#end_day").val($("#end_day-").val());
+		    $("#use_aim").val($("#use_aim-").val());
+		    $("#rej_sort_cd").val($("#rej_sort_cd-").text());
+
+	    
+	    gfn_customLayerPopup('dim-layer-admin-info', 'dimBgAdminInfo', 'admin_info_layer', 'closeAdminInfoPopup');
+	}
+	
+	function fn_setFrmAppPop() {
+		var param = "";
+		param += "applicationSeq=" + $("#tdApplicationSeq-" + no).text();
+
+		gf_send(
+				"<c:url value='/user/cancelRequest/getApplicationList' />",
+				param, "fn_setFrmAppPopCallback");
+	}
+
+	
+	function fn_setFrmAppPopCallback(data) {
+		var applicationInfo = data.applicationInfo;
+
+		$("#applicationSeq").val(applicationInfo.applicationSeq);
+		$("#applicationName").val(applicationInfo.applicationName);
+		$("#applicationDescription").val(
+				applicationInfo.applicationDescription);
+		$("#applicationIntroduction").val(
+				applicationInfo.applicationIntroduction);
+		$("#applicationUrl").val(applicationInfo.applicationUrl);
+		$("#tutorialUrl").val(applicationInfo.tutorialUrl);
+		$("#idq").val(applicationInfo.idq);
+		$("#codiceq").val(applicationInfo.codiceq);
+		$("#tabgenName").val(applicationInfo.tabgenName);
+		$("#cbUseYn").val(applicationInfo.useYn);
+		$("#cbUseYn option:eq(" + applicationInfo.useYn + ")").attr(
+				'selected', 'selected');
+		$("#displayOrder").val(applicationInfo.displayOrder);
+	}
+
 
 	function fn_getApplicationListCallback(data) {
 		var applicationList = data.applicationList;
@@ -355,9 +660,20 @@
 				bodyHtml += "    <td id=\"tdRes_sts-"+i+"\">"
 						+ gfn_nullValue(applicationList[i].res_sts)
 						+ "</td>";
-				bodyHtml += "    <td id=\"tdRej_sort-"+i+"\">"
-						+ gfn_nullValue(applicationList[i].res_sts_cd)
-						+ "</td>";
+						
+						if(applicationList[i].res_sts_cd == "C0102" ){
+/* 							bodyHtml += "    <td id=\"tdRej_sort-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].res_sts_cd)
+							+ "</td>"; */
+							bodyHtml += "    <td id=\"tdCancelRequestBtn-"+i+"\"><input type=\"button\" id=\"btnCancelRequestBtn-"+i+"\" value=\"요청 취소\" class=\"button small special\" /></td>";
+						}
+						if(applicationList[i].res_sts_cd == "C0104" ){
+							bodyHtml += "    <td id=\"tdCancelReservationBtn-"+i+"\"><input type=\"button\" id=\"btnCancelReservationBtn-"+i+"\" value=\"예약 취소\" class=\"button small special\" /></td>";
+						}
+						else{
+							
+						}
+						
 				bodyHtml += "    <td id=\"tdCan_rej_cau-"+i+"\">"
 						+ gfn_nullValue(applicationList[i].remain_day)
 						+ "</td>";
@@ -389,7 +705,7 @@
 				pageHtml);
 	}
 
-	var strClickEventNm = "";
+	 var strClickEventNm = "";
 	strClickEventNm += "#btnNewApplication, #btnSaveApplication, #btnNewFile, #btnSaveFile";
 	// mouse click event
 	$(document).on("click", strClickEventNm, function(e) {
@@ -432,7 +748,6 @@
 			fn_getFileList(1);
 		}
 	});
-
 	function fn_applicationPopup(no) {
 		gfn_clearForm("frmAppPop");
 
@@ -446,6 +761,8 @@
 		gfn_customLayerPopup('dim-layer-app', 'dimBgApp', 'app_layer',
 				'closeAppPopup');
 	}
+	
+	
 
 	function fn_setFrmAppPop(no) {
 		var param = "";
@@ -474,7 +791,7 @@
 		$("#cbUseYn option:eq(" + applicationInfo.useYn + ")").attr(
 				'selected', 'selected');
 		$("#displayOrder").val(applicationInfo.displayOrder);
-	}
+	} 
 
 	function fn_saveApplication() {
 		var frmId = "frmAppPop";
@@ -519,8 +836,7 @@
 				frmId,
 				"<c:url value='/admin/systemManagement/getApplicationFileList' />",
 				"fn_getFileListCallback")
-	}
-
+	} 
 	function fn_getFileListCallback(data) {
 		var fileList = data.fileList;
 		var paginationHtml = data.pageInfo.paginationHtml;
