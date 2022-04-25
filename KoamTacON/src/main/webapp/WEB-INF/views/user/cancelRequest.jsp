@@ -236,7 +236,7 @@
 					<div id="cancelRequestDiv">
 						<form id="fn_CancelRequestPop" method="post">
 							<div class="row uniform">
-								<h3 style="width: 300px;">예약</h3>
+								<h3 style="width: 300px;">요청 취소</h3>
 								 <div class="6u 12u$(small)">
 								<!--	<input type="text" name="userId" id="userId" value=""
 										placeholder="이름" required="required" maxlength="15" />  <input
@@ -336,7 +336,7 @@
 	
 		<div id="dim-layer-cancel-reservartion" class="dim-layer">
 		<div id="dimBgCancelReservarion" class="dimBg"></div>
-		<div id="cancel_request_layer" class="popcont-layer 12u$"
+		<div id="cancel_reservation_layer" class="popcont-layer 12u$"
 			style="width: 600px;">
 			<div class="pop-container">
 				<div class="pop-conts">
@@ -345,7 +345,7 @@
 	
 						<form id="fn_CancelReservationPop" method="post">
 							<div class="row uniform">
-								<h3 style="width: 300px;">예약</h3>
+								<h3 style="width: 300px;">예약 취소</h3>
 								 <div class="6u 12u$(small)">
 								<!--	<input type="text" name="userId" id="userId" value=""
 										placeholder="이름" required="required" maxlength="15" />  <input
@@ -551,8 +551,9 @@
 		e.preventDefault();
 
 		var id = $(this).attr("id");
-/* 		var sId = id.split("-")[0]; */
-/* 		var no = id.split("-")[1]; */
+		alert("id:"+id);
+ 		var sId = id.split("-")[0];
+ 		var no = id.split("-")[1];
 
 		$("#applicationSeq").val($("#tdApplicationSeq-").text());
 		$("#sLinkedSeq").val($("#applicationSeq").val());
@@ -564,18 +565,29 @@
 			}
 		}
 		$("#btnEdit-").toggleClass("special"); */
-
-			fn_applicationPopup();
+		var flag = "";
+		if (sId == "tdCancelReservation") {
+			flag = 'reserv';
+		} else if (sId == "tdCancelRequest") {
+			flag = 'request';
+		}
+		
+		fn_applicationPopup(flag);
 
 	});
 
-	function fn_applicationPopup() {
+	function fn_applicationPopup(flag) {
 /* 		gfn_clearForm("frmAppPop"); */
 
 			fn_setFrmAppPop();
 			
-		gfn_customLayerPopup('dim-layer-cancel-request', 'dimBgCancelRequest', 'cancel_request_layer',
+		if (flag == 'reserv') {
+			gfn_customLayerPopup('dim-layer-cancel-reservartion', 'dimBgCancelReservarion', 'cancel_reservation_layer',
+			'closeCancelReservationPopup');
+		} else if (flag == 'request') {
+			gfn_customLayerPopup('dim-layer-cancel-request', 'dimBgCancelRequest', 'cancel_request_layer',
 				'closeCancelRequestPopup');
+		}
 	}
 
 	function fn_setFrmAppPop() {
@@ -806,9 +818,9 @@
 /* 							bodyHtml += "    <td id=\"tdRej_sort-"+i+"\">"
 							+ gfn_nullValue(applicationList[i].res_sts_cd)
 							+ "</td>"; */
-							bodyHtml += "    <td><input type=\"button\" id=\"btnCancelRequestBtn-"+i+"\" value=\"요청 취소\" class=\"button small special\" /></td>";
+							bodyHtml += "    <td id=\"tdCancelRequest-"+i+"\"><input type=\"button\" id=\"btnCancelRequestBtn-"+i+"\" value=\"요청 취소\" class=\"button small special\" /></td>";
 						} else if(applicationList[i].res_sts_cd == "C0104" ){
-							bodyHtml += "    <td><input type=\"button\" id=\"btnCancelReservationBtn-"+i+"\" value=\"예약 취소\" class=\"button small special\" /></td>";
+							bodyHtml += "    <td id=\"tdCancelReservation-"+i+"\"><input type=\"button\" id=\"btnCancelReservationBtn-"+i+"\" value=\"예약 취소\" class=\"button small special\" /></td>";
 						}
 						else{
 							
