@@ -131,7 +131,7 @@ aside {
 				sDate.datepicker({
 					language : 'ko',
 					autoClose : true,
-					minDate : new Date(),
+					minDate: 0,
 					onSelect : function() {
 						datePickerSet(sDate, eDate);
 					}

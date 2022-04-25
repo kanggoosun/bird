@@ -71,56 +71,56 @@ aside {
 			<%-- 		<%@ include file="../include/miniCalendar_admin.jsp"%> --%>
 			<div class="inner">
 				<section style="opacity: 1;">
-					<form id="frmMainFilter" name="frmMainFilter">
+					<!-- <form id="frmMainFilter" name="frmMainFilter">
+                        <div class="row">
+                            <div class="3u 12u$(medium)">
+                                <input type="text" name="sUser" id="sUser" value="" placeholder="user id or user name"/> 
+                            </div>
+                        </div>
+                    </form> -->
+					<form id="frmAdminInfoPop2" method="post">
 						<div style="margin: 0 0 0.5em 0;" class="row">
 							<div class="2u 12u$(medium) select-wrapper">
-								<select id="cbSearchField" name="cbSearchField">
-									<option value="usr.user_id">Owner ID</option>
-									<option value="usr.name">Owner name</option>
-									<option value="usr.company">Company</option>
-									<option value="grp.group_code">Group code</option>
-									<option value="grp.area">Area</option>
+								<select id="sCop" name="sCop">
+									<option value="">-- 법인 --</option>
+									<option value="C0201">ECHOIT</option>
+									<option value="C0202">SICT</option>
 								</select>
 							</div>
 						</div>
 
 						<div style="margin: 0 0 0.5em 0;" class="row">
-							<!-- 	<div style="opacity: 0.8; position: relative;"
-								class="2u 12u$(medium)">
-								<input type="text" name="sKeyword" id="datepicker1" value=""
-									placeholder="예약 시작일" />
-							</div>
-
-							<h4></h4>
-							<div class="2u 12u$(medium)">
-								<input type="text" name="sKeyword" id="datepicker2" value=""
-									placeholder="예약 종료일" />
-							</div> -->
 							<%@ include file="../include/miniCalendar.jsp"%>
 
 						</div>
 						<div style="margin: 0 0 0.5em 0;" class="row">
 							<div class="2u 12u$(medium) select-wrapper">
-								<select id="cbSearchField" name="cbSearchField">
-									<option value="usr.user_id">Owner ID</option>
-									<option value="usr.name">Owner name</option>
-									<option value="usr.company">Company</option>
-									<option value="grp.group_code">Group code</option>
-									<option value="grp.area">Area</option>
+								<select id="cbUseYn" name="cbUseYn">
+									<option value="">-- 상태 --</option>
+									<option value="C0101">임시저장</option>
+									<option value="C0102">요청</option>
+									<option value="C0103">요청취소</option>
+									<option value="C0104">승인</option>
+									<option value="C0105">반려</option>
+									<option value="C0106">예약취소</option>
+									<option value="C0107">취소승인</option>
+									<option value="C0108">취소반려</option>
+									<option value="C0109">완료</option>
+
 								</select>
 							</div>
 							<h4></h4>
 							<div class="2u 12u$(medium)">
-								<input type="text" name="sKeyword" id="sKeyword" value=""
+								<input type="text" name="sUser" id="sUser" value=""
 									placeholder="이름" />
 							</div>
 							<!-- <div class="6u$ 12u$"> -->
-							<div class="2u 12u$(medium) select-wrapper">
-								<!-- 	<ul class="actions vertical"> -->
+							<!-- 	<div class="2u 12u$(medium) select-wrapper">
+									<ul class="actions vertical">
 								<input type="button" name="btnSaveAdminInfo"
 									id="btnSaveAdminInfo" value="Save" class="button special fit" />
-								<!-- 	</ul> -->
-							</div>
+									</ul>
+							</div> -->
 						</div>
 					</form>
 				</section>
@@ -141,34 +141,33 @@ aside {
 					<table class="alt">
 						<thead style="text-align: center; font-size: 0.8em;">
 							<tr>
-								<td width="3%">순번</td>
-								<td width="4%">이름</td>
-								<td width="6%">법인</td>
-								<td width="6%">부서</td>
-								<td width="6%">이메일</td>
-								<td width="6%">핸드폰번호</td>
-								<td width="6%">연수원</td>
-								<td width="6%">요청일자</td>
-								<td width="6%">시작일</td>
-								<td width="6%">종료일</td>
-								<td width="5%">이용목적</td>
-								<td width="6%">이용요금</td>
-								<td width="7%">승인 반려 일자</td>
-								<td width="5%">상태</td>
-								<td width="5%">취소분류</td>
-								<td width="8%">취소 반려 사유</td>
-								<td width="17%">실제 이용자 대표 이름</td>
-								<td width="10%">실제 이용자 핸드폰번호</td>
-								<td width="6%">실제 이용자 이메일</td>
-								<td width="4%">차량번호</td>
-								<td width="6%">비고</td>				
+								<th style="text-align: center;">순번</th>
+								<th style="text-align: center;">이름</th>
+								<th style="text-align: center;">법인</th>
+								<th style="text-align: center;">부서</th>
+								<th style="text-align: center;">이메일</th>
+								<th style="text-align: center;">핸드폰번호</th>
+								<th style="text-align: center;">연수원</th>
+								<th style="text-align: center;">요청일자</th>
+								<th style="text-align: center;">시작일</th>
+								<th style="text-align: center;">종료일</th>
+								<th style="text-align: center;">이용목적</th>
+								<th style="text-align: center;">이용요금</th>
+								<th style="text-align: center;">승인 반려 일자</th>
+								<th style="text-align: center;">상태</th>
+								<th style="text-align: center;">취소분류</th>
+								<th style="text-align: center;">취소 반려 사유</th>
+								<th style="text-align: center;">실제 이용자 대표 이름</th>
+								<th style="text-align: center;">실제 이용자 핸드폰번호</th>
+								<th style="text-align: center;">실제 이용자 이메일</th>
+								<th style="text-align: center;">차량번호</th>
+								<th style="text-align: center;">비고</th>
 							</tr>
 						</thead>
-
-
-						<tbody style="text-align: center; font-size: 0.8em;">
+						<tbody style="text-align: center; font-size: 0.7em;">
 							<tr>
-								<td colspan="7" style="text-align: center;">55555555555555</td>
+								<td colspan="5" style="text-align: center;">There is no
+									data.</td>
 							</tr>
 						</tbody>
 						<tfoot style="font-size: 0.7em;">
@@ -176,13 +175,14 @@ aside {
 								<td colspan="7" style="text-align: center;"
 									id="tdPaginationApplication"></td>
 							</tr>
-							<tr>
-								<td colspan="7" style="text-align: right;">
+							<!-- 	<tr>
+								 <td colspan="7" style="text-align: right;">
 									<ul class="actions">
-										<!--   <li><input type="button" name="btnNewApplication" id="btnNewApplication" value="New Application" class="button small special" /></li> -->
-									</ul>
-								</td>
-							</tr>
+										<li><input type="button" name="btnNewApplication"
+											id="btnNewApplication" value="New Application"
+											class="button small special" /></li>
+								</td> 
+							</tr> -->
 						</tfoot>
 					</table>
 				</div>
@@ -204,73 +204,83 @@ aside {
 							<div class="row uniform">
 								<h3 style="width: 300px;">예약</h3>
 								<div class="6u 12u$(small)">
-									<input type="text" name="userId" id="userId" value=""
-										placeholder="이름" required="required" maxlength="15" /> <input
+									<input type="text" name="name" id="name" value="" readonly
+										placeholder="이름"  maxlength="15" />
+									<!--  <input
 										type="hidden" name="flagIdDupeChk" id="flagIdDupeChk"
 										value="false" /> <input type="hidden" name="flagSave"
-										id="flagSave" value="" />
+										id="flagSave" value="" /> -->
 								</div>
 								<!-- <div class="6u$ 12u$(small)">
 									<input type="button" name="btnIdDupeChk" id="btnIdDupeChk"
 										value="ID Duplication Check" class="button" />
 								</div> -->
 								<div class="6u 12u$(small)">
-									<input type="text" name="name" id="name" value=""
-										placeholder="법인" required="required" maxlength="50" />
+									<input type="text" name="cop_cd" id="cop_cd" value="" readonly
+										  maxlength="50" />
 								</div>
 								<div class="6u$ 12u$(small)">
-									<input type="email" name="email" id="email" value=""
-										placeholder="부서" required="required" maxlength="50" />
+									<input type="text" name="dep_nm" id="dep_nm" value="" readonly
+										  maxlength="50" />
 								</div>
 								<div class="6u 12u$(small)">
-									<input type="text" name="name" id="name" value=""
-										placeholder="이메일" required="required" maxlength="50" />
+									<input type="text" name="email" id="email" value="" readonly
+										  maxlength="50" />
 								</div>
 								<div class="6u$ 12u$(small)">
-									<input type="email" name="email" id="email" value=""
-										placeholder="핸드폰번호" required="required" maxlength="50" />
+									<input type="text" name="phone" id="phone" value="" readonly
+										  maxlength="50" />
 								</div>
 								<div class="6u 12u$(small)">
-									<input type="text" name="name" id="name" value=""
-										placeholder="연수원" required="required" maxlength="50" />
+									<input type="text" name="place" id="place" value="" readonly
+										  maxlength="50" />
 								</div>
 								<div class="6u$ 12u$(small)">
-									<input type="email" name="email" id="email" value=""
-										placeholder="이용목적" required="required" maxlength="50" />
+									<input type="text" name="use_aim" id="use_aim" value=""
+										readonly   maxlength="50" />
 								</div>
 								<div class="6u 12u$(small)">
-									<input type="text" name="name" id="name" value=""
-										placeholder="시작일" required="required" maxlength="50" />
+									<input type="text" name="sta_day" id="sta_day" value=""
+										readonly   maxlength="50" />
 								</div>
 								<div class="6u$ 12u$(small)">
-									<input type="email" name="email" id="email" value=""
-										placeholder="종료일" required="required" maxlength="50" />
+									<input type="text" name="end_day" id="end_day" value=""
+										readonly   maxlength="50" />
 								</div>
 								<div style="width: 550px; display: flex; align-items: center;">
 									<h3 style="display: flex; align-items: center;">실제 이용자 정보</h3>
 								</div>
 
 								<div class="6u 12u(small)">
-									<input type="text" name="name" id="name" value=""
-										placeholder="이름" required="required" maxlength="50" />
+									<input type="text" name="real_name" id="real_name" value=""
+										readonly   maxlength="50" />
 								</div>
 
 								<div class="6u 12u$(small)">
-									<input type="email" name="email" id="email" value=""
-										placeholder="핸드폰번호" required="required" maxlength="50" />
+									<input type="text" name="real_phone" id="real_phone" value=""
+										readonly   maxlength="50" />
 								</div>
 								<div class="6u 12u$(small)">
-									<input type="text" name="name" id="name" value=""
-										placeholder="이메일" required="required" maxlength="50" />
+									<input type="text" name="real_email" id="real_email" value=""
+										readonly   maxlength="50" />
 								</div>
 								<div class="6u$ 12u$(small)">
-									<input type="email" name="email" id="email" value=""
-										placeholder="차량번호" required="required" maxlength="50" />
+									<input type="text" name="real_car" id="real_car" value=""
+										readonly   maxlength="50" />
 								</div>
 								<div class="6u 12u$(small)">
-									<input type="text" name="name" id="name" value=""
-										placeholder="비고" required="required" maxlength="50" />
+									<input type="text" name="rmk" id="rmk" value=""
+										  maxlength="50" />
 								</div>
+								<div class="6u 12u$(small)">
+									<input type="text" name="seq" id="seq" value=""
+										  maxlength="50" />
+								</div>
+								<div class="6u 12u$(small)">
+									<input type="text" name="res_sts_cd" id="res_sts_cd" value=""
+										  maxlength="50" />
+								</div>
+								
 
 								<%-- <div class="6u 12u$(small)">
 									<div class="select-wrappecr" id="divForCBCountry">
@@ -314,8 +324,50 @@ aside {
 			fn_getApplicationList(1);
 		});
 
+		$("#sUser").on("input", function() {
+			fn_getApplicationList(1);
+		});
+
+		/* 		$("#sCop").on("input", function() {
+		 fn_getApplicationList(1);
+		 }); */
+
+		var strClickEventNm = "";
+		strClickEventNm += "#btnSaveAdminInfo, #btnCreateAdmin, #btnIdDupeChk";
+		// mouse click event
+		$(document).on("click", strClickEventNm, function(e) {
+			e.preventDefault();
+
+			var id = $(this).attr("id");
+			fn_eventCallFunction(id);
+		});
+
+		function fn_eventCallFunction() {
+			var args = fn_eventCallFunction.arguments;
+
+			if (args[0] === "btnSaveAdminInfo") {
+				fn_submitAdminInfo();
+			} else if (args[0] === "btnCreateAdmin") {
+				fn_AdminInfoPop("");
+			} else if (args[0] === "btnIdDupeChk") {
+				fn_isExist();
+			}
+
+			else if (args[0] === "groupName") {
+				$("#mdcId").focus();
+			} else if (args[0] === "mdcId") {
+				$("#deviceCode").focus();
+			} else if (args[0] === "deviceCode") {
+				$("#activationCode").focus();
+			} else if (args[0] === "activationCode") {
+				return false;
+			}
+		}
+
 		function fn_getApplicationList(pageNo) {
 			var param = "";
+			param += "sUser=" + $("#sUser").val();
+			param += "&";
 			param += "curPage=" + pageNo;
 			param += "&";
 			param += "callFunction=fn_getApplicationList";
@@ -351,11 +403,9 @@ aside {
 							+ gfn_nullValue(applicationList[i].dep_nm)
 							+ "</td>";
 					bodyHtml += "    <td id=\"tdEmail-"+i+"\">"
-							+ gfn_nullValue(applicationList[i].email)
-							+ "</td>";
+							+ gfn_nullValue(applicationList[i].email) + "</td>";
 					bodyHtml += "    <td id=\"tdPhone-"+i+"\">"
-							+ gfn_nullValue(applicationList[i].phone)
-							+ "</td>";
+							+ gfn_nullValue(applicationList[i].phone) + "</td>";
 					bodyHtml += "    <td id=\"tdPlace_cd-"+i+"\">"
 							+ gfn_nullValue(applicationList[i].place_cd)
 							+ "</td>";
@@ -397,13 +447,11 @@ aside {
 							+ "</td>";
 					bodyHtml += "    <td id=\"tdReal_use_car_no-"+i+"\">"
 							+ gfn_nullValue(applicationList[i].real_use_car_no)
-							+ "</td>";	
-					bodyHtml += "    <td id=\"tdRmk-"+i+"\">"
-							+ gfn_nullValue(applicationList[i].rmk) 
 							+ "</td>";
+					bodyHtml += "    <td id=\"tdRmk-"+i+"\">"
+							+ gfn_nullValue(applicationList[i].rmk) + "</td>";
 					bodyHtml += "    <td id=\"tdSeq-"+i+"\">"
-							+gfn_nullValue(applicationList[i].seq)
-							+ "</td>";	
+							+ gfn_nullValue(applicationList[i].seq) + "</td>";
 					bodyHtml += "</tr>";
 				}
 				pageHtml = paginationHtml;
@@ -441,11 +489,32 @@ aside {
 				$("#flagSave").val("I");
 			} else {
 				$("#flagSave").val("U");
-				$("#userId").val($("#userId-" + no).val());
-				$("#name").val($("#tdReal_use_nm-" + no).text());
-				$("#email").val($("#tdUserEmail-" + no).text());
-				$("#cbCountry").val($("#countryCode-" + no).val()).prop(
-						"selected", true);
+				$("#name").val($("#tdName-" + no).text());
+				$("#cop_cd").val($("#tdCop_cd-" + no).text());
+				$("#dep_nm").val($("#tdDep_nm-" + no).text());
+				$("#email").val($("#tdEmail-" + no).text());
+				$("#phone").val($("#tdPhone-" + no).text());
+				$("#place").val($("#tdPlace_cd-" + no).text());
+				$("#use_aim").val($("#tdUse_aim-" + no).text());
+				$("#sta_day").val($("#tdSta_day-" + no).text());
+				$("#end_day").val($("#tdEnd_day-" + no).text());
+				$("#real_name").val($("#tdReal_use_nm-" + no).text());
+				$("#real_phone").val($("#tdReal_use_phone-" + no).text());
+				$("#real_email").val($("#tdReal_use_email-" + no).text());
+				$("#real_car").val($("#tdReal_use_car_no-" + no).text());
+				$("#rmk").val($("#tdRmk-" + no).text());
+				$("#seq").val($("#tdSeq-" + no).text());
+				var tmpString = $("#tdRes_sts_cd-" + no).text();
+				alert(tmpString);
+				$("#res_sts_cd").val(tmpString);		
+				/* 			$("#cbCountry").val($("#countryCode-" + no).val()).prop(
+									"selected", true); */
+				if (tmpString == "C0105") {
+					$("#btnSaveAdminInfo").css("display", "none");
+				} else {
+					$("#btnSaveAdminInfo").css("display", "block");
+				}
+				
 			}
 
 			gfn_customLayerPopup('dim-layer-admin-info', 'dimBgAdminInfo',
@@ -466,7 +535,7 @@ aside {
 					if ($("#flagSave").val() === "I") {
 						gf_sendForm(
 								frmId,
-								"<c:url value='/manager/reservationManagement/insertApplication' />",
+								"<c:url value='/manager/reservationManagement/getApplicationInfo' />",
 								"fn_submitAdminInfoCallback");
 					} else {
 						gf_sendForm(
@@ -478,11 +547,23 @@ aside {
 			}
 		}
 
+		$(document).on("change", "#cbSearchField", function(e) {
+			e.preventDefault();
+
+			fn_getApplicationList(1);
+		});
+
+		$(document).on("input", "#sKeyword", function(e) {
+			e.preventDefault();
+
+			fn_getApplicationList(1);
+		});
+
 		function fn_submitAdminInfoCallback(data) {
 			$('#dim-layer-admin-info').fadeOut();
 			gfn_layerPopup(data.msg);
 
-			fn_getAdminInfoList(1);
+			fn_getApplicationList(1);
 		}
 
 		//한개만 단순하게 만들때
