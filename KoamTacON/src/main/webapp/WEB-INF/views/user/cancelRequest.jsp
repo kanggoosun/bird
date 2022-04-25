@@ -83,8 +83,8 @@
 									<td colspan="7" style="text-align: right;">
 										<ul class="actions">
 											<!--   <li><input type="button" name="btnNewApplication" id="btnNewApplication" value="New Application" class="button small special" /></li> -->
-											 <li><input type="button" name="btnCancelRequest" id="btnCancelRequest" value="요청 취소" class="button small special" /></li>
-											 <li><input type="button" name="btnCancelReservation" id="btnCancelReservation" value="예약 취소" class="button small special" /></li>
+	<!-- 										 <li><input type="button" name="btnCancelRequest" id="btnCancelRequest" value="요청 취소" class="button small special" /></li>
+											 <li><input type="button" name="btnCancelReservation" id="btnCancelReservation" value="예약 취소" class="button small special" /></li> -->
 										
 										</ul>
 									</td>
@@ -226,14 +226,14 @@
 	
 	
 	<!-- Admin Information popup layer -->
-	<div id="dim-layer-admin-info" class="dim-layer">
-		<div id="dimBgAdminInfo" class="dimBg"></div>
-		<div id="admin_info_layer" class="popcont-layer 12u$"
+	<div id="dim-layer-cancel-request" class="dim-layer">
+		<div id="dimBgCancelRequest" class="dimBg"></div>
+		<div id="cancel_request_layer" class="popcont-layer 12u$"
 			style="width: 600px;">
 			<div class="pop-container">
 				<div class="pop-conts">
 					<!--content //-->
-					<div id="adminInfoDiv">
+					<div id="cancelRequestDiv">
 						<form id="fn_CancelRequestPop" method="post">
 							<div class="row uniform">
 								<h3 style="width: 300px;">예약</h3>
@@ -323,6 +323,26 @@
 								
 							</div>
 						</form>
+					</div>
+
+					<!--// content-->
+					<div class="btn-r">
+						<a href="#" id="closeCancelRequestPopup" class="btn-layerClose">Close</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+		<div id="dim-layer-cancel-reservartion" class="dim-layer">
+		<div id="dimBgCancelReservarion" class="dimBg"></div>
+		<div id="cancel_request_layer" class="popcont-layer 12u$"
+			style="width: 600px;">
+			<div class="pop-container">
+				<div class="pop-conts">
+					<!--content //-->
+					<div id="cancelReservartionDiv">
+	
 						<form id="fn_CancelReservationPop" method="post">
 							<div class="row uniform">
 								<h3 style="width: 300px;">예약</h3>
@@ -417,21 +437,20 @@
 								
 							</div>
 						</form>
-					</div>
+						
+						</div>
 
 					<!--// content-->
 					<div class="btn-r">
-						<a href="#" id="closeAdminInfoPopup" class="btn-layerClose">Close</a>
+						<a href="#" id="closeCancelReservationPopup" class="btn-layerClose">Close</a>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	
-	
 
 	<!-- File popup layer -->
-	<div id="dim-layer-file" class="dim-layer">
+	<%-- <div id="dim-layer-file" class="dim-layer">
 		<div id="dimBgFile" class="dimBg"></div>
 		<div id="file_layer" class="popcont-layer" style="max-width: 600px;">
 			<div class="pop-container">
@@ -500,7 +519,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> --%>
 
 	<!-- popup layer -->
 	<%@ include file="../include/popupLayer.jsp"%>
@@ -527,78 +546,47 @@
 				"<c:url value='/user/cancelRequest/getApplicationList' />",
 				param, "fn_getApplicationListCallback");
 	}
-
-
 	
-	var strClickEventNm  = "";
-	strClickEventNm += "#btnCancelRequest, #btnCancelReservation";
-	// mouse click event
-	$(document).on("click", strClickEventNm, function(e){
-	    e.preventDefault();
+	$(document).on("click", "#tblApplicationList tbody td", function(e) {
+		e.preventDefault();
 
-	    var id = $(this).attr("id");
-	    fn_eventCallFunction(id);
+		var id = $(this).attr("id");
+/* 		var sId = id.split("-")[0]; */
+/* 		var no = id.split("-")[1]; */
+
+		$("#applicationSeq").val($("#tdApplicationSeq-").text());
+		$("#sLinkedSeq").val($("#applicationSeq").val());
+		$("#sLinkedTable").val("tb_applications");
+
+	/* 	for (var i = 0; i < $("#tblApplicationList tbody tr").length; i++) {
+			if (!$("#btnEdit-" + i).hasClass("special")) {
+				$("#btnEdit-" + i).toggleClass("special");
+			}
+		}
+		$("#btnEdit-").toggleClass("special"); */
+
+			fn_applicationPopup();
+
 	});
-	
-	function fn_eventCallFunction() {
-	    var args = fn_eventCallFunction.arguments;
-	    
-	    if (args[0] === "btnCancelRequest") {
-	    	fn_CancelRequestPop();
-	    } else if (args[0] === "btnCancelReservation") {
-	    	fn_CancelReservationPop();
-	    }
-	    
-/* 	    else if (args[0] === "groupName") {
-	        $("#mdcId").focus();
-	    } else if (args[0] === "mdcId") {
-	        $("#deviceCode").focus();
-	    } else if (args[0] === "deviceCode") {
-	        $("#activationCode").focus();
-	    } else if (args[0] === "activationCode") {
-	        return false;
-	    } */
+
+	function fn_applicationPopup() {
+/* 		gfn_clearForm("frmAppPop"); */
+
+			fn_setFrmAppPop();
+			
+		gfn_customLayerPopup('dim-layer-cancel-request', 'dimBgCancelRequest', 'cancel_request_layer',
+				'closeCancelRequestPopup');
 	}
 
-
-	function fn_CancelRequestPop() {
-
-
-
-			$("#flagSave").val("S");
-			$("#place").val($("#place-").val());
-		    $("#sta_day").val($("#sta_day-").val());
-		    $("#end_day").val($("#end_day-").val());
-		    $("#use_aim").val($("#use_aim-").val());
-	    
-	    gfn_customLayerPopup('dim-layer-admin-info', 'dimBgAdminInfo', 'admin_info_layer', 'closeAdminInfoPopup');
-	}
-	
-
-	function fn_CancelReservationPop() {
-
-
-			$("#flagSave").val("U");
-            $("#place").val($("#place-").val());
-		    $("#sta_day").val($("#sta_day-").val());
-		    $("#end_day").val($("#end_day-").val());
-		    $("#use_aim").val($("#use_aim-").val());
-		    $("#rej_sort_cd").val($("#rej_sort_cd-").text());
-
-	    
-	    gfn_customLayerPopup('dim-layer-admin-info', 'dimBgAdminInfo', 'admin_info_layer', 'closeAdminInfoPopup');
-	}
-	
 	function fn_setFrmAppPop() {
 		var param = "";
-		param += "applicationSeq=" + $("#tdApplicationSeq-" + no).text();
+		param += "applicationSeq=" + $("#tdApplicationSeq-").text();
 
 		gf_send(
-				"<c:url value='/user/cancelRequest/getApplicationList' />",
+				"<c:url value='/admin/systemManagement/getApplicationInfo' />",
 				param, "fn_setFrmAppPopCallback");
 	}
 
-	
 	function fn_setFrmAppPopCallback(data) {
 		var applicationInfo = data.applicationInfo;
 
@@ -619,6 +607,159 @@
 		$("#displayOrder").val(applicationInfo.displayOrder);
 	}
 
+
+/* 	
+	var strClickEventNm  = "";
+	strClickEventNm += "#tblCancelRequest tbody td", "#tblCancelReservation tbody td"; */
+	// mouse click event
+	/* $(document).on("click", "#tblCancelRequest tbody td", function(e){
+	    e.preventDefault();
+
+	    var id = $(this).attr("id");
+	    var sId = id.split("-")[0];
+	    var no = id.split("-")[1]; */
+/* 	    alert('id='+id); */
+
+    /* $("#sRowNo").val(no);
+    for(var i=0; i<$("#tblCancelRequest tbody tr").length; i++) {
+        if (!$("#btnCancelRequestBtn-"+i).hasClass("special")) {
+            $("#btnCancelRequestBtn-"+i).toggleClass("special");
+        }
+    }
+    $("#btnCancelRequestBtn-"+no).toggleClass("special");
+    
+    if (sId === "tdCancelRequestBtn") {
+    	fn_CancelRequestPop(); */
+    /*  else {
+    	$("#sMasterCode").val($("#tdCodeMasterMasterCode-"+no).text());
+    	fn_getCodeDetailList(1);
+    } */
+
+/* 	    fn_eventCallFunction(id); */
+
+/* 	fn_CancelRequestPop(); */
+
+	/* });
+	
+	$(document).on("click", "#tblCancelReservation tbody td", function(e){
+	    e.preventDefault();
+
+	    var id = $(this).attr("id");
+	    var sId = id.split("-")[0];
+	    var no = id.split("-")[1];
+/* 	    alert('id='+id); */
+ 		/*  
+ 		$("#sRowNo").val(no);
+    for(var i=0; i<$("#tblCancelReservation tbody tr").length; i++) {
+        if (!$("#btnCancelReservationBtn-"+i).hasClass("special")) {
+            $("#btnCancelReservationBtn-"+i).toggleClass("special");
+        }
+    }
+    $("#btnCancelReservationBtn-"+no).toggleClass("special");
+ 		 */
+/* 	    fn_eventCallFunction(id); */
+/* 
+	fn_CancelReservationPop();
+ }
+
+	});
+	
+	
+	function fn_eventCallFunction(id) {
+	var args = fn_eventCallFunction.arguments;
+	    
+	    if (args[0] === "btnCancelRequest") {
+	    	fn_CancelRequestPop();
+	    } else if (args[0] === "btnCancelReservation") {
+	    	fn_CancelReservationPop();
+	    } 
+	    
+
+	     */
+/* 	    else if (args[0] === "groupName") {
+	        $("#mdcId").focus();
+	    } else if (args[0] === "mdcId") {
+	        $("#deviceCode").focus();
+	    } else if (args[0] === "deviceCode") {
+	        $("#activationCode").focus();
+	    } else if (args[0] === "activationCode") {
+	        return false;
+	    } */
+	
+
+	
+	/* $(document).on("click", "#tblCancelRequest tbody td", function(e){
+	    e.preventDefault();
+
+	    var id = $(this).attr("id");
+	    var sId = id.split("-")[0];
+	    var no = id.split("-")[1];
+
+/* 	    $("#applicationSeq").val($("#tdApplicationSeq-"+no).text());
+	    $("#sLinkedSeq").val($("#applicationSeq").val());
+	    $("#sLinkedTable").val("tb_applications"); */
+	    
+/* 	    for(var i=0; i<$("#tblCancelRequest tbody tr").length; i++) {
+	        if (!$("#btnCancelRequest-"+i).hasClass("special")) {
+	            $("#btnCancelRequest-"+i).toggleClass("special");
+	        }
+	    }
+	    $("#btnCancelRequest-"+no).toggleClass("special");
+	    
+	    if (sId === "tdButton") {
+	    	alert("11111");
+	    	fn_CancelRequestPop(no);
+	    } else {
+	        fn_getFileList(1);
+	    	alert("2222");
+	    }
+	});
+ */
+/* 	function fn_CancelRequestPop(no) {
+/* 		gfn_clearForm("frmAppPop"); */
+		
+/* 		if (no === "") {
+			$("#saveFlag").val("I");
+		} else {
+			$("#saveFlag").val("U");
+			fn_setFrmAppPop(no);
+		}
+		
+		gfn_customLayerPopup('dim-layer-app', 'dimBgApp', 'app_layer', 'closeAppPopup');
+	}
+
+	
+	 */
+	
+
+	function fn_CancelRequestPop() {
+
+
+			$("#flagSave").val("S");
+			$("#place").val($("#place-").val());
+		    $("#sta_day").val($("#sta_day-").val());
+		    $("#end_day").val($("#end_day-").val());
+		    $("#use_aim").val($("#use_aim-").val());
+	    
+	    gfn_customLayerPopup('dim-layer-cancel-request', 'dimBgCancelRequest', 'cancel_request_layer', 'closeCancelRequestPopup');
+	}
+	
+
+	function fn_CancelReservationPop() {
+
+
+			$("#flagSave").val("U");
+            $("#place").val($("#place-").val());
+		    $("#sta_day").val($("#sta_day-").val());
+		    $("#end_day").val($("#end_day-").val());
+		    $("#use_aim").val($("#use_aim-").val());
+		    $("#rej_sort_cd").val($("#rej_sort_cd-").text());
+
+	    
+	    gfn_customLayerPopup('dim-layer-cancel-reservation', 'dimBgCancelReservation', 'cancel_reservation_layer', 'closeCancelReservationPopup');
+	}
+	
+	
 
 	function fn_getApplicationListCallback(data) {
 		var applicationList = data.applicationList;
@@ -665,10 +806,9 @@
 /* 							bodyHtml += "    <td id=\"tdRej_sort-"+i+"\">"
 							+ gfn_nullValue(applicationList[i].res_sts_cd)
 							+ "</td>"; */
-							bodyHtml += "    <td id=\"tdCancelRequestBtn-"+i+"\"><input type=\"button\" id=\"btnCancelRequestBtn-"+i+"\" value=\"요청 취소\" class=\"button small special\" /></td>";
-						}
-						if(applicationList[i].res_sts_cd == "C0104" ){
-							bodyHtml += "    <td id=\"tdCancelReservationBtn-"+i+"\"><input type=\"button\" id=\"btnCancelReservationBtn-"+i+"\" value=\"예약 취소\" class=\"button small special\" /></td>";
+							bodyHtml += "    <td><input type=\"button\" id=\"btnCancelRequestBtn-"+i+"\" value=\"요청 취소\" class=\"button small special\" /></td>";
+						} else if(applicationList[i].res_sts_cd == "C0104" ){
+							bodyHtml += "    <td><input type=\"button\" id=\"btnCancelReservationBtn-"+i+"\" value=\"예약 취소\" class=\"button small special\" /></td>";
 						}
 						else{
 							
@@ -706,7 +846,7 @@
 	}
 
 	 var strClickEventNm = "";
-	strClickEventNm += "#btnNewApplication, #btnSaveApplication, #btnNewFile, #btnSaveFile";
+	strClickEventNm += "#btnNewApplication, #btnSaveApplication, #btnNewFile, #btnSaveFile #btnCancelRequest #btnCancelReservation";
 	// mouse click event
 	$(document).on("click", strClickEventNm, function(e) {
 		e.preventDefault();
@@ -715,16 +855,20 @@
 
 		if (id === "btnNewApplication") {
 			fn_applicationPopup("");
-		} else if (id === "btnSaveApplication") {
+/* 		} else if (id === "btnSaveApplication") {
 			fn_saveApplication();
 		} else if (id === "btnNewFile") {
 			fn_filePopup("");
 		} else if (id === "btnSaveFile") {
-			fn_saveFile();
+			fn_saveFile(); */
+		} else if (id === "btnCancelRequest"){
+			fn_CancelRequestPop();
+		} else if (id === "btnCancelReservation"){
+			fn_CancelReservationPop();
 		}
 	});
 
-	$(document).on("click", "#tblApplicationList tbody td", function(e) {
+	/* $(document).on("click", "#tblCancelRequest tbody td", function(e) {
 		e.preventDefault();
 
 		var id = $(this).attr("id");
@@ -745,54 +889,35 @@
 		if (sId === "tdButton") {
 			fn_applicationPopup(no);
 		} else {
-			fn_getFileList(1);
-		}
-	});
-	function fn_applicationPopup(no) {
-		gfn_clearForm("frmAppPop");
+/* 			fn_getFileList(1); */
+/* 		}
+	}); */
+	
+	/* $(document).on("click", "#tblCancelReservation tbody td", function(e) {
+		e.preventDefault();
 
-		if (no === "") {
-			$("#saveFlag").val("I");
+		var id = $(this).attr("id");
+		var sId = id.split("-")[0];
+		var no = id.split("-")[1];
+
+		$("#applicationSeq").val($("#tdApplicationSeq-" + no).text());
+		$("#sLinkedSeq").val($("#applicationSeq").val());
+		$("#sLinkedTable").val("tb_applications");
+
+		for (var i = 0; i < $("#tblApplicationList tbody tr").length; i++) {
+			if (!$("#btnEdit-" + i).hasClass("special")) {
+				$("#btnEdit-" + i).toggleClass("special");
+			}
+		}
+		$("#btnEdit-").toggleClass("special");
+
+		if (sId === "tdButton") {
+			fn_applicationPopup();
 		} else {
-			$("#saveFlag").val("U");
-			fn_setFrmAppPop(no);
-		}
-
-		gfn_customLayerPopup('dim-layer-app', 'dimBgApp', 'app_layer',
-				'closeAppPopup');
-	}
-	
-	
-
-	function fn_setFrmAppPop(no) {
-		var param = "";
-		param += "applicationSeq=" + $("#tdApplicationSeq-" + no).text();
-
-		gf_send(
-				"<c:url value='/admin/systemManagement/getApplicationInfo' />",
-				param, "fn_setFrmAppPopCallback");
-	}
-
-	function fn_setFrmAppPopCallback(data) {
-		var applicationInfo = data.applicationInfo;
-
-		$("#applicationSeq").val(applicationInfo.applicationSeq);
-		$("#applicationName").val(applicationInfo.applicationName);
-		$("#applicationDescription").val(
-				applicationInfo.applicationDescription);
-		$("#applicationIntroduction").val(
-				applicationInfo.applicationIntroduction);
-		$("#applicationUrl").val(applicationInfo.applicationUrl);
-		$("#tutorialUrl").val(applicationInfo.tutorialUrl);
-		$("#idq").val(applicationInfo.idq);
-		$("#codiceq").val(applicationInfo.codiceq);
-		$("#tabgenName").val(applicationInfo.tabgenName);
-		$("#cbUseYn").val(applicationInfo.useYn);
-		$("#cbUseYn option:eq(" + applicationInfo.useYn + ")").attr(
-				'selected', 'selected');
-		$("#displayOrder").val(applicationInfo.displayOrder);
-	} 
-
+/* 			fn_getFileList(1); */
+/* 		}
+	});
+	 */
 	function fn_saveApplication() {
 		var frmId = "frmAppPop";
 		if (gfn_checkRequired(frmId) === true) {
@@ -819,7 +944,7 @@
 		}
 	}
 
-	function fn_getFileList(pageNo) {
+/* 	function fn_getFileList(pageNo) {
 		var frmId = "frmFilePop";
 
 		if (!$("#sLinkedSeq").val()) {
@@ -836,46 +961,46 @@
 				frmId,
 				"<c:url value='/admin/systemManagement/getApplicationFileList' />",
 				"fn_getFileListCallback")
-	} 
-	function fn_getFileListCallback(data) {
+	}  */
+/* 	function fn_getFileListCallback(data) {
 		var fileList = data.fileList;
 		var paginationHtml = data.pageInfo.paginationHtml;
 
 		fn_makeTblFileList(fileList, paginationHtml);
 	}
+ */
+// 	function fn_makeTblFileList(fileList, paginationHtml) {
+// 		var bodyHtml = "";
+// 		var pageHtml = "";
 
-	function fn_makeTblFileList(fileList, paginationHtml) {
-		var bodyHtml = "";
-		var pageHtml = "";
+// 		if (fileList != null && fileList.length > 0) {
+// 			for (var i = 0; i < fileList.length; i++) {
+// 				bodyHtml += "<tr>";
+// 				bodyHtml += "    <td id=\"tdFileSeq-"+i+"\">"
+// 						+ fileList[i].filesSeq + "</td>";
+// 				bodyHtml += "    <td id=\"tdOriginalName-"+i+"\">";
+// 				bodyHtml += "        <input type=\"hidden\" id=\"listFilename-"+i+"\" name=\"listFilename-"+i+"\" value=\""+fileList[i].filename+"\" />";
+// 				bodyHtml += fileList[i].originalName + "</td>";
+// 				bodyHtml += "    <td id=\"tdFileType-"+i+"\">"
+// 						+ fileList[i].fileTypeNm + "</td>";
+// 				bodyHtml += "    <td id=\"tdFileUsage-"+i+"\">"
+// 						+ fileList[i].fileUsageNm + "</td>";
+// 				bodyHtml += "    <td id=\"tdAction-"+i+"\">";
+// 				bodyHtml += "        <input type=\"button\" id=\"btnEditFile-"+i+"\" value=\"Edit\" class=\"button small special btnDynamic\" />";
+// 				bodyHtml += "        <input type=\"button\" id=\"btnDeleteFile-"+i+"\" value=\"Delete\" class=\"button small special btnDynamic\" />";
+// 				bodyHtml += "    </td>";
+// 				bodyHtml += "</tr>";
+// 			}
+// 			pageHtml = paginationHtml;
+// 		} else {
+// 			bodyHtml += "<tr><td colspan=\"5\" style=\"text-align:center;\">There is no data.</td></tr>";
+// 		}
 
-		if (fileList != null && fileList.length > 0) {
-			for (var i = 0; i < fileList.length; i++) {
-				bodyHtml += "<tr>";
-				bodyHtml += "    <td id=\"tdFileSeq-"+i+"\">"
-						+ fileList[i].filesSeq + "</td>";
-				bodyHtml += "    <td id=\"tdOriginalName-"+i+"\">";
-				bodyHtml += "        <input type=\"hidden\" id=\"listFilename-"+i+"\" name=\"listFilename-"+i+"\" value=\""+fileList[i].filename+"\" />";
-				bodyHtml += fileList[i].originalName + "</td>";
-				bodyHtml += "    <td id=\"tdFileType-"+i+"\">"
-						+ fileList[i].fileTypeNm + "</td>";
-				bodyHtml += "    <td id=\"tdFileUsage-"+i+"\">"
-						+ fileList[i].fileUsageNm + "</td>";
-				bodyHtml += "    <td id=\"tdAction-"+i+"\">";
-				bodyHtml += "        <input type=\"button\" id=\"btnEditFile-"+i+"\" value=\"Edit\" class=\"button small special btnDynamic\" />";
-				bodyHtml += "        <input type=\"button\" id=\"btnDeleteFile-"+i+"\" value=\"Delete\" class=\"button small special btnDynamic\" />";
-				bodyHtml += "    </td>";
-				bodyHtml += "</tr>";
-			}
-			pageHtml = paginationHtml;
-		} else {
-			bodyHtml += "<tr><td colspan=\"5\" style=\"text-align:center;\">There is no data.</td></tr>";
-		}
+// 		$("#tblFileList tbody").html(bodyHtml);
+// 		$("#tblFileList tfoot #tdPaginationFile").html(pageHtml);
+// 	}
 
-		$("#tblFileList tbody").html(bodyHtml);
-		$("#tblFileList tfoot #tdPaginationFile").html(pageHtml);
-	}
-
-	function fn_filePopup(no) {
+	/* function fn_filePopup(no) {
 		if (!$("#sLinkedSeq").val()) {
 			gfn_layerPopup("Choose application name to upload files.");
 			return false;
@@ -946,16 +1071,16 @@
 		}
 		$('#dim-layer-file').fadeOut();
 	}
-
-	function fn_saveFileCallback(data) {
+ */
+/* 	function fn_saveFileCallback(data) {
 		gfn_layerPopup(data.msg);
 
 		if (data.flag === "success") {
 			fn_getFileList(1);
 		}
-	}
+	} */
 
-	$(document).on("click", "#tblFileList tbody td", function(e) {
+	/* $(document).on("click", "#tblFileList tbody td", function(e) {
 		e.preventDefault();
 
 		var id = $(this).attr("id");
@@ -997,9 +1122,9 @@
 		}
 		$("#btnEditFile-" + no).toggleClass("special");
 		$("#btnDeleteFile-" + no).toggleClass("special");
-	}
+	} */
 
-	function fn_deleteFile(filesSeq, filename) {
+	/* function fn_deleteFile(filesSeq, filename) {
 		var param = "";
 		param += "filesSeq=" + filesSeq;
 		param += "&";
@@ -1008,17 +1133,17 @@
 		gf_send(
 				"<c:url value='/admin/systemManagement/deleteApplicationFiles' />",
 				param, "fn_deleteFileCallback");
-	}
+	} */
 
-	function fn_deleteFileCallback(data) {
+/* 	function fn_deleteFileCallback(data) {
 		gfn_layerPopup(data.msg);
 
 		if (data.flag === "success") {
 			fn_getFileList(1);
 		}
-	}
+	} */
 
-	function fn_editFile(filesSeq) {
+	/* function fn_editFile(filesSeq) {
 		var param = "";
 		param += "filesSeq=" + filesSeq;
 
@@ -1027,14 +1152,14 @@
 				param, "fn_editFileCallback");
 		$('#dim-layer-file').fadeOut();
 	}
-
-	function fn_editFileCallback(data) {
+ */
+/* 	function fn_editFileCallback(data) {
 		gfn_layerPopup(data.msg);
 
 		if (data.flag === "success") {
 			fn_getFileList(1);
 		}
-	}
+	} */
 	</script>
 </body>
 </html>
