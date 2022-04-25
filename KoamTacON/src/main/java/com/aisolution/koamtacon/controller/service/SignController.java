@@ -28,7 +28,7 @@ import com.aisolution.common.util.SessionUtil;
 import com.aisolution.koamtacon.service.service.SignService;
 
 @Controller
-@RequestMapping("/sign")
+/* @RequestMapping("/sign") */
 public class SignController {
 	private static final Logger log = LoggerFactory.getLogger(SignController.class);
 	
