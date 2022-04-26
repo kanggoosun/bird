@@ -205,7 +205,7 @@ aside {
 								<h3 style="width: 300px;">예약</h3>
 								<div class="6u 12u$(small)">
 									<input type="text" name="name" id="name" value="" readonly
-										placeholder="이름"  maxlength="15" />
+										placeholder="이름" maxlength="15" />
 									<!--  <input
 										type="hidden" name="flagIdDupeChk" id="flagIdDupeChk"
 										value="false" /> <input type="hidden" name="flagSave"
@@ -217,35 +217,35 @@ aside {
 								</div> -->
 								<div class="6u 12u$(small)">
 									<input type="text" name="cop_cd" id="cop_cd" value="" readonly
-										  maxlength="50" />
+										maxlength="50" />
 								</div>
 								<div class="6u$ 12u$(small)">
 									<input type="text" name="dep_nm" id="dep_nm" value="" readonly
-										  maxlength="50" />
+										maxlength="50" />
 								</div>
 								<div class="6u 12u$(small)">
 									<input type="text" name="email" id="email" value="" readonly
-										  maxlength="50" />
+										maxlength="50" />
 								</div>
 								<div class="6u$ 12u$(small)">
 									<input type="text" name="phone" id="phone" value="" readonly
-										  maxlength="50" />
+										maxlength="50" />
 								</div>
 								<div class="6u 12u$(small)">
 									<input type="text" name="place" id="place" value="" readonly
-										  maxlength="50" />
+										maxlength="50" />
 								</div>
 								<div class="6u$ 12u$(small)">
 									<input type="text" name="use_aim" id="use_aim" value=""
-										readonly   maxlength="50" />
+										readonly maxlength="50" />
 								</div>
 								<div class="6u 12u$(small)">
 									<input type="text" name="sta_day" id="sta_day" value=""
-										readonly   maxlength="50" />
+										readonly maxlength="50" />
 								</div>
 								<div class="6u$ 12u$(small)">
 									<input type="text" name="end_day" id="end_day" value=""
-										readonly   maxlength="50" />
+										readonly maxlength="50" />
 								</div>
 								<div style="width: 550px; display: flex; align-items: center;">
 									<h3 style="display: flex; align-items: center;">실제 이용자 정보</h3>
@@ -253,35 +253,33 @@ aside {
 
 								<div class="6u 12u(small)">
 									<input type="text" name="real_name" id="real_name" value=""
-										readonly   maxlength="50" />
+										readonly maxlength="50" />
 								</div>
 
 								<div class="6u 12u$(small)">
 									<input type="text" name="real_phone" id="real_phone" value=""
-										readonly   maxlength="50" />
+										readonly maxlength="50" />
 								</div>
 								<div class="6u 12u$(small)">
 									<input type="text" name="real_email" id="real_email" value=""
-										readonly   maxlength="50" />
+										readonly maxlength="50" />
 								</div>
 								<div class="6u$ 12u$(small)">
 									<input type="text" name="real_car" id="real_car" value=""
-										readonly   maxlength="50" />
+										readonly maxlength="50" />
 								</div>
 								<div class="6u 12u$(small)">
-									<input type="text" name="rmk" id="rmk" value=""
-										  maxlength="50" />
+									<input style="width: 540px;" type="text" name="rmk" id="rmk"
+										value="" placeholder="비고" maxlength="50" />
 								</div>
-								<div class="6u 12u$(small)">
-									<input type="text" name="seq" id="seq" value=""
-										  maxlength="50" />
+								<div style="visibility: hidden" ; class="6u 12u$(small)">
+									<input style="visibility: hidden" ; type="text" name="seq"
+										id="seq" value="" maxlength="50" />
 								</div>
-								<div class="6u 12u$(small)">
-									<input type="text" name="res_sts_cd" id="res_sts_cd" value=""
-										  maxlength="50" />
+								<div style="visibility: hidden" ; class="6u$ 12u$(small)">
+									<input style="visibility: hidden" ; type="text"
+										name="res_sts_cd" id="res_sts_cd" value="" maxlength="50" />
 								</div>
-								
-
 								<%-- <div class="6u 12u$(small)">
 									<div class="select-wrappecr" id="divForCBCountry">
 										<select id="cbCountry" name="cbCountry">
@@ -299,8 +297,15 @@ aside {
 							</div>
 						</form>
 					</div>
-
 					<!--// content-->
+				<!-- 	<div class="btn-r" id="C0102ON" name="C0102ON">
+						<a href="#" id="btnSaveAdminInfo1" class="btn-layerClose">반려</a> <a
+							href="#" id="btnSaveAdminInfo" class="btn-layerClose">승인</a>
+					</div>
+					<div class="btn-r"  id="C0106ON" name="C0106ON">
+						<a href="#" id="btnSaveAdminInfo1" class="btn-layerClose">취소반려</a> <a
+							href="#" id="btnSaveAdminInfo" class="btn-layerClose">취소승인</a>
+					</div> -->
 					<div class="btn-r">
 						<a href="#" id="closeAdminInfoPopup" class="btn-layerClose">Close</a>
 					</div>
@@ -505,16 +510,18 @@ aside {
 				$("#rmk").val($("#tdRmk-" + no).text());
 				$("#seq").val($("#tdSeq-" + no).text());
 				var tmpString = $("#tdRes_sts_cd-" + no).text();
-				alert(tmpString);
-				$("#res_sts_cd").val(tmpString);		
+				/* 		alert(tmpString); */
+				$("#res_sts_cd").val(tmpString);
 				/* 			$("#cbCountry").val($("#countryCode-" + no).val()).prop(
 									"selected", true); */
-				if (tmpString == "C0105") {
-					$("#btnSaveAdminInfo").css("display", "none");
-				} else {
+				if (tmpString === "C0102") {
 					$("#btnSaveAdminInfo").css("display", "block");
+				} else if (tmpString === "C0106") {
+					$("#btnSaveAdminInfo").css("display", "blcok");
+				} else {
+					$("#btnSaveAdminInfo").css("display", "none");
 				}
-				
+
 			}
 
 			gfn_customLayerPopup('dim-layer-admin-info', 'dimBgAdminInfo',
