@@ -276,9 +276,9 @@
 									<input type="text" name="end_day" id="end_day" value=""
 										placeholder="종료일" required="required" maxlength="50" />
 								</div>
-								<div class="6u$ 12u$(small)">
+								<div class="6u$ 12u$(large)">
 									<input type="text" name="use_aim" id="use_aim" value=""
-										placeholder="이용목적" required="required" maxlength="50" />
+										placeholder="이용목적" required="required" maxlength="100" style="width:540px;" />
 								</div>
 								<!-- <div style="width: 550px; display: flex; align-items: center;">
 									<h3 style="display: flex; align-items: center;">실제 이용자 정보</h3>
@@ -385,13 +385,13 @@
 									<input type="text" name="end_day" id="end_day" value=""
 										placeholder="종료일" required="required" maxlength="50" />
 								</div>
-								<div class="6u$ 12u$(small)">
+								<div class="6u$ 12u$(large)">
 									<input type="text" name="use_aim" id="use_aim" value=""
-										placeholder="이용목적" required="required" maxlength="50" />
+										placeholder="이용목적" required="required" maxlength="100" style="width:540px;" />
 								</div>
-								<div class="6u 12u(small)">
+								<div class="6u 12u(large)">
 									<input type="text" name="rej_sort_cd" id="rej_sort_cd" value=""
-										placeholder="취소사유" required="required" maxlength="50" />
+										placeholder="취소사유" required="required" maxlength="100" style="width:540px;" />
 								</div>
 								
 								<!-- <div style="width: 550px; display: flex; align-items: center;">
@@ -551,7 +551,7 @@
 		e.preventDefault();
 
 		var id = $(this).attr("id");
-		alert("id:"+id);
+/* 		alert("id:"+id); */
  		var sId = id.split("-")[0];
  		var no = id.split("-")[1];
 
