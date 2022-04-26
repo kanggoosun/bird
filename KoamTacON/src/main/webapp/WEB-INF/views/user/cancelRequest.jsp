@@ -44,7 +44,7 @@
 
 					</header>
 
-					<h4>예약취소</h4>
+					<h4>예약취소소소</h4>
 					<div id="tblApplicationList" class="table-wrapper">
 						<table class="alt">
 							<thead style="text-align: center; font-size: 0.8em;">
